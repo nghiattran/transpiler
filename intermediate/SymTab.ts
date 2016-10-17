@@ -1,6 +1,7 @@
 import {SymTabEntry} from './SymTabEntry';
+import {HashMap} from '../util/HashMap';
 
-export interface SymTab {
+export interface SymTab extends HashMap {
     /**
      * Getter.
      * @return the scope nesting level of this entry.

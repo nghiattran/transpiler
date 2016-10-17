@@ -3,8 +3,8 @@ import {Message} from "../message/Message"
 import {MessageListener} from "../message/MessageListener";
 import {MessageHandler} from "../message/MessageHandler";
 
-import SymTabStack from "SymTabStacklocation";
-import SymTabFactory from "SymTabFactorylocation";
+import {SymTabStack} from "../intermediate/SymTabStack";
+import {SymTabFactory} from "../intermediate/SymTabFactory";
 
 import {Token} from "./Token";
 import {Scanner} from "./Scanner";

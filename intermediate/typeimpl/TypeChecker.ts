@@ -1,6 +1,6 @@
 import {TypeSpec} from '../TypeSpec';
 import {TypeForm} from '../TypeForm';
-import {TypeFormImpl, TypeFormImplEnum} from './TypeFormImpl';
+import {TypeFormImpl} from './TypeFormImpl';
 
 import {Predefined} from '../symtabimpl/Predefined';
 
@@ -139,8 +139,7 @@ export class TypeChecker {
         var compatible : boolean = false;
 
         // Two identical scalar or enumeration types.
-        // TODO : form === TypeFormImplEnum.SCALAR might not be solution
-        if ((type1 === type2) && ((form === TypeFormImplEnum.SCALAR) || (form == TypeFormImplEnum.ENUMERATION))) {
+        if ((type1 === type2) && ((form === TypeFormImpl.SCALAR) || (form === TypeFormImpl.ENUMERATION))) {
             compatible = true;
         }
 

@@ -4,8 +4,8 @@ import {MessageListener} from "../message/MessageListener";
 import {MessageHandler} from "../message/MessageHandler";
 import {MessageType} from "../message/MessageType";
 
-import SymTabStack from "SymTabStacklocation";
-import SymTabFactory from "SymTabFactorylocation";
+import {SymTabStack} from "../intermediate/SymTabStack";
+import {SymTabFactory} from "../intermediate/SymTabFactory";
 
 import {Token} from "./Token";
 import {Parser} from "./Parser";
@@ -35,6 +35,7 @@ export class Source implements MessageProducer {
      * @param reader the reader for the source program
      * @throws IOException if an I/O error occurred
      */
+    // public constructor(BufferedReader reader)
     public constructor() {
         this.lineNum = 0;
         this.currentPos = -2;  // set to -2 to read the first source line
@@ -156,7 +157,7 @@ export class Source implements MessageProducer {
      */
     private readLine() : void {
         // TODO use fs to read
-        this.line = this.reader.readLine();  // null when at the end of the source
+        // this.line = this.reader.readLine();  // null when at the end of the source
         this.currentPos = -1;
 
         if (this.line != null) {
@@ -176,15 +177,15 @@ export class Source implements MessageProducer {
      * @throws Exception if an error occurred.
      */
     public close() : void {
-        if (this.reader !== null) {
-            try {
-                this.reader.close();
-            }
-            catch (ex) {
-                ex.printStackTrace();
-                throw ex;
-            }
-        }
+        // if (this.reader !== null) {
+        //     try {
+        //         this.reader.close();
+        //     }
+        //     catch (ex) {
+        //         ex.printStackTrace();
+        //         throw ex;
+        //     }
+        // }
     }
 
     /**

@@ -1,7 +1,7 @@
 "use strict";
-var SymTabStackImpl_1 = require("SymTabStackImpl");
-var SymTabImpl_1 = require("SymTabImpl");
-var SymTabEntryImpl_1 = require("SymTabEntryImpl");
+var SymTabStackImpl_1 = require("./symtabimpl/SymTabStackImpl");
+var SymTabEntryImpl_1 = require("./symtabimpl/SymTabEntryImpl");
+var SymTabImpl_1 = require("./symtabimpl/SymTabImpl");
 var SymTabFactory = (function () {
     function SymTabFactory() {
     }

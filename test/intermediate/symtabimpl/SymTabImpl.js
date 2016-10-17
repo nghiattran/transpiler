@@ -32,7 +32,7 @@ var SymTabImpl = (function (_super) {
      */
     SymTabImpl.prototype.enter = function (name) {
         var entry = SymTabFactory_1.SymTabFactory.createSymTabEntry(name, this);
-        this.put(name, entry);
+        _super.prototype.put.call(this, name, entry);
         return entry;
     };
     /**
@@ -47,6 +47,7 @@ var SymTabImpl = (function (_super) {
      * @return a list of symbol table entries sorted by name.
      */
     SymTabImpl.prototype.sortedEntries = function () {
+        // TODO: fix this
         // Collection<SymTabEntry> entries = values();
         // Iterator<SymTabEntry> iter = entries.iterator();
         // ArrayList<SymTabEntry> list = new ArrayList<SymTabEntry>(size());

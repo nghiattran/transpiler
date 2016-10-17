@@ -5,8 +5,8 @@ import {Definition} from '../Definition';
 import {RoutineCode} from '../RoutineCode';
 import {TypeFactory} from '../TypeFactory';
 
-import {DefinitionImpl, DefinitionImplEnum} from './DefinitionImpl';
-import {RoutineCodeImpl, RoutineCodeImplEnum} from './RoutineCodeImpl';
+import {DefinitionImpl} from './DefinitionImpl';
+import {RoutineCodeImpl} from './RoutineCodeImpl';
 
 export  class Predefined {
     // Predefined types.
@@ -64,28 +64,28 @@ export  class Predefined {
         this.integerId = symTabStack.enterLocal("integer");
         this.integerType = TypeFactory.createType(SCALAR);
         this.integerType.setIdentifier(this.integerId);
-        this.integerId.setDefinition(DefinitionImpl.get(DefinitionImplEnum.TYPE));
+        this.integerId.setDefinition(DefinitionImpl.TYPE);
         this.integerId.setTypeSpec(this.integerType);
 
         // Type real.
         this.realId = symTabStack.enterLocal("real");
         this.realType = TypeFactory.createType(SCALAR);
         this.realType.setIdentifier(this.realId);
-        this.realId.setDefinition(DefinitionImpl.get(DefinitionImplEnum.TYPE));
+        this.realId.setDefinition(DefinitionImpl.TYPE);
         this.realId.setTypeSpec(this.realType);
 
         // Type boolean.
         this.booleanId = symTabStack.enterLocal("boolean");
         this.booleanType = TypeFactory.createType(ENUMERATION);
         this.booleanType.setIdentifier(this.booleanId);
-        this.booleanId.setDefinition(DefinitionImpl.get(DefinitionImplEnum.TYPE));
+        this.booleanId.setDefinition(DefinitionImpl.TYPE);
         this.booleanId.setTypeSpec(this.booleanType);
 
         // Type char.
         this.charId = symTabStack.enterLocal("char");
         this.charType = TypeFactory.createType(SCALAR);
         this.charType.setIdentifier(this.charId);
-        this.charId.setDefinition(DefinitionImpl.get(DefinitionImplEnum.TYPE));
+        this.charId.setDefinition(DefinitionImpl.TYPE);
         this.charId.setTypeSpec(this.charType);
 
         // Undefined type.
@@ -99,13 +99,13 @@ export  class Predefined {
     private static initializeConstants(symTabStack : SymTabStack) : void {
         // Boolean enumeration constant false.
         this.falseId = symTabStack.enterLocal("false");
-        this.falseId.setDefinition(DefinitionImpl.get(DefinitionImplEnum.ENUMERATION_CONSTANT));
+        this.falseId.setDefinition(DefinitionImpl.ENUMERATION_CONSTANT);
         this.falseId.setTypeSpec(this.booleanType);
         this.falseId.setAttribute(CONSTANT_VALUE, 0);
 
         // Boolean enumeration constant true.
         this.trueId = symTabStack.enterLocal("true");
-        this.trueId.setDefinition(DefinitionImpl.get(DefinitionImplEnum.ENUMERATION_CONSTANT));
+        this.trueId.setDefinition(DefinitionImpl.ENUMERATION_CONSTANT);
         this.trueId.setTypeSpec(this.booleanType);
         this.trueId.setAttribute(CONSTANT_VALUE, 1);
 
@@ -113,7 +113,7 @@ export  class Predefined {
         var constants: SymTabEntry[] = [];
         constants.push(this.falseId);
         constants.push(this.trueId);
-        this.booleanType.setAttribute(DefinitionImpl.get(DefinitionImplEnum.ENUMERATION_CONSTANT), constants);
+        this.booleanType.setAttribute(DefinitionImpl.ENUMERATION_CONSTANT, constants);
     }
 
     /**
@@ -121,35 +121,35 @@ export  class Predefined {
      * @param symTabStack the symbol table stack to initialize.
      */
     private static initializeStandardRoutines(symTabStack : SymTabStack) : void {
-        this.readId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.PROCEDURE), "read",    RoutineCodeImpl.get(RoutineCodeImplEnum.READ));
-        this.readlnId  = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.PROCEDURE), "readln",  RoutineCodeImpl.get(RoutineCodeImplEnum.READLN));
-        this.writeId   = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.PROCEDURE), "write",   RoutineCodeImpl.get(RoutineCodeImplEnum.WRITE));
-        this.writelnId = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.PROCEDURE), "writeln", RoutineCodeImpl.get(RoutineCodeImplEnum.WRITELN));
+        this.readId    = this.enterStandard(symTabStack, DefinitionImpl.PROCEDURE, "read",    RoutineCodeImpl.READ);
+        this.readlnId  = this.enterStandard(symTabStack, DefinitionImpl.PROCEDURE, "readln",  RoutineCodeImpl.READLN);
+        this.writeId   = this.enterStandard(symTabStack, DefinitionImpl.PROCEDURE, "write",   RoutineCodeImpl.WRITE);
+        this.writelnId = this.enterStandard(symTabStack, DefinitionImpl.PROCEDURE, "writeln", RoutineCodeImpl.WRITELN);
 
-        this.absId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "abs",    RoutineCodeImpl.get(RoutineCodeImplEnum.ABS));
-        this.arctanId = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "arctan", RoutineCodeImpl.get(RoutineCodeImplEnum.ARCTAN));
-        this.chrId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "chr",    RoutineCodeImpl.get(RoutineCodeImplEnum.CHR));
-        this.cosId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "cos",    RoutineCodeImpl.get(RoutineCodeImplEnum.COS));
-        this.eofId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "eof",    RoutineCodeImpl.get(RoutineCodeImplEnum.EOF));
-        this.eolnId   = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "eoln",   RoutineCodeImpl.get(RoutineCodeImplEnum.EOLN));
-        this.expId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "exp",    RoutineCodeImpl.get(RoutineCodeImplEnum.EXP));
-        this.lnId     = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "ln",     RoutineCodeImpl.get(RoutineCodeImplEnum.LN));
-        this.oddId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "odd",    RoutineCodeImpl.get(RoutineCodeImplEnum.ODD));
-        this.ordId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "ord",    RoutineCodeImpl.get(RoutineCodeImplEnum.ORD));
-        this.predId   = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "pred",   RoutineCodeImpl.get(RoutineCodeImplEnum.PRED));
-        this.roundId  = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "round",  RoutineCodeImpl.get(RoutineCodeImplEnum.ROUND));
-        this.sinId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "sin",    RoutineCodeImpl.get(RoutineCodeImplEnum.SIN));
-        this.sqrId    = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "sqr",    RoutineCodeImpl.get(RoutineCodeImplEnum.SQR));
-        this.sqrtId   = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "sqrt",   RoutineCodeImpl.get(RoutineCodeImplEnum.SQRT));
-        this.succId   = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "succ",   RoutineCodeImpl.get(RoutineCodeImplEnum.SUCC));
-        this.truncId  = this.enterStandard(symTabStack, DefinitionImpl.get(DefinitionImplEnum.FUNCTION), "trunc",  RoutineCodeImpl.get(RoutineCodeImplEnum.TRUNC));
+        this.absId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "abs",    RoutineCodeImpl.ABS);
+        this.arctanId = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "arctan", RoutineCodeImpl.ARCTAN);
+        this.chrId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "chr",    RoutineCodeImpl.CHR);
+        this.cosId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "cos",    RoutineCodeImpl.COS);
+        this.eofId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "eof",    RoutineCodeImpl.EOF);
+        this.eolnId   = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "eoln",   RoutineCodeImpl.EOLN);
+        this.expId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "exp",    RoutineCodeImpl.EXP);
+        this.lnId     = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "ln",     RoutineCodeImpl.LN);
+        this.oddId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "odd",    RoutineCodeImpl.ODD);
+        this.ordId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "ord",    RoutineCodeImpl.ORD);
+        this.predId   = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "pred",   RoutineCodeImpl.PRED);
+        this.roundId  = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "round",  RoutineCodeImpl.ROUND);
+        this.sinId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "sin",    RoutineCodeImpl.SIN);
+        this.sqrId    = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "sqr",    RoutineCodeImpl.SQR);
+        this.sqrtId   = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "sqrt",   RoutineCodeImpl.SQRT);
+        this.succId   = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "succ",   RoutineCodeImpl.SUCC);
+        this.truncId  = this.enterStandard(symTabStack, DefinitionImpl.FUNCTION, "trunc",  RoutineCodeImpl.TRUNC);
     }
 
     /**
-     * Enter a standard DefinitionImpl.get(DefinitionImplEnum.PROCEDURE) or DefinitionImpl.get(DefinitionImplEnum.FUNCTION) into the symbol table stack.
+     * Enter a standard DefinitionImpl.PROCEDURE or DefinitionImpl.FUNCTION into the symbol table stack.
      * @param symTabStack the symbol table stack to initialize.
-     * @param defn either DefinitionImpl.get(DefinitionImplEnum.PROCEDURE) or DefinitionImpl.get(DefinitionImplEnum.FUNCTION).
-     * @param name the DefinitionImpl.get(DefinitionImplEnum.PROCEDURE) or DefinitionImpl.get(DefinitionImplEnum.FUNCTION) name.
+     * @param defn either DefinitionImpl.PROCEDURE or DefinitionImpl.FUNCTION.
+     * @param name the DefinitionImpl.PROCEDURE or DefinitionImpl.FUNCTION name.
      */
     private static enterStandard(symTabStack : SymTabStack,
                                 defn : Definition, name : string,

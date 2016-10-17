@@ -1,6 +1,6 @@
 "use strict";
 var MessageHandler_1 = require("../message/MessageHandler");
-var SymTabFactorylocation_1 = require("SymTabFactorylocation");
+var SymTabFactory_1 = require("../intermediate/SymTabFactory");
 /**
  * <h1>Parser</h1>
  *
@@ -75,7 +75,7 @@ var Parser = (function () {
     Parser.prototype.sendMessage = function (message) {
         Parser.messageHandler.sendMessage(message);
     };
-    Parser.symTabStack = SymTabFactorylocation_1["default"].createSymTabStack(); // symbol table stack
+    Parser.symTabStack = SymTabFactory_1.SymTabFactory.createSymTabStack(); // symbol table stack
     Parser.messageHandler = new MessageHandler_1.MessageHandler(); // message handler delegate
     return Parser;
 }());

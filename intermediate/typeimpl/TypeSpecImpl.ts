@@ -6,8 +6,8 @@ import {TypeForm} from '../TypeForm';
 
 import {Predefined} from '../symtabimpl/Predefined';
 
-import {TypeKeyImpl, TypeKeyImplEnum} from './TypeKeyImpl';
-import {TypeFormImpl, TypeFormImplEnum} from './TypeFormImpl';
+import {TypeKeyImpl} from './TypeKeyImpl';
+import {TypeFormImpl} from './TypeFormImpl';
 
 
 export class TypeSpecImpl extends HashMap implements TypeSpec {
@@ -39,17 +39,17 @@ export class TypeSpecImpl extends HashMap implements TypeSpec {
      * @param value a string value.
      */
     public stringConstructor(value : string) {
-        this.form = TypeFormImpl.get(TypeFormImplEnum.ARRAY);
+        this.form = TypeFormImpl.ARRAY;
 
-        var indexType : TypeSpec = new TypeSpecImpl(TypeFormImpl.get(TypeFormImplEnum.SUBRANGE)) as TypeSpec;
+        var indexType : TypeSpec = new TypeSpecImpl(TypeFormImpl.SUBRANGE) as TypeSpec;
         
-        indexType.setAttribute(TypeKeyImpl.get(TypeKeyImplEnum.SUBRANGE_BASE_TYPE), Predefined.integerType);
-        indexType.setAttribute(TypeKeyImpl.get(TypeKeyImplEnum.SUBRANGE_MIN_VALUE), 1);
-        indexType.setAttribute(TypeKeyImpl.get(TypeKeyImplEnum.SUBRANGE_MAX_VALUE), value.length);
+        indexType.setAttribute(TypeKeyImpl.SUBRANGE_BASE_TYPE, Predefined.integerType);
+        indexType.setAttribute(TypeKeyImpl.SUBRANGE_MIN_VALUE, 1);
+        indexType.setAttribute(TypeKeyImpl.SUBRANGE_MAX_VALUE, value.length);
 
-        this.setAttribute(TypeKeyImpl.get(TypeKeyImplEnum.ARRAY_INDEX_TYPE), indexType);
-        this.setAttribute(TypeKeyImpl.get(TypeKeyImplEnum.ARRAY_ELEMENT_TYPE), Predefined.charType);
-        this.setAttribute(TypeKeyImpl.get(TypeKeyImplEnum.ARRAY_ELEMENT_COUNT), value.length);
+        this.setAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE, indexType);
+        this.setAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE, Predefined.charType);
+        this.setAttribute(TypeKeyImpl.ARRAY_ELEMENT_COUNT, value.length);
     }
 
     /**
@@ -80,9 +80,9 @@ export class TypeSpecImpl extends HashMap implements TypeSpec {
      * @return true if this is a Pascal string type.
      */
     public isPascalString(): boolean {
-        if (this.form === TypeFormImpl.get(TypeFormImplEnum.ARRAY)) {
-            var elmtType : TypeSpec = this.getAttribute(TypeKeyImpl.get(TypeKeyImplEnum.ARRAY_ELEMENT_TYPE)) as TypeSpec;
-            var indexType : TypeSpec = this.getAttribute(TypeKeyImpl.get(TypeKeyImplEnum.ARRAY_INDEX_TYPE)) as TypeSpec;
+        if (this.form === TypeFormImpl.ARRAY) {
+            var elmtType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE) as TypeSpec;
+            var indexType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE) as TypeSpec;
 
             return (elmtType.baseType()  == Predefined.charType) &&
                    (indexType.baseType() == Predefined.integerType);
@@ -96,7 +96,7 @@ export class TypeSpecImpl extends HashMap implements TypeSpec {
      * @return the base type of this type.
      */
     public baseType() : TypeSpec {
-        return this.form == TypeFormImpl.get(TypeFormImplEnum.SUBRANGE) ? this.getAttribute(TypeKeyImpl.get(TypeKeyImplEnum.SUBRANGE_BASE_TYPE)) as TypeSpec
+        return this.form == TypeFormImpl.SUBRANGE ? this.getAttribute(TypeKeyImpl.SUBRANGE_BASE_TYPE) as TypeSpec
                                 : this;
     }
 }

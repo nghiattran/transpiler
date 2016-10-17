@@ -3,6 +3,12 @@ import {TypeForm} from '../TypeForm';
 export class TypeFormImpl implements TypeForm {
     private text : string;
 
+    public static SCALAR : TypeFormImpl = new TypeFormImpl('SCALAR');
+    public static ENUMERATION : TypeFormImpl = new TypeFormImpl('ENUMERATION');
+    public static SUBRANGE : TypeFormImpl = new TypeFormImpl('SUBRANGE');
+    public static ARRAY : TypeFormImpl = new TypeFormImpl('ARRAY');
+    public static RECORD : TypeFormImpl = new TypeFormImpl('RECORD');
+    
     /**
      * Constructor.
      */
@@ -18,16 +24,7 @@ export class TypeFormImpl implements TypeForm {
         return this.text;
     }
 
-    public static get(type : TypeFormImplEnum) : TypeFormImpl {
-        return new TypeFormImpl(TypeFormImplEnum[type]);
-    }
-
     public toString() : string {
         return this.toString().toLowerCase();
     }
-}
-
-
-export enum TypeFormImplEnum {
-    SCALAR, ENUMERATION, SUBRANGE, ARRAY, RECORD
 }

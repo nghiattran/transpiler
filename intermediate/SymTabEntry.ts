@@ -2,13 +2,14 @@ import {SymTab} from './SymTab';
 import {Definition} from './Definition';
 import {TypeSpec} from './TypeSpec';
 import {SymTabKey} from './SymTabKey';
+import {HashMap} from '../util/HashMap';
 
-export interface SymTabEntry {
+export interface SymTabEntry extends HashMap {
     /**
      * Getter.
      * @return the name of the entry.
      */
-    getName() : String;
+    getName() : string;
 
     /**
      * Getter.

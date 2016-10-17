@@ -16,6 +16,7 @@ var Source = (function () {
      * @param reader the reader for the source program
      * @throws IOException if an I/O error occurred
      */
+    // public constructor(BufferedReader reader)
     function Source() {
         this.lineNum = 0;
         this.currentPos = -2; // set to -2 to read the first source line
@@ -118,7 +119,7 @@ var Source = (function () {
      */
     Source.prototype.readLine = function () {
         // TODO use fs to read
-        this.line = this.reader.readLine(); // null when at the end of the source
+        // this.line = this.reader.readLine();  // null when at the end of the source
         this.currentPos = -1;
         if (this.line != null) {
             ++this.lineNum;
@@ -134,15 +135,15 @@ var Source = (function () {
      * @throws Exception if an error occurred.
      */
     Source.prototype.close = function () {
-        if (this.reader !== null) {
-            try {
-                this.reader.close();
-            }
-            catch (ex) {
-                ex.printStackTrace();
-                throw ex;
-            }
-        }
+        // if (this.reader !== null) {
+        //     try {
+        //         this.reader.close();
+        //     }
+        //     catch (ex) {
+        //         ex.printStackTrace();
+        //         throw ex;
+        //     }
+        // }
     };
     /**
      * Add a parser message listener.

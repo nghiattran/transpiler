@@ -1,9 +1,10 @@
-import {SymTabStackImpl} from "SymTabStackImpl";
-import {SymTabStack} from "SymTabStackImpl";
-import {SymTab} from "SymTab";
-import {SymTabImpl} from "SymTabImpl";
-import {SymTabEntry} from "SymTabEntry";
-import {SymTabEntryImpl} from "SymTabEntryImpl";
+import {SymTabStackImpl} from "./symtabimpl/SymTabStackImpl";
+import {SymTabEntryImpl} from "./symtabimpl/SymTabEntryImpl";
+import {SymTabImpl} from "./symtabimpl/SymTabImpl";
+
+import {SymTabStack} from "./SymTabStack";
+import {SymTab} from "./SymTab";
+import {SymTabEntry} from "./SymTabEntry";
 
 export class SymTabFactory {
     /**
@@ -20,7 +21,7 @@ export class SymTabFactory {
      * @return the symbol table implementation.
      */
     public static createSymTab(nestingLevel : number) : SymTab {
-        return new SymTabImpl(nestingLevel);
+        return <SymTab> new SymTabImpl(nestingLevel);
     }
 
     /**

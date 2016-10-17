@@ -15,17 +15,15 @@ export class FrontendFactory {
      */
     static createParser(language:string, type: string, source: Source)
     {
-        if (language.equalsIgnoreCase("Pascal") &&
-            type.equalsIgnoreCase("top-down"))
+        if (language.toUpperCase() === "Pascal".toUpperCase() &&
+            type.toUpperCase() === "top-down".toUpperCase())
         {
             var scanner = new PascalScanner(source);
             return new PascalParserTD(scanner);
-        }
-        else if (!language.equalsIgnoreCase("Pascal")) {
+        } else if (language.toUpperCase() !== "Pascal".toUpperCase()) {
             throw new Error("Parser factory: Invalid language '" +
                                 language + "'");
-        }
-        else {
+        } else {
             throw new Error("Parser factory: Invalid type '" +
                                 type + "'");
         }

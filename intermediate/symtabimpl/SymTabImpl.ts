@@ -34,7 +34,7 @@ export class SymTabImpl extends HashMap implements SymTab {
      */
     public enter(name : string) : SymTabEntry {
         var entry : SymTabEntry = SymTabFactory.createSymTabEntry(name, this);
-        this.put(name, entry);
+        super.put(name, entry);
 
         return entry;
     }
