@@ -1,8 +1,10 @@
 "use strict";
+var Source_1 = require('./frontend/Source');
 var FrontendFactory_1 = require('./frontend/FrontendFactory');
 var MessageType_1 = require('./message/MessageType');
-var SymTabKeyImpl_1 = require('./intermediate/symtabimpl/SymTabKeyImpl');
 var CrossReferencer_1 = require('./util/CrossReferencer');
+var fs = require("fs");
+var util = require("util");
 var Pascal = (function () {
     /**
      * Compile or interpret a Pascal source program.
@@ -10,7 +12,7 @@ var Pascal = (function () {
      * @param filePath the source file path.
      * @param flags the command line flags.
      */
-    function Pascal(operation, filePath, flags) {
+    function Pascal(operation, text, flags) {
         try {
             this.intermediate = flags.indexOf('i') > -1;
             this.xref = flags.indexOf('x') > -1;
@@ -20,7 +22,7 @@ var Pascal = (function () {
             this.call = flags.indexOf('c') > -1;
             this.returnn = flags.indexOf('r') > -1;
             // TODO : fix sourse
-            // this.source = new Source(new BufferedReader(new FileReader(filePath)));
+            this.source = new Source_1.Source(text);
             this.source.addMessageListener(new SourceMessageListener());
             this.parser = FrontendFactory_1.FrontendFactory.createParser("Pascal", "top-down", this.source);
             this.parser.addMessageListener(new ParserMessageListener());
@@ -28,10 +30,11 @@ var Pascal = (function () {
             //            backend.addMessageListener(new BackendMessageListener());
             this.parser.parse();
             this.source.close();
-            if (this.parser.getErrorCount() == 0) {
+            if (this.parser.getErrorCount() === 0) {
                 this.symTabStack = this.parser.getSymTabStack();
-                var programId = this.symTabStack.getProgramId();
-                this.iCode = programId.getAttribute(SymTabKeyImpl_1.SymTabKeyImpl.ROUTINE_ICODE);
+                // var programId : SymTabEntry = this.symTabStack.getProgramId();
+                // this.iCode = programId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE) as ICode;
+                console.log(this.xref);
                 if (this.xref) {
                     var crossReferencer = new CrossReferencer_1.CrossReferencer();
                     crossReferencer.print(this.symTabStack);
@@ -39,6 +42,7 @@ var Pascal = (function () {
             }
         }
         catch (ex) {
+            console.log(ex);
             console.log("***** Internal translator error. *****");
             ex.printStackTrace();
         }
@@ -59,12 +63,10 @@ var Pascal = (function () {
             var i = 0;
             var flags = "";
             // Flags.
-            while ((++i < args.length) && (args[i].charAt(0) == '-')) {
-                flags += args[i].substring(1);
-            }
+            flags = args[1];
             // Source path.
             if (i < args.length) {
-                var path = args[i];
+                var path = args[2];
                 new Pascal(operation, path, flags);
             }
             else {
@@ -77,10 +79,10 @@ var Pascal = (function () {
     };
     Pascal.FLAGS = "[-ixlafcr]";
     Pascal.USAGE = "Usage: Pascal execute|compile " + Pascal.FLAGS + " <source file path>";
-    Pascal.SOURCE_LINE_FORMAT = "%03d %s";
-    Pascal.PARSER_SUMMARY_FORMAT = "\n%,20d source lines." +
-        "\n%,20d syntax errors." +
-        "\n%,20.2f seconds total parsing time.\n";
+    Pascal.SOURCE_LINE_FORMAT = "%d %s";
+    Pascal.PARSER_SUMMARY_FORMAT = "\n%d source lines." +
+        "\n%d syntax errors." +
+        "\n%d seconds total parsing time.\n";
     Pascal.PREFIX_WIDTH = 5;
     Pascal.INTERPRETER_SUMMARY_FORMAT = "\n%,20d statements executed." +
         "\n%,20d runtime errors." +
@@ -165,7 +167,7 @@ var BackendMessageListener = (function () {
                 var runtimeErrors = body[1];
                 var elapsedTime = body[2];
                 // TODO: format
-                // System.out.printf(INTERPRETER_SUMMARY_FORMAT,
+                // util.format(INTERPRETER_SUMMARY_FORMAT,
                 //                   executionCount, runtimeErrors,
                 //                   elapsedTime);
                 break;
@@ -175,7 +177,7 @@ var BackendMessageListener = (function () {
                 var instructionCount = body[0];
                 var elapsedTime = body[1];
                 // TODO: format
-                // System.out.printf(COMPILER_SUMMARY_FORMAT,
+                // util.format(COMPILER_SUMMARY_FORMAT,
                 //                   instructionCount, elapsedTime);
                 break;
             }
@@ -201,8 +203,7 @@ var SourceMessageListener = (function () {
                 var lineNumber = body[0];
                 var lineText = body[1];
                 // TODO format output
-                // console.log(String.format(SOURCE_LINE_FORMAT,
-                //                                  lineNumber, lineText));
+                console.log(util.format(Pascal.SOURCE_LINE_FORMAT, lineNumber, lineText));
                 break;
             }
         }
@@ -227,10 +228,10 @@ var ParserMessageListener = (function () {
                 var statementCount = body[0];
                 var syntaxErrors = body[1];
                 var elapsedTime = body[2];
+                console.log(body);
                 // TODO format output
-                // System.out.printf(PARSER_SUMMARY_FORMAT,
-                //                   statementCount, syntaxErrors,
-                //                   elapsedTime);
+                var line = util.format(Pascal.PARSER_SUMMARY_FORMAT, statementCount, syntaxErrors, elapsedTime);
+                console.log(line);
                 break;
             }
             case MessageType_1.MessageType.SYNTAX_ERROR: {
@@ -259,3 +260,5 @@ var ParserMessageListener = (function () {
     };
     return ParserMessageListener;
 }());
+var text = fs.readFileSync('./test.pas', 'utf8');
+Pascal.main(['compile', 'xi', text]);

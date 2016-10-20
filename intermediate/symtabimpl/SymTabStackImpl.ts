@@ -7,7 +7,7 @@ import {List} from '../../util/List';
 
 export class SymTabStackImpl extends List implements SymTabStack {
     private currentNestingLevel : number;  // current scope nesting level
-    private programId : SymTabEntry;    // entry for the main program id
+    private programId : SymTabEntry;       // entry for the main program id
 
     /**
      * Constructor.

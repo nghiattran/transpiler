@@ -18,7 +18,7 @@ export abstract class Scanner {
      * Constructor
      * @param source the source to be used with this scanner.
      */
-    public Constructor(source : Source) {
+    public constructor(source : Source) {
         this.source = source;
     }
 

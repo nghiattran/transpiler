@@ -34,6 +34,13 @@ var HashMap = (function () {
     HashMap.prototype.get = function (key) {
         return this.collection[key.toString()];
     };
+    HashMap.prototype.toList = function () {
+        var list = [];
+        for (var entry in this.collection) {
+            list.push(this.collection[entry]);
+        }
+        return list;
+    };
     return HashMap;
 }());
 exports.HashMap = HashMap;

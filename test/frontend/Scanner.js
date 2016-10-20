@@ -1,14 +1,12 @@
 "use strict";
 var Scanner = (function () {
-    function Scanner() {
-    }
     /**
      * Constructor
      * @param source the source to be used with this scanner.
      */
-    Scanner.prototype.Constructor = function (source) {
+    function Scanner(source) {
         this.source = source;
-    };
+    }
     /**
      * @return the current token.
      */

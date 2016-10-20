@@ -1,5 +1,5 @@
 export class List {
-	protected collection : Object[];
+	protected collection : Object[] = [];
 
 	add(value : Object) : void {
 		this.collection.push(value)

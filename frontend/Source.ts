@@ -21,7 +21,7 @@ import {Parser} from "./Parser";
  */
 export class Source implements MessageProducer {
     public static EOL = '\n';      // end-of-line character
-    public static EOF = 'TODO';  // end-of-file character
+    public static EOF = 'EOF';  // end-of-file character
 
     // private BufferedReader reader;            // reader for the source program
     private line : string;                      // source line
@@ -29,17 +29,20 @@ export class Source implements MessageProducer {
     private currentPos : number;                   // current source line position
 
     private messageHandler : MessageHandler;    // delegate to handle messages
-
+    private globalPos : number;
+    private text : string;
     /**
      * Constructor.
      * @param reader the reader for the source program
      * @throws IOException if an I/O error occurred
      */
     // public constructor(BufferedReader reader)
-    public constructor() {
+    public constructor(text : string) {
+        this.text = text;
         this.lineNum = 0;
         this.currentPos = -2;  // set to -2 to read the first source line
         this.messageHandler = new MessageHandler();
+        this.globalPos = 0;
     }
 
     /**
@@ -66,18 +69,19 @@ export class Source implements MessageProducer {
      */
     public currentChar() : string {
         // First time?
-        if (this.currentPos == -2) {
+        if (this.currentPos === -2) {
             this.readLine();
             return this.nextChar();
         }
 
+
         // At end of file?
-        else if (this.line == null) {
+        else if (this.line === null) {
             return Source.EOF;
         }
 
         // At end of line?
-        else if ((this.currentPos == -1) || (this.currentPos == this.line.length)) {
+        else if ((this.currentPos === -1) || (this.currentPos === this.line.length)) {
             return Source.EOL;
         }
 
@@ -111,7 +115,7 @@ export class Source implements MessageProducer {
      */
     public peekChar() : string {
         this.currentChar();
-        if (this.line == null) {
+        if (this.line === null) {
             return Source.EOF;
         }
 
@@ -124,7 +128,7 @@ export class Source implements MessageProducer {
      * @throws Exception if an error occurred.
      */
     public atEol() : boolean {
-        return (this.line != null) && (this.currentPos == this.line.length);
+        return (this.line != null) && (this.currentPos === this.line.length);
     }
 
     /**
@@ -133,11 +137,11 @@ export class Source implements MessageProducer {
      */
     public atEof() : boolean{
         // First time?
-        if (this.currentPos == -2) {
+        if (this.currentPos === -2) {
             this.readLine();
         }
 
-        return this.line == null;
+        return this.line === null;
     }
 
     /**
@@ -151,13 +155,32 @@ export class Source implements MessageProducer {
         }
     }
 
+    public readALine() : string {
+        var line = '';
+
+        if (this.globalPos >= this.text.length) {
+            return null;
+        }
+
+        while(this.text.charAt(this.globalPos) !== Source.EOL 
+            && this.globalPos < this.text.length) 
+        {
+            line += this.text.charAt(this.globalPos);
+            this.globalPos++;
+        }
+        this.globalPos++;          // skip \n chacracter
+
+
+        return line;
+    }
+
     /**
      * Read the next source line.
      * @throws IOException if an I/O error occurred.
      */
     private readLine() : void {
-        // TODO use fs to read
-        // this.line = this.reader.readLine();  // null when at the end of the source
+        this.line = this.readALine();  // null when at the end of the source
+        
         this.currentPos = -1;
 
         if (this.line != null) {
@@ -168,7 +191,7 @@ export class Source implements MessageProducer {
         // and the line text to all the listeners.
         if (this.line != null) {
             this.sendMessage(new Message(MessageType.SOURCE_LINE,
-                                    {lineNum: this.lineNum, line: this.line}));
+                                    [this.lineNum, this.line]));
         }
     }
 

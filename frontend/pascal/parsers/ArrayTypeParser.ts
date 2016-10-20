@@ -1,31 +1,4 @@
-package wci.frontend.pascal.parsers;
-
-import java.util.EnumSet;
-import java.util.ArrayList;
-
-import wci.frontend.*;
-import wci.frontend.pascal.*;
-import wci.intermediate.*;
-import wci.intermediate.symtabimpl.*;
-
-import static wci.frontend.pascal.PascalTokenType.*;
-import static wci.frontend.pascal.PascalErrorCode.*;
-import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
-import static wci.intermediate.typeimpl.TypeFormImpl.ARRAY;
-import static wci.intermediate.typeimpl.TypeFormImpl.SUBRANGE;
-import static wci.intermediate.typeimpl.TypeFormImpl.ENUMERATION;
-import static wci.intermediate.typeimpl.TypeKeyImpl.*;
-
-/**
- * <h1>ArrayTypeParser</h1>
- *
- * <p>Parse a Pascal array type specification.</p>
- *
- * <p>Copyright (c) 2009 by Ronald Mak</p>
- * <p>For instructional purposes only.  No warranties.</p>
- */
-class ArrayTypeParser extends TypeSpecificationParser
-{
+export class ArrayTypeParser extends TypeSpecificationParser {
     /**
      * Constructor.
      * @param parent the parent parser.

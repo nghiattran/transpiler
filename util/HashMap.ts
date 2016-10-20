@@ -37,4 +37,14 @@ export class HashMap {
     public get(key) : Object{
         return this.collection[key.toString()];
     }
+
+    public toList() : Object[] {
+        let list = [];
+
+        for (var entry in this.collection) {
+            list.push(this.collection[entry]);
+        }
+
+        return list;
+    }
 }

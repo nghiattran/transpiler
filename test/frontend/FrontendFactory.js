@@ -1,6 +1,6 @@
 "use strict";
-var PascalParserTDlocation_1 = require("PascalParserTDlocation");
-var PascalScannerlocation_1 = require("PascalScannerlocation");
+var PascalParserTD_1 = require('./pascal/PascalParserTD');
+var PascalScanner_1 = require('./pascal/PascalScanner');
 var FrontendFactory = (function () {
     function FrontendFactory() {
     }
@@ -15,8 +15,8 @@ var FrontendFactory = (function () {
     FrontendFactory.createParser = function (language, type, source) {
         if (language.toUpperCase() === "Pascal".toUpperCase() &&
             type.toUpperCase() === "top-down".toUpperCase()) {
-            var scanner = new PascalScannerlocation_1["default"](source);
-            return new PascalParserTDlocation_1["default"](scanner);
+            var scanner = new PascalScanner_1.PascalScanner(source);
+            return new PascalParserTD_1.PascalParserTD(scanner);
         }
         else if (language.toUpperCase() !== "Pascal".toUpperCase()) {
             throw new Error("Parser factory: Invalid language '" +

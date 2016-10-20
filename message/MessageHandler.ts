@@ -4,7 +4,7 @@ import {MessageListener} from "./MessageListener";
 
 export class MessageHandler {
     private message : Message;                       // message
-    private listeners : MessageListener[];  // listener list
+    private listeners : MessageListener[] = [];  // listener list
 
     /**
      * Constructor.

@@ -1,21 +1,6 @@
-package wci.frontend.pascal.tokens;
+import {PascalToken} from '../PascalToken';
 
-import wci.frontend.*;
-import wci.frontend.pascal.*;
-
-import static wci.frontend.pascal.PascalTokenType.*;
-import static wci.frontend.pascal.PascalErrorCode.*;
-
-/**
- * <h1>PascalNumberToken</h1>
- *
- * <p>Pascal number tokens (integer and real).</p>
- *
- * <p>Copyright (c) 2009 by Ronald Mak</p>
- * <p>For instructional purposes only.  No warranties.</p>
- */
-public class PascalNumberToken extends PascalToken
-{
+export class PascalNumberToken extends PascalToken {
     private static final int MAX_EXPONENT = 37;
 
     /**

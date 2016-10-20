@@ -47,15 +47,7 @@ var SymTabImpl = (function (_super) {
      * @return a list of symbol table entries sorted by name.
      */
     SymTabImpl.prototype.sortedEntries = function () {
-        // TODO: fix this
-        // Collection<SymTabEntry> entries = values();
-        // Iterator<SymTabEntry> iter = entries.iterator();
-        // ArrayList<SymTabEntry> list = new ArrayList<SymTabEntry>(size());
-        // // Iterate over the sorted entries and append them to the list.
-        // while (iter.hasNext()) {
-        //     list.add(iter.next());
-        // }
-        return []; // sorted list of entries
+        return this.toList();
     };
     /**
      * @return the next local variables array slot number.

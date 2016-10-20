@@ -17,10 +17,12 @@ var Source = (function () {
      * @throws IOException if an I/O error occurred
      */
     // public constructor(BufferedReader reader)
-    function Source() {
+    function Source(text) {
+        this.text = text;
         this.lineNum = 0;
         this.currentPos = -2; // set to -2 to read the first source line
         this.messageHandler = new MessageHandler_1.MessageHandler();
+        this.globalPos = 0;
     }
     /**
      * Getter.
@@ -44,14 +46,14 @@ var Source = (function () {
      */
     Source.prototype.currentChar = function () {
         // First time?
-        if (this.currentPos == -2) {
+        if (this.currentPos === -2) {
             this.readLine();
             return this.nextChar();
         }
-        else if (this.line == null) {
+        else if (this.line === null) {
             return Source.EOF;
         }
-        else if ((this.currentPos == -1) || (this.currentPos == this.line.length)) {
+        else if ((this.currentPos === -1) || (this.currentPos === this.line.length)) {
             return Source.EOL;
         }
         else if (this.currentPos > this.line.length) {
@@ -79,7 +81,7 @@ var Source = (function () {
      */
     Source.prototype.peekChar = function () {
         this.currentChar();
-        if (this.line == null) {
+        if (this.line === null) {
             return Source.EOF;
         }
         var nextPos = this.currentPos + 1;
@@ -90,7 +92,7 @@ var Source = (function () {
      * @throws Exception if an error occurred.
      */
     Source.prototype.atEol = function () {
-        return (this.line != null) && (this.currentPos == this.line.length);
+        return (this.line != null) && (this.currentPos === this.line.length);
     };
     /**
      * @return true if at the end of the file, else return false.
@@ -98,10 +100,10 @@ var Source = (function () {
      */
     Source.prototype.atEof = function () {
         // First time?
-        if (this.currentPos == -2) {
+        if (this.currentPos === -2) {
             this.readLine();
         }
-        return this.line == null;
+        return this.line === null;
     };
     /**
      * Skip the rest of the current input line
@@ -113,13 +115,25 @@ var Source = (function () {
             this.currentPos = this.line.length + 1;
         }
     };
+    Source.prototype.readALine = function () {
+        var line = '';
+        if (this.globalPos >= this.text.length) {
+            return null;
+        }
+        while (this.text.charAt(this.globalPos) !== Source.EOL
+            && this.globalPos < this.text.length) {
+            line += this.text.charAt(this.globalPos);
+            this.globalPos++;
+        }
+        this.globalPos++; // skip \n chacracter
+        return line;
+    };
     /**
      * Read the next source line.
      * @throws IOException if an I/O error occurred.
      */
     Source.prototype.readLine = function () {
-        // TODO use fs to read
-        // this.line = this.reader.readLine();  // null when at the end of the source
+        this.line = this.readALine(); // null when at the end of the source
         this.currentPos = -1;
         if (this.line != null) {
             ++this.lineNum;
@@ -127,7 +141,7 @@ var Source = (function () {
         // Send a source line message containing the line number
         // and the line text to all the listeners.
         if (this.line != null) {
-            this.sendMessage(new Message_1.Message(MessageType_1.MessageType.SOURCE_LINE, { lineNum: this.lineNum, line: this.line }));
+            this.sendMessage(new Message_1.Message(MessageType_1.MessageType.SOURCE_LINE, [this.lineNum, this.line]));
         }
     };
     /**
@@ -167,7 +181,7 @@ var Source = (function () {
         this.messageHandler.sendMessage(message);
     };
     Source.EOL = '\n'; // end-of-line character
-    Source.EOF = 'TODO'; // end-of-file character
+    Source.EOF = 'EOF'; // end-of-file character
     return Source;
 }());
 exports.Source = Source;

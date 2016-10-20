@@ -13,6 +13,9 @@ import {SymTabKeyImpl} from './intermediate/symtabimpl/SymTabKeyImpl';
 
 import {CrossReferencer} from './util/CrossReferencer';
 
+import fs = require("fs");
+import util = require("util");
+
 export class Pascal {
     private parser : Parser;            // language-independent parser
     private source : Source;            // language-independent scanner
@@ -36,7 +39,7 @@ export class Pascal {
      * @param filePath the source file path.
      * @param flags the command line flags.
      */
-    public constructor(operation : string, filePath : string, flags : string) {
+    public constructor(operation : string, text : string, flags : string) {
         try {
             this.intermediate = flags.indexOf('i') > -1;
             this.xref         = flags.indexOf('x') > -1;
@@ -47,7 +50,7 @@ export class Pascal {
             this.returnn      = flags.indexOf('r') > -1;
 
             // TODO : fix sourse
-            // this.source = new Source(new BufferedReader(new FileReader(filePath)));
+            this.source = new Source(text);
             this.source.addMessageListener(new SourceMessageListener());
 
             this.parser = FrontendFactory.createParser("Pascal", "top-down", this.source);
@@ -55,16 +58,16 @@ export class Pascal {
 
 //            backend = BackendFactory.createBackend(operation);
 //            backend.addMessageListener(new BackendMessageListener());
-
+    
             this.parser.parse();
             this.source.close();
 
-            if (this.parser.getErrorCount() == 0) {
+            if (this.parser.getErrorCount() === 0) {
                 this.symTabStack = this.parser.getSymTabStack();
 
-                var programId : SymTabEntry = this.symTabStack.getProgramId();
-                this.iCode = programId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE) as ICode;
-
+                // var programId : SymTabEntry = this.symTabStack.getProgramId();
+                // this.iCode = programId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE) as ICode;
+                console.log(this.xref);
                 if (this.xref) {
                     var crossReferencer : CrossReferencer = new CrossReferencer();
                     crossReferencer.print(this.symTabStack);
@@ -78,8 +81,8 @@ export class Pascal {
 
 //                backend.process(iCode, symTabStack);
             }
-        }
-        catch (ex) {
+        } catch (ex) {
+            console.log(ex)
             console.log("***** Internal translator error. *****");
             ex.printStackTrace();
         }
@@ -108,13 +111,11 @@ export class Pascal {
             var flags : string = "";
 
             // Flags.
-            while ((++i < args.length) && (args[i].charAt(0) == '-')) {
-                flags += args[i].substring(1);
-            }
+            flags = args[1];
 
             // Source path.
             if (i < args.length) {
-                var path : string = args[i];
+                var path : string = args[2];
                 new Pascal(operation, path, flags);
             }
             else {
@@ -126,12 +127,12 @@ export class Pascal {
         }
     }
 
-    public static SOURCE_LINE_FORMAT : string = "%03d %s";
+    public static SOURCE_LINE_FORMAT : string = "%d %s";
 
     public static PARSER_SUMMARY_FORMAT : string =
-        "\n%,20d source lines." +
-        "\n%,20d syntax errors." +
-        "\n%,20.2f seconds total parsing time.\n";
+        "\n%d source lines." +
+        "\n%d syntax errors." +
+        "\n%d seconds total parsing time.\n";
 
     public static PREFIX_WIDTH : number = 5;
 
@@ -181,7 +182,7 @@ class BackendMessageListener implements MessageListener {
                     let lineNumber : number = message.getBody() as number;
 
                     // TODO: format
-                    // System.out.printf(LINE_FORMAT, lineNumber);
+                    // util.format(LINE_FORMAT, lineNumber);
                 }
                 break;
             }
@@ -194,7 +195,7 @@ class BackendMessageListener implements MessageListener {
                     let value : Object = body[2] as Object;
 
                     // TODO: format
-                    // System.out.printf(ASSIGN_FORMAT,
+                    // util.format(ASSIGN_FORMAT,
                     //                   lineNumber, variableName, value);
                 }
                 break;
@@ -208,7 +209,7 @@ class BackendMessageListener implements MessageListener {
                     let value : Object = body[2] as Object;
 
                     // TODO: format
-                    // System.out.printf(FETCH_FORMAT,
+                    // util.format(FETCH_FORMAT,
                     //                   lineNumber, variableName, value);
                 }
                 break;
@@ -221,7 +222,7 @@ class BackendMessageListener implements MessageListener {
                     let routineName : string = body[1] as string;
 
                     // TODO: format
-                    // System.out.printf(CALL_FORMAT,
+                    // util.format(CALL_FORMAT,
                     //                   lineNumber, routineName);
                 }
                 break;
@@ -234,7 +235,7 @@ class BackendMessageListener implements MessageListener {
                     let routineName : string = body[1] as string;
 
                     // TODO: format
-                    // System.out.printf(RETURN_FORMAT,
+                    // util.format(RETURN_FORMAT,
                     //                   lineNumber, routineName);
                 }
                 break;
@@ -262,7 +263,7 @@ class BackendMessageListener implements MessageListener {
                 let elapsedTime : number = body[2] as number;
 
                 // TODO: format
-                // System.out.printf(INTERPRETER_SUMMARY_FORMAT,
+                // util.format(INTERPRETER_SUMMARY_FORMAT,
                 //                   executionCount, runtimeErrors,
                 //                   elapsedTime);
                 break;
@@ -274,7 +275,7 @@ class BackendMessageListener implements MessageListener {
                 let elapsedTime : number = body[1] as number;
 
                 // TODO: format
-                // System.out.printf(COMPILER_SUMMARY_FORMAT,
+                // util.format(COMPILER_SUMMARY_FORMAT,
                 //                   instructionCount, elapsedTime);
                 break;
             }
@@ -292,17 +293,16 @@ class SourceMessageListener implements MessageListener {
      */
     public messageReceived(message : Message) : void{
         var type : MessageType = message.getType();
-        var body : Object[] = message.getBody();
-
+        let body : Object[] = message.getBody() as Object[];
         switch (type) {
 
             case MessageType.SOURCE_LINE: {
                 var lineNumber : number = body[0] as number;
                 var lineText : string  = body[1] as string;
-
+                
                 // TODO format output
-                // console.log(String.format(SOURCE_LINE_FORMAT,
-                //                                  lineNumber, lineText));
+                console.log(util.format(Pascal.SOURCE_LINE_FORMAT,
+                                        lineNumber, lineText));
                 break;
             }
         }
@@ -327,11 +327,12 @@ class ParserMessageListener implements MessageListener {
                 let statementCount : number = body[0] as number;
                 let syntaxErrors : number = body[1] as number;
                 let elapsedTime : number= body[2] as number;
-
+                console.log(body);
                 // TODO format output
-                // System.out.printf(PARSER_SUMMARY_FORMAT,
-                //                   statementCount, syntaxErrors,
-                //                   elapsedTime);
+                var line = util.format(Pascal.PARSER_SUMMARY_FORMAT,
+                                  statementCount, syntaxErrors,
+                                  elapsedTime);
+                console.log(line);
                 break;
             }
 
@@ -365,3 +366,8 @@ class ParserMessageListener implements MessageListener {
         }
     }
 }
+
+
+let text = fs.readFileSync('./test.pas', 'utf8');
+
+Pascal.main(['compile', 'xi', text])

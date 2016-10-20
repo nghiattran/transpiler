@@ -4,6 +4,7 @@ var MessageHandler = (function () {
      * Constructor.
      */
     function MessageHandler() {
+        this.listeners = []; // listener list
     }
     /**
      * Add a listener to the listener list.

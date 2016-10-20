@@ -1,8 +1,8 @@
-import PascalParserTD from "PascalParserTDlocation";
-import PascalScanner from "PascalScannerlocation";
+import {PascalParserTD} from './pascal/PascalParserTD';
+import {PascalScanner} from './pascal/PascalScanner';
 
-import {Source} from "./Source";
-import {Scanner} from "./Scanner";
+import {Source} from './Source';
+import {Scanner} from './Scanner';
 
 export class FrontendFactory {
     /**
@@ -13,7 +13,7 @@ export class FrontendFactory {
      * @return the parser.
      * @throws Exception if an error occurred.
      */
-    static createParser(language:string, type: string, source: Source)
+    static createParser(language : string, type: string, source: Source)
     {
         if (language.toUpperCase() === "Pascal".toUpperCase() &&
             type.toUpperCase() === "top-down".toUpperCase())
