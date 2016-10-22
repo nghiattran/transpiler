@@ -1,16 +1,19 @@
 import {PascalToken} from '../PascalToken';
+import {PascalErrorCode} from '../PascalErrorCode';
+import {PascalTokenType} from '../PascalTokenType';
+import {PascalScanner} from '../PascalScanner';
+
+import {Source} from '../../Source';
 
 export class PascalNumberToken extends PascalToken {
-    private static final int MAX_EXPONENT = 37;
+    private static MAX_EXPONENT : number = 37;
 
     /**
      * Constructor.
      * @param source the source from where to fetch the token's characters.
      * @throws Exception if an error occurred.
      */
-    public PascalNumberToken(Source source)
-        throws Exception
-    {
+    public constructor(source : Source) {
         super(source);
     }
 
@@ -18,12 +21,10 @@ export class PascalNumberToken extends PascalToken {
      * Extract a Pascal number token from the source.
      * @throws Exception if an error occurred.
      */
-    protected void extract()
-        throws Exception
-    {
-        StringBuilder textBuffer = new StringBuilder();  // token's characters
-        extractNumber(textBuffer);
-        text = textBuffer.toString();
+    protected extract() : void{
+        let textBuffer : string = '';  // token's characters
+        this.extractNumber(textBuffer);
+        this.text = textBuffer.toString();
     }
 
     /**
@@ -31,39 +32,37 @@ export class PascalNumberToken extends PascalToken {
      * @param textBuffer the buffer to append the token's characters.
      * @throws Exception if an error occurred.
      */
-    protected void extractNumber(StringBuilder textBuffer)
-        throws Exception
-    {
-        String wholeDigits = null;     // digits before the decimal point
-        String fractionDigits = null;  // digits after the decimal point
-        String exponentDigits = null;  // exponent digits
-        char exponentSign = '+';       // exponent sign '+' or '-'
-        boolean sawDotDot = false;     // true if saw .. token
-        char currentChar;              // current character
+    protected extractNumber(textBuffer : string) : void{
+        let wholeDigits : string = null;     // digits before the decimal point
+        let fractionDigits : string = null;  // digits after the decimal point
+        let exponentDigits : string = null;  // exponent digits
+        let exponentSign : string = '+';       // exponent sign '+' or '-'
+        let sawDotDot : boolean = false;     // true if saw .. token
+        let currentChar : string;              // current character
 
-        type = INTEGER;  // assume INTEGER token type for now
+        this.type = PascalTokenType.INTEGER;  // assume PascalTokenType.INTEGER token this.type for now
 
         // Extract the digits of the whole part of the number.
-        wholeDigits = unsignedIntegerDigits(textBuffer);
-        if (type == ERROR) {
+        wholeDigits = this.unsignedIntegerDigits(textBuffer);
+        if (this.type === PascalTokenType.ERROR) {
             return;
         }
 
         // Is there a . ?
         // It could be a decimal point or the start of a .. token.
-        currentChar = currentChar();
-        if (currentChar == '.') {
-            if (peekChar() == '.') {
+        currentChar = this.currentChar();
+        if (currentChar === '.') {
+            if (this.peekChar() === '.') {
                 sawDotDot = true;  // it's a ".." token, so don't consume it
             }
             else {
-                type = REAL;  // decimal point, so token type is REAL
-                textBuffer.append(currentChar);
-                currentChar = nextChar();  // consume decimal point
+                this.type = PascalTokenType.REAL;  // decimal point, so token this.type is PascalTokenType.REAL
+                textBuffer += currentChar
+                currentChar = this.nextChar();  // consume decimal point
 
                 // Collect the digits of the fraction part of the number.
-                fractionDigits = unsignedIntegerDigits(textBuffer);
-                if (type == ERROR) {
+                fractionDigits = this.unsignedIntegerDigits(textBuffer);
+                if (this.type === PascalTokenType.ERROR) {
                     return;
                 }
             }
@@ -71,39 +70,39 @@ export class PascalNumberToken extends PascalToken {
 
         // Is there an exponent part?
         // There cannot be an exponent if we already saw a ".." token.
-        currentChar = currentChar();
-        if (!sawDotDot && ((currentChar == 'E') || (currentChar == 'e'))) {
-            type = REAL;  // exponent, so token type is REAL
-            textBuffer.append(currentChar);
-            currentChar = nextChar();  // consume 'E' or 'e'
+        currentChar = this.currentChar();
+        if (!sawDotDot && ((currentChar === 'E') || (currentChar === 'e'))) {
+            this.type = PascalTokenType.REAL;  // exponent, so token this.type is PascalTokenType.REAL
+            textBuffer += currentChar;
+            currentChar = this.nextChar();  // consume 'E' or 'e'
 
             // Exponent sign?
-            if ((currentChar == '+') || (currentChar == '-')) {
-                textBuffer.append(currentChar);
+            if ((currentChar === '+') || (currentChar === '-')) {
+                textBuffer += currentChar;
                 exponentSign = currentChar;
-                currentChar = nextChar();  // consume '+' or '-'
+                currentChar = this.nextChar();  // consume '+' or '-'
             }
 
             // Extract the digits of the exponent.
-            exponentDigits = unsignedIntegerDigits(textBuffer);
+            exponentDigits = this.unsignedIntegerDigits(textBuffer);
         }
 
         // Compute the value of an integer number token.
-        if (type == INTEGER) {
-            int integerValue = computeIntegerValue(wholeDigits);
+        if (this.type === PascalTokenType.INTEGER) {
+            let integerValue : number = this.computeIntegerValue(wholeDigits);
 
-            if (type != ERROR) {
-                value = new Integer(integerValue);
+            if (this.type != PascalTokenType.ERROR) {
+                this.value = Math.floor(integerValue);
             }
         }
 
         // Compute the value of a real number token.
-        else if (type == REAL) {
-            float floatValue = computeFloatValue(wholeDigits, fractionDigits,
+        else if (this.type === PascalTokenType.REAL) {
+            let floatValue : number = this.computeFloatValue(wholeDigits, fractionDigits,
                                                  exponentDigits, exponentSign);
 
-            if (type != ERROR) {
-                value = new Float(floatValue);
+            if (this.type != PascalTokenType.ERROR) {
+                this.value = floatValue;
             }
         }
     }
@@ -114,24 +113,22 @@ export class PascalNumberToken extends PascalToken {
      * @return the string of digits.
      * @throws Exception if an error occurred.
      */
-    private String unsignedIntegerDigits(StringBuilder textBuffer)
-        throws Exception
-    {
-        char currentChar = currentChar();
+    private unsignedIntegerDigits(textBuffer : string ) : string {
+        let currentChar : string = this.currentChar();
 
         // Must have at least one digit.
-        if (!Character.isDigit(currentChar)) {
-            type = ERROR;
-            value = INVALID_NUMBER;
+        if (!PascalScanner.isDigit(currentChar)) {
+            this.type = PascalTokenType.ERROR;
+            this.value = PascalErrorCode.INVALID_NUMBER;
             return null;
         }
 
         // Extract the digits.
-        StringBuilder digits = new StringBuilder();
-        while (Character.isDigit(currentChar)) {
-            textBuffer.append(currentChar);
-            digits.append(currentChar);
-            currentChar = nextChar();  // consume digit
+        let digits : string = '';
+        while (PascalScanner.isDigit(currentChar)) {
+            textBuffer += currentChar
+            digits += currentChar;
+            currentChar = this.nextChar();  // consume digit
         }
 
         return digits.toString();
@@ -143,23 +140,22 @@ export class PascalNumberToken extends PascalToken {
      * @param digits the string of digits.
      * @return the integer value.
      */
-    private int computeIntegerValue(String digits)
-    {
+    private computeIntegerValue(digits : string) : number {
         // Return 0 if no digits.
-        if (digits == null) {
+        if (digits === null) {
             return 0;
         }
 
-        int integerValue = 0;
-        int prevValue = -1;    // overflow occurred if prevValue > integerValue
-        int index = 0;
+        let integerValue : number = 0;
+        let prevValue : number = -1;    // overflow occurred if prevValue > integerValue
+        let index : number = 0;
 
         // Loop over the digits to compute the integer value
         // as long as there is no overflow.
-        while ((index < digits.length()) && (integerValue >= prevValue)) {
+        while ((index < digits.length) && (integerValue >= prevValue)) {
             prevValue = integerValue;
             integerValue = 10*integerValue +
-                           Character.getNumericValue(digits.charAt(index++));
+                           PascalScanner.getNumericValue(digits.charAt(index++))
         }
 
         // No overflow:  Return the integer value.
@@ -169,8 +165,8 @@ export class PascalNumberToken extends PascalToken {
 
         // Overflow:  Set the integer out of range error.
         else {
-            type = ERROR;
-            value = RANGE_INTEGER;
+            this.type = PascalTokenType.ERROR;
+            this.value = PascalErrorCode.RANGE_INTEGER;
             return 0;
         }
     }
@@ -183,37 +179,37 @@ export class PascalNumberToken extends PascalToken {
      * @param exponentSign the exponent sign.
      * @return the float value.
      */
-    private float computeFloatValue(String wholeDigits, String fractionDigits,
-                                    String exponentDigits, char exponentSign)
+    private computeFloatValue(wholeDigits : string, fractionDigits : string,
+                              exponentDigits : string, exponentSign : string) : number
     {
-        double floatValue = 0.0;
-        int exponentValue = computeIntegerValue(exponentDigits);
-        String digits = wholeDigits;  // whole and fraction digits
+        let floatValue : number = 0.0;
+        let exponentValue : number = this.computeIntegerValue(exponentDigits);
+        let digits : string = wholeDigits;  // whole and fraction digits
 
         // Negate the exponent if the exponent sign is '-'.
-        if (exponentSign == '-') {
+        if (exponentSign === '-') {
             exponentValue = -exponentValue;
         }
 
         // If there are any fraction digits, adjust the exponent value
         // and append the fraction digits.
         if (fractionDigits != null) {
-            exponentValue -= fractionDigits.length();
+            exponentValue -= fractionDigits.length;
             digits += fractionDigits;
         }
 
         // Check for a real number out of range error.
-        if (Math.abs(exponentValue + wholeDigits.length()) > MAX_EXPONENT) {
-            type = ERROR;
-            value = RANGE_REAL;
-            return 0.0f;
+        if (Math.abs(exponentValue + wholeDigits.length) > PascalNumberToken.MAX_EXPONENT) {
+            this.type = PascalTokenType.ERROR;
+            this.value = PascalErrorCode.RANGE_REAL;
+            return 0;
         }
 
         // Loop over the digits to compute the float value.
-        int index = 0;
-        while (index < digits.length()) {
+        let index : number = 0;
+        while (index < digits.length) {
             floatValue = 10*floatValue +
-                         Character.getNumericValue(digits.charAt(index++));
+                         PascalScanner.getNumericValue(digits.charAt(index++));
         }
 
         // Adjust the float value based on the exponent value.
@@ -221,6 +217,6 @@ export class PascalNumberToken extends PascalToken {
             floatValue *= Math.pow(10, exponentValue);
         }
 
-        return (float) floatValue;
+        return floatValue;
     }
 }

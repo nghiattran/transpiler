@@ -1,24 +1,4 @@
-package wci.frontend.pascal.parsers;
-
-import wci.frontend.*;
-import wci.frontend.pascal.*;
-import wci.intermediate.*;
-
-import static wci.frontend.pascal.PascalTokenType.*;
-import static wci.frontend.pascal.PascalErrorCode.*;
-import static wci.intermediate.icodeimpl.ICodeNodeTypeImpl.*;
-import static wci.intermediate.icodeimpl.ICodeKeyImpl.*;
-
-/**
- * <h1>CompoundStatementParser</h1>
- *
- * <p>Parse a Pascal compound statement.</p>
- *
- * <p>Copyright (c) 2009 by Ronald Mak</p>
- * <p>For instructional purposes only.  No warranties.</p>
- */
-public class CompoundStatementParser extends StatementParser
-{
+export class CompoundStatementParser extends StatementParser {
     /**
      * Constructor.
      * @param parent the parent parser.

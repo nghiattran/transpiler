@@ -1,3 +1,8 @@
+import {PascalToken} from '../PascalToken';
+import {PascalErrorCode} from '../PascalErrorCode';
+
+import {Source} from '../../Source';
+
 export class PascalErrorToken extends PascalToken {
     /**
      * Constructor.

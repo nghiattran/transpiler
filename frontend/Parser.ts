@@ -27,7 +27,7 @@ export abstract class Parser implements MessageProducer {
      * Constructor.
      * @param scanner the scanner to be used with this parser.
      */
-    protected constructor(scanner:Scanner) {
+    constructor(scanner:Scanner) {
         this.scanner = scanner;
     }
 

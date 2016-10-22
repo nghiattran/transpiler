@@ -61,6 +61,9 @@ var Scanner = (function () {
     Scanner.prototype.skipToNextLine = function () {
         this.source.skipToNextLine();
     };
+    Scanner.isDigit = function (n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    };
     return Scanner;
 }());
 exports.Scanner = Scanner;

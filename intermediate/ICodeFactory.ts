@@ -1,8 +1,8 @@
-import {ICodeImpl} from './ICodeImpl';
+import {ICodeImpl} from './icodeimpl/ICodeImpl';
 import {ICode} from './ICode';
 import {ICodeNodeType} from './ICodeNodeType';
 import {ICodeNode} from './ICodeNode';
-import {ICodeNodeImpl} from './ICodeNodeImpl';
+import {ICodeNodeImpl} from './icodeimpl/ICodeNodeImpl';
 
 export class ICodeFactory {
     /**

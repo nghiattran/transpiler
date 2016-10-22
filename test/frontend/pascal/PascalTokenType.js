@@ -1,40 +1,6 @@
 "use strict";
+var List_1 = require('../../util/List');
 var HashMap_1 = require('../../util/HashMap');
-var PascalTokenType = (function () {
-    /**
-     * Constructor.
-     * @param text the token text.
-     */
-    function PascalTokenType(text) {
-        text = text || this.toString().toLowerCase();
-        this.text = text;
-    }
-    PascalTokenType.initialize = function () {
-        var values = PascalTokenType.values();
-        for (var i = PascalTokenType.FIRST_RESERVED_INDEX; i < PascalTokenType.LAST_RESERVED_INDEX; ++i) {
-            PascalTokenType.RESERVED_WORDS.put(values[i].getText().toLowerCase());
-        }
-    };
-    /**
-     * Getter.
-     * @return the token text.
-     */
-    PascalTokenType.prototype.getText = function () {
-        return this.text;
-    };
-    PascalTokenType.FIRST_RESERVED_INDEX = PascalTokenTypeEnum.AND;
-    PascalTokenType.LAST_RESERVED_INDEX = PascalTokenTypeEnum.WITH;
-    PascalTokenType.FIRST_SPECIAL_INDEX = PascalTokenTypeEnum.PLUS;
-    PascalTokenType.LAST_SPECIAL_INDEX = PascalTokenTypeEnum.DOT_DOT;
-    // Set of lower-cased Pascal reserved word text strings.
-    PascalTokenType.RESERVED_WORDS = new HashMap_1.HashMap();
-    return PascalTokenType;
-}());
-exports.PascalTokenType = PascalTokenType;
-var PascalTokenType;
-(function (PascalTokenType) {
-    PascalTokenType.initialize();
-})(PascalTokenType = exports.PascalTokenType || (exports.PascalTokenType = {}));
 (function (PascalTokenTypeEnum) {
     // Reserved words.
     PascalTokenTypeEnum[PascalTokenTypeEnum["AND"] = 0] = "AND";
@@ -127,3 +93,110 @@ var PascalTokenTypeEnum;
     }
     PascalTokenTypeEnum.indices = indices;
 })(PascalTokenTypeEnum = exports.PascalTokenTypeEnum || (exports.PascalTokenTypeEnum = {}));
+var PascalTokenType = (function () {
+    /**
+     * Constructor.
+     * @param text the token text.
+     */
+    function PascalTokenType(text) {
+        text = text || this.toString().toLowerCase();
+        this.text = text;
+    }
+    PascalTokenType.initialize = function () {
+        var values = PascalTokenTypeEnum.names();
+        for (var i = PascalTokenType.FIRST_RESERVED_INDEX; i < PascalTokenType.LAST_RESERVED_INDEX; ++i) {
+            PascalTokenType.RESERVED_WORDS.add(PascalTokenType[values[i]]);
+        }
+        var specialValues = PascalTokenTypeEnum.names();
+        for (var i = PascalTokenType.FIRST_SPECIAL_INDEX; i < PascalTokenType.LAST_SPECIAL_INDEX; ++i) {
+            PascalTokenType.SPECIAL_SYMBOLS.put(PascalTokenType[values[i]].getText(), PascalTokenType[values[i]]);
+        }
+    };
+    /**
+     * Getter.
+     * @return the token text.
+     */
+    PascalTokenType.prototype.getText = function () {
+        return this.text;
+    };
+    PascalTokenType.AND = new PascalTokenType('AND');
+    PascalTokenType.ARRAY = new PascalTokenType('ARRAY');
+    PascalTokenType.BEGIN = new PascalTokenType('BEGIN');
+    PascalTokenType.CASE = new PascalTokenType('CASE');
+    PascalTokenType.CONST = new PascalTokenType('CONST');
+    PascalTokenType.DIV = new PascalTokenType('DIV');
+    PascalTokenType.DO = new PascalTokenType('DO');
+    PascalTokenType.DOWNTO = new PascalTokenType('DOWNTO');
+    PascalTokenType.ELSE = new PascalTokenType('ELSE');
+    PascalTokenType.END = new PascalTokenType('END');
+    PascalTokenType.FILE = new PascalTokenType('FILE');
+    PascalTokenType.FOR = new PascalTokenType('FOR');
+    PascalTokenType.FUNCTION = new PascalTokenType('FUNCTION');
+    PascalTokenType.GOTO = new PascalTokenType('GOTO');
+    PascalTokenType.IF = new PascalTokenType('IF');
+    PascalTokenType.IN = new PascalTokenType('IN');
+    PascalTokenType.LABEL = new PascalTokenType('LABEL');
+    PascalTokenType.MOD = new PascalTokenType('MOD');
+    PascalTokenType.NIL = new PascalTokenType('NIL');
+    PascalTokenType.NOT = new PascalTokenType('NOT');
+    PascalTokenType.OF = new PascalTokenType('OF');
+    PascalTokenType.OR = new PascalTokenType('OR');
+    PascalTokenType.PACKED = new PascalTokenType('PACKED');
+    PascalTokenType.PROCEDURE = new PascalTokenType('PROCEDURE');
+    PascalTokenType.PROGRAM = new PascalTokenType('PROGRAM');
+    PascalTokenType.RECORD = new PascalTokenType('RECORD');
+    PascalTokenType.REPEAT = new PascalTokenType('REPEAT');
+    PascalTokenType.SET = new PascalTokenType('SET');
+    PascalTokenType.THEN = new PascalTokenType('THEN');
+    PascalTokenType.TO = new PascalTokenType('TO');
+    PascalTokenType.TYPE = new PascalTokenType('TYPE');
+    PascalTokenType.UNTIL = new PascalTokenType('UNTIL');
+    PascalTokenType.VAR = new PascalTokenType('VAR');
+    PascalTokenType.WHILE = new PascalTokenType('WHILE');
+    PascalTokenType.WITH = new PascalTokenType('WITH');
+    PascalTokenType.PLUS = new PascalTokenType('+');
+    PascalTokenType.MINUS = new PascalTokenType('-');
+    PascalTokenType.STAR = new PascalTokenType('*');
+    PascalTokenType.SLASH = new PascalTokenType('/');
+    PascalTokenType.COLON_EQUALS = new PascalTokenType(':=');
+    PascalTokenType.DOT = new PascalTokenType('/');
+    PascalTokenType.COMMA = new PascalTokenType(',');
+    PascalTokenType.SEMICOLON = new PascalTokenType(';');
+    PascalTokenType.COLON = new PascalTokenType(':');
+    PascalTokenType.QUOTE = new PascalTokenType('"');
+    PascalTokenType.EQUALS = new PascalTokenType('=');
+    PascalTokenType.NOT_EQUALS = new PascalTokenType('<>');
+    PascalTokenType.LESS_THAN = new PascalTokenType('<');
+    PascalTokenType.LESS_EQUALS = new PascalTokenType('<=');
+    PascalTokenType.GREATER_EQUALS = new PascalTokenType('>=');
+    PascalTokenType.GREATER_THAN = new PascalTokenType('>');
+    PascalTokenType.LEFT_PAREN = new PascalTokenType('(');
+    PascalTokenType.RIGHT_PAREN = new PascalTokenType(')');
+    PascalTokenType.LEFT_BRACKET = new PascalTokenType('[');
+    PascalTokenType.RIGHT_BRACKET = new PascalTokenType(']');
+    PascalTokenType.LEFT_BRACE = new PascalTokenType('{');
+    PascalTokenType.RIGHT_BRACE = new PascalTokenType('}');
+    PascalTokenType.UP_ARROW = new PascalTokenType('^');
+    PascalTokenType.DOT_DOT = new PascalTokenType('..');
+    PascalTokenType.IDENTIFIER = new PascalTokenType('IDENTIFIER');
+    PascalTokenType.INTEGER = new PascalTokenType('INTEGER');
+    PascalTokenType.REAL = new PascalTokenType('REAL');
+    PascalTokenType.STRING = new PascalTokenType('STRING');
+    PascalTokenType.ERROR = new PascalTokenType('ERROR');
+    PascalTokenType.END_OF_FILE = new PascalTokenType('END_OF_FILE');
+    PascalTokenType.FIRST_RESERVED_INDEX = PascalTokenTypeEnum.AND;
+    PascalTokenType.LAST_RESERVED_INDEX = PascalTokenTypeEnum.WITH;
+    PascalTokenType.FIRST_SPECIAL_INDEX = PascalTokenTypeEnum.PLUS;
+    PascalTokenType.LAST_SPECIAL_INDEX = PascalTokenTypeEnum.DOT_DOT;
+    // Set of lower-cased Pascal reserved word text strings.
+    PascalTokenType.RESERVED_WORDS = new List_1.List();
+    // Hash table of Pascal special symbols.  Each special symbol's text
+    // is the key to its Pascal token type.
+    PascalTokenType.SPECIAL_SYMBOLS = new HashMap_1.HashMap();
+    return PascalTokenType;
+}());
+exports.PascalTokenType = PascalTokenType;
+var PascalTokenType;
+(function (PascalTokenType) {
+    PascalTokenType.initialize();
+})(PascalTokenType = exports.PascalTokenType || (exports.PascalTokenType = {}));
