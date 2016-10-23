@@ -8,6 +8,10 @@ import {TypeFactory} from '../TypeFactory';
 import {DefinitionImpl} from './DefinitionImpl';
 import {RoutineCodeImpl} from './RoutineCodeImpl';
 
+import {SymTabKeyImpl} from '../symtabimpl/SymTabKeyImpl'
+
+import {TypeFormImpl} from '../typeimpl/TypeFormImpl'
+
 export  class Predefined {
     // Predefined types.
     public static integerType      : TypeSpec;
@@ -62,34 +66,34 @@ export  class Predefined {
     private static initializeTypes(symTabStack : SymTabStack) : void{
         // Type integer.
         this.integerId = symTabStack.enterLocal("integer");
-        this.integerType = TypeFactory.createType(SCALAR);
+        this.integerType = TypeFactory.createType(TypeFormImpl.SCALAR);
         this.integerType.setIdentifier(this.integerId);
         this.integerId.setDefinition(DefinitionImpl.TYPE);
         this.integerId.setTypeSpec(this.integerType);
 
         // Type real.
         this.realId = symTabStack.enterLocal("real");
-        this.realType = TypeFactory.createType(SCALAR);
+        this.realType = TypeFactory.createType(TypeFormImpl.SCALAR);
         this.realType.setIdentifier(this.realId);
         this.realId.setDefinition(DefinitionImpl.TYPE);
         this.realId.setTypeSpec(this.realType);
 
         // Type boolean.
         this.booleanId = symTabStack.enterLocal("boolean");
-        this.booleanType = TypeFactory.createType(ENUMERATION);
+        this.booleanType = TypeFactory.createType(TypeFormImpl.ENUMERATION);
         this.booleanType.setIdentifier(this.booleanId);
         this.booleanId.setDefinition(DefinitionImpl.TYPE);
         this.booleanId.setTypeSpec(this.booleanType);
 
         // Type char.
         this.charId = symTabStack.enterLocal("char");
-        this.charType = TypeFactory.createType(SCALAR);
+        this.charType = TypeFactory.createType(TypeFormImpl.SCALAR);
         this.charType.setIdentifier(this.charId);
         this.charId.setDefinition(DefinitionImpl.TYPE);
         this.charId.setTypeSpec(this.charType);
 
         // Undefined type.
-        this.undefinedType = TypeFactory.createType(SCALAR);
+        this.undefinedType = TypeFactory.createType(TypeFormImpl.SCALAR);
     }
 
     /**
@@ -101,13 +105,13 @@ export  class Predefined {
         this.falseId = symTabStack.enterLocal("false");
         this.falseId.setDefinition(DefinitionImpl.ENUMERATION_CONSTANT);
         this.falseId.setTypeSpec(this.booleanType);
-        this.falseId.setAttribute(CONSTANT_VALUE, 0);
+        this.falseId.setAttribute(SymTabKeyImpl.CONSTANT_VALUE, 0);
 
         // Boolean enumeration constant true.
         this.trueId = symTabStack.enterLocal("true");
         this.trueId.setDefinition(DefinitionImpl.ENUMERATION_CONSTANT);
         this.trueId.setTypeSpec(this.booleanType);
-        this.trueId.setAttribute(CONSTANT_VALUE, 1);
+        this.trueId.setAttribute(SymTabKeyImpl.CONSTANT_VALUE, 1);
 
         // Add false and true to the boolean enumeration type.
         var constants: SymTabEntry[] = [];
@@ -157,7 +161,7 @@ export  class Predefined {
     {
         var procId : SymTabEntry = symTabStack.enterLocal(name);
         procId.setDefinition(defn);
-        procId.setAttribute(ROUTINE_CODE, routineCode);
+        procId.setAttribute(SymTabKeyImpl.ROUTINE_CODE, routineCode);
 
         return procId;
     }

@@ -1,6 +1,7 @@
 "use strict";
 var HashMap = (function () {
     function HashMap() {
+        this.collection = {};
     }
     /**
      * Set an attribute of the entry.

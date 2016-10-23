@@ -1,5 +1,5 @@
 import {TypeForm} from './TypeForm';
-import {TypeSpecImpl} from './TypeSpecImpl';
+import {TypeSpecImpl} from './typeimpl/TypeSpecImpl';
 import {TypeSpec} from './TypeSpec';
 
 

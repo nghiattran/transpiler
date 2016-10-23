@@ -10,9 +10,11 @@ import {SymTabKeyImpl} from '../intermediate/symtabimpl/SymTabKeyImpl';
 import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
 import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 
+var util = require('util');
+
 export class CrossReferencer {
     private static NAME_WIDTH : number = 16;
-    private static NAME_FORMAT : string       = "%-" + CrossReferencer.NAME_WIDTH + "s";
+    private static NAME_FORMAT : string       = "%s";
     private static NUMBERS_LABEL : string     = " Line numbers    ";
     private static NUMBERS_UNDERLINE : string = " ------------    ";
     private static NUMBER_FORMAT : string     = " %03d";
@@ -36,6 +38,7 @@ export class CrossReferencer {
         console.log("\n===== CROSS-REFERENCE TABLE =====");
 
         let programId : SymTabEntry = symTabStack.getProgramId();
+        
         this.printRoutine(programId);
     }
 
@@ -74,39 +77,42 @@ export class CrossReferencer {
      * Print column headings.
      */
     private printColumnHeadings() : void {
-        console.log();
         // TODO check it
-        // console.log(String.format(NAME_FORMAT, "Identifier")
-        //                    + NUMBERS_LABEL +     "Type specification");
-        // console.log(String.format(NAME_FORMAT, "----------")
-        //                    + NUMBERS_UNDERLINE + "------------------");
+        console.log(util.format(CrossReferencer.NAME_FORMAT, "Identifier")
+                           + CrossReferencer.NUMBERS_LABEL +     "Type specification");
+        console.log(util.format(CrossReferencer.NAME_FORMAT, "----------")
+                           + CrossReferencer.NUMBERS_UNDERLINE + "------------------");
     }
-
+    
     /**
      * Print the entries in a symbol table.
      * @param symTab the symbol table.
      * @param recordTypes the list to fill with RECORD type specifications.
      */
-    private printSymTab(symTab : SymTab, recordTypes : TypeSpec[]) : void {
+    private printSymTab(symTab : SymTab, recordTypes? : TypeSpec[]) : void {
+        recordTypes = recordTypes || [];
+
         // Loop over the sorted list of symbol table entries.
         let sorted : SymTabEntry[] = symTab.sortedEntries();
-        for (let i = 0; i < length; ++i) {
+        for (let i = 0; i < sorted.length; i++) {
             let entry : SymTabEntry = sorted[i];
             let lineNumbers : number[] = entry.getLineNumbers();
 
-             // For each entry, print the identifier name
+            // For each entry, print the identifier name
             // followed by the line numbers.
-            // TODO format
-            // console.log(String.format(NAME_FORMAT, entry.getName()));
+            let line = entry.getName();
+            for (var index = line.length; index < 10; index++) {
+                line += ' ';
+            }
+
             if (lineNumbers != null) {
                 for (let lineNumber in lineNumbers) {
-                    // TODO format
-                    // System.out.print(String.format(NUMBER_FORMAT, lineNumber));
+                    line += lineNumber + ',';
                 }
             }
 
             // Print the symbol table entry.
-            console.log();
+            console.log(line);
             this.printEntry(entry, recordTypes);
         }
     }

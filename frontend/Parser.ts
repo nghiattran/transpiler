@@ -27,7 +27,7 @@ export abstract class Parser implements MessageProducer {
      * Constructor.
      * @param scanner the scanner to be used with this parser.
      */
-    constructor(scanner:Scanner) {
+    constructor(scanner : Scanner) {
         this.scanner = scanner;
     }
 
@@ -60,7 +60,7 @@ export abstract class Parser implements MessageProducer {
      * table.  To be implemented by a language-specific parser subclass.
      * @throws Exception if an error occurred.
      */
-    public abstract parse() : void
+    public abstract parse(...params): any;
 
     /**
      * Return the number of syntax errors found by the parser.

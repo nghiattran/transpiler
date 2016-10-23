@@ -1,13 +1,17 @@
 import {PascalErrorHandler} from './PascalErrorHandler';
 import {PascalErrorCode} from './PascalErrorCode';
+import {PascalTokenType} from './PascalTokenType';
 
 import {Scanner} from '../Scanner';
 import {Parser} from '../Parser';
 import {Token} from '../Token';
+import {TokenType} from '../TokenType';
 import {EofToken} from '../EofToken';
 
 import {MessageType} from '../../message/MessageType';
 import {Message} from '../../message/Message';
+
+import {SymTabEntry} from '../../intermediate/SymTabEntry';
 
 import {List} from '../../util/List';
 
@@ -30,19 +34,50 @@ export class PascalParserTD extends Parser {
      * Parse a Pascal source program and generate the symbol table
      * and the intermediate code.
      */
-    public parse() : void {
+    public parse(...params) : any {
         let token : Token;
         // let startTime : number = performance.now();
 
-        while (!((token = this.nextToken()) instanceof EofToken)) {}
+        try {
+            // Loop over each token until the end of file.
+            while (!((token = this.nextToken()) instanceof EofToken)) {
+                var tokenType : TokenType = token.getType();
 
-        // Send the parser summary message.
-        // let elapsedTime : number = performance.now() - startTime;
-        let elapsedTime = 0;
-        this.sendMessage(new Message(MessageType.PARSER_SUMMARY,
+                // Cross reference only the identifiers.
+                if (tokenType === (PascalTokenType.IDENTIFIER as TokenType)) {
+                    var name : string = token.getText().toLowerCase();
+
+                    // If it's not already in the symbol table,
+                    // create and enter a new entry for the identifier.
+                    var entry : SymTabEntry = PascalParserTD.symTabStack.lookup(name);
+ 
+                    if (!entry) {
+                        entry = PascalParserTD.symTabStack.enterLocal(name);
+                    }
+
+                    // Append the current line number to the entry.
+                    entry.appendLineNumber(token.getLineNumber());
+                }
+
+                else if (tokenType === PascalTokenType.ERROR) {
+                    PascalParserTD.errorHandler.flag(token, <PascalErrorCode> token.getValue(),
+                                      this);
+                }
+            }
+
+            // Send the parser summary message.
+            // float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
+            let elapsedTime = 0;
+            this.sendMessage(new Message(MessageType.PARSER_SUMMARY,
                                 [token.getLineNumber(),
                                   this.getErrorCount(),
                                   elapsedTime]));
+        }
+        catch (ex) {
+            console.log('Error!!!!!!!!');
+            console.log(ex);
+            PascalParserTD.errorHandler.abortTranslation(PascalErrorCode.IO_ERROR, this);
+        }
     }
 
     /**

@@ -5,6 +5,12 @@ import {Token} from '../../Token';
 
 import {TypeSpec} from '../../../intermediate/TypeSpec';
 
+import {List} from '../../../util/List';
+
+import {SimpleTypeParser} from './SimpleTypeParser';
+import {ArrayTypeParser} from './ArrayTypeParser';
+import {RecordTypeParser} from './RecordTypeParser';
+
 export class TypeSpecificationParser extends PascalParserTD {
     /**
      * Constructor.
@@ -18,11 +24,12 @@ export class TypeSpecificationParser extends PascalParserTD {
     // TODO
     static TYPE_START_SET : List =
         SimpleTypeParser.SIMPLE_TYPE_START_SET.clone();
-    // static {
-    //     TYPE_START_SET.add(PascalTokenType.ARRAY);
-    //     TYPE_START_SET.add(PascalTokenType.RECORD);
-    //     TYPE_START_SET.add(SEMICOLON);
-    // }
+
+    static initialize () : void {
+        TypeSpecificationParser.TYPE_START_SET.add(PascalTokenType.ARRAY);
+        TypeSpecificationParser.TYPE_START_SET.add(PascalTokenType.RECORD);
+        TypeSpecificationParser.TYPE_START_SET.add(PascalTokenType.SEMICOLON);
+    }
 
     /**
      * Parse a Pascal type specification.
@@ -52,4 +59,8 @@ export class TypeSpecificationParser extends PascalParserTD {
             }
         }
     }
+}
+
+export module TypeSpecificationParser {
+    TypeSpecificationParser.initialize();
 }

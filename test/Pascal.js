@@ -34,7 +34,6 @@ var Pascal = (function () {
                 this.symTabStack = this.parser.getSymTabStack();
                 // var programId : SymTabEntry = this.symTabStack.getProgramId();
                 // this.iCode = programId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE) as ICode;
-                console.log(this.xref);
                 if (this.xref) {
                     var crossReferencer = new CrossReferencer_1.CrossReferencer();
                     crossReferencer.print(this.symTabStack);

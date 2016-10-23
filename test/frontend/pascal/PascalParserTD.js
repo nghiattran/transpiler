@@ -6,6 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var PascalErrorHandler_1 = require('./PascalErrorHandler');
 var PascalErrorCode_1 = require('./PascalErrorCode');
+var PascalTokenType_1 = require('./PascalTokenType');
 var Parser_1 = require('../Parser');
 var EofToken_1 = require('../EofToken');
 var MessageType_1 = require('../../message/MessageType');
@@ -29,15 +30,44 @@ var PascalParserTD = (function (_super) {
      * and the intermediate code.
      */
     PascalParserTD.prototype.parse = function () {
+        var params = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            params[_i - 0] = arguments[_i];
+        }
         var token;
         // let startTime : number = performance.now();
-        while (!((token = this.nextToken()) instanceof EofToken_1.EofToken)) { }
-        // Send the parser summary message.
-        // let elapsedTime : number = performance.now() - startTime;
-        var elapsedTime = 0;
-        this.sendMessage(new Message_1.Message(MessageType_1.MessageType.PARSER_SUMMARY, [token.getLineNumber(),
-            this.getErrorCount(),
-            elapsedTime]));
+        try {
+            // Loop over each token until the end of file.
+            while (!((token = this.nextToken()) instanceof EofToken_1.EofToken)) {
+                var tokenType = token.getType();
+                // Cross reference only the identifiers.
+                if (tokenType === PascalTokenType_1.PascalTokenType.IDENTIFIER) {
+                    var name = token.getText().toLowerCase();
+                    // If it's not already in the symbol table,
+                    // create and enter a new entry for the identifier.
+                    var entry = PascalParserTD.symTabStack.lookup(name);
+                    if (!entry) {
+                        entry = PascalParserTD.symTabStack.enterLocal(name);
+                    }
+                    // Append the current line number to the entry.
+                    entry.appendLineNumber(token.getLineNumber());
+                }
+                else if (tokenType === PascalTokenType_1.PascalTokenType.ERROR) {
+                    PascalParserTD.errorHandler.flag(token, token.getValue(), this);
+                }
+            }
+            // Send the parser summary message.
+            // float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
+            var elapsedTime = 0;
+            this.sendMessage(new Message_1.Message(MessageType_1.MessageType.PARSER_SUMMARY, [token.getLineNumber(),
+                this.getErrorCount(),
+                elapsedTime]));
+        }
+        catch (ex) {
+            console.log('Error!!!!!!!!');
+            console.log(ex);
+            PascalParserTD.errorHandler.abortTranslation(PascalErrorCode_1.PascalErrorCode.IO_ERROR, this);
+        }
     };
     /**
      * Return the number of syntax errors found by the parser.

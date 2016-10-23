@@ -3,6 +3,7 @@ var DefinitionImpl_1 = require('../intermediate/symtabimpl/DefinitionImpl');
 var SymTabKeyImpl_1 = require('../intermediate/symtabimpl/SymTabKeyImpl');
 var TypeKeyImpl_1 = require('../intermediate/typeimpl/TypeKeyImpl');
 var TypeFormImpl_1 = require('../intermediate/typeimpl/TypeFormImpl');
+var util = require('util');
 var CrossReferencer = (function () {
     function CrossReferencer() {
     }
@@ -49,12 +50,11 @@ var CrossReferencer = (function () {
      * Print column headings.
      */
     CrossReferencer.prototype.printColumnHeadings = function () {
-        console.log();
         // TODO check it
-        // console.log(String.format(NAME_FORMAT, "Identifier")
-        //                    + NUMBERS_LABEL +     "Type specification");
-        // console.log(String.format(NAME_FORMAT, "----------")
-        //                    + NUMBERS_UNDERLINE + "------------------");
+        console.log(util.format(CrossReferencer.NAME_FORMAT, "Identifier")
+            + CrossReferencer.NUMBERS_LABEL + "Type specification");
+        console.log(util.format(CrossReferencer.NAME_FORMAT, "----------")
+            + CrossReferencer.NUMBERS_UNDERLINE + "------------------");
     };
     /**
      * Print the entries in a symbol table.
@@ -62,21 +62,25 @@ var CrossReferencer = (function () {
      * @param recordTypes the list to fill with RECORD type specifications.
      */
     CrossReferencer.prototype.printSymTab = function (symTab, recordTypes) {
+        recordTypes = recordTypes || [];
         // Loop over the sorted list of symbol table entries.
         var sorted = symTab.sortedEntries();
-        for (var i = 0; i < length; ++i) {
+        for (var i = 0; i < sorted.length; i++) {
             var entry = sorted[i];
             var lineNumbers = entry.getLineNumbers();
             // For each entry, print the identifier name
             // followed by the line numbers.
-            // TODO format
-            // console.log(String.format(NAME_FORMAT, entry.getName()));
+            var line = entry.getName();
+            for (var index = line.length; index < 10; index++) {
+                line += ' ';
+            }
             if (lineNumbers != null) {
                 for (var lineNumber in lineNumbers) {
+                    line += lineNumber + ',';
                 }
             }
             // Print the symbol table entry.
-            console.log();
+            console.log(line);
             this.printEntry(entry, recordTypes);
         }
     };
@@ -226,7 +230,7 @@ var CrossReferencer = (function () {
             : value.toString();
     };
     CrossReferencer.NAME_WIDTH = 16;
-    CrossReferencer.NAME_FORMAT = "%-" + CrossReferencer.NAME_WIDTH + "s";
+    CrossReferencer.NAME_FORMAT = "%s";
     CrossReferencer.NUMBERS_LABEL = " Line numbers    ";
     CrossReferencer.NUMBERS_UNDERLINE = " ------------    ";
     CrossReferencer.NUMBER_FORMAT = " %03d";

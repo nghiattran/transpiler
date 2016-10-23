@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var HashMap_1 = require('../../util/HashMap');
+var SymTabEntry_1 = require('../SymTabEntry');
 var SymTabEntryImpl = (function (_super) {
     __extends(SymTabEntryImpl, _super);
     /**
@@ -13,67 +13,8 @@ var SymTabEntryImpl = (function (_super) {
      * @param symTab the symbol table that contains this entry.
      */
     function SymTabEntryImpl(name, symTab) {
-        _super.call(this);
-        this.name = name;
-        this.symTab = symTab;
-        this.lineNumbers = [];
+        _super.call(this, name, symTab);
     }
-    /**
-     * Getter.
-     * @return the name of the entry.
-     */
-    SymTabEntryImpl.prototype.getName = function () {
-        return this.name;
-    };
-    /**
-     * Getter.
-     * @return the symbol table that contains this entry.
-     */
-    SymTabEntryImpl.prototype.getSymTab = function () {
-        return this.symTab;
-    };
-    /**
-     * Setter.
-     * @param definition the definition to set.
-     */
-    SymTabEntryImpl.prototype.setDefinition = function (definition) {
-        this.definition = definition;
-    };
-    /**
-     * Getter.
-     * @return the definition.
-     */
-    SymTabEntryImpl.prototype.getDefinition = function () {
-        return this.definition;
-    };
-    /**
-     * Setter.
-     * @param typeSpec the type specification to set.
-     */
-    SymTabEntryImpl.prototype.setTypeSpec = function (typeSpec) {
-        this.typeSpec = typeSpec;
-    };
-    /**
-     * Getter.
-     * @return the type specification.
-     */
-    SymTabEntryImpl.prototype.getTypeSpec = function () {
-        return this.typeSpec;
-    };
-    /**
-     * Append a source line number to the entry.
-     * @param lineNumber the line number to append.
-     */
-    SymTabEntryImpl.prototype.appendLineNumber = function (lineNumber) {
-        this.lineNumbers.push(lineNumber);
-    };
-    /**
-     * Getter.
-     * @return the list of source line numbers for the entry.
-     */
-    SymTabEntryImpl.prototype.getLineNumbers = function () {
-        return this.lineNumbers;
-    };
     return SymTabEntryImpl;
-}(HashMap_1.HashMap));
+}(SymTabEntry_1.SymTabEntry));
 exports.SymTabEntryImpl = SymTabEntryImpl;

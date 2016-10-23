@@ -1,31 +1,5 @@
-package wci.frontend.pascal.parsers;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-
-import wci.frontend.*;
-import wci.frontend.pascal.*;
-import wci.intermediate.*;
-import wci.intermediate.symtabimpl.*;
-import wci.intermediate.typeimpl.*;
-
-import static wci.frontend.pascal.PascalTokenType.*;
-import static wci.frontend.pascal.PascalErrorCode.*;
-import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
-import static wci.intermediate.symtabimpl.DefinitionImpl.*;
-import static wci.intermediate.typeimpl.TypeFormImpl.*;
-import static wci.intermediate.typeimpl.TypeKeyImpl.*;
-
-/**
- * <h1>ConstantDefinitionsParser</h1>
- *
- * <p>Parse Pascal constant definitions.</p>
- *
- * <p>Copyright (c) 2009 by Ronald Mak</p>
- * <p>For instructional purposes only.  No warranties.</p>
- */
-public class ConstantDefinitionsParser extends DeclarationsParser
-{
+export class ConstantDefinitionsParser extends DeclarationsParser {
     /**
      * Constructor.
      * @param parent the parent parser.

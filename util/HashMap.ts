@@ -1,6 +1,6 @@
 
 export class HashMap {
-	protected collection : Object;
+	protected collection : Object = {};
 
 	/**
      * Set an attribute of the entry.
