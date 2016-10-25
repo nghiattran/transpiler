@@ -2,7 +2,7 @@
     "compilerOptions": {
         "removeComments": true,
         "preserveConstEnums": true,
-        "outDir": "test",
+        "outDir": ".tmp",
         "sourceMap": true
     },
     "include": [
