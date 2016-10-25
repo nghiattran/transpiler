@@ -7,7 +7,7 @@ export class HashMap {
      * @param key the attribute key.
      * @param value the attribute value.
      */
-    public setAttribute(key, value) : void {
+    public setAttribute(key : Object, value : Object) : void {
         this.collection[key.toString()] = value;
     }
 
@@ -16,7 +16,7 @@ export class HashMap {
      * @param key the attribute key.
      * @return the attribute value.
      */
-    public getAttribute(key) : Object{
+    public getAttribute(key : Object) : Object{
         return this.collection[key.toString()];
     }
 
@@ -25,7 +25,7 @@ export class HashMap {
      * @param key the attribute key.
      * @param value the attribute value.
      */
-    public put(key, value) : void {
+    public put(key : Object, value : Object) : void {
         this.collection[key.toString()] = value;
     }
 
@@ -34,12 +34,12 @@ export class HashMap {
      * @param key the attribute key.
      * @return the attribute value.
      */
-    public get(key) : Object{
+    public get(key : Object) : Object{
         return this.collection[key.toString()];
     }
 
     public toList() : Object[] {
-        let list = [];
+        let list : any[] = [];
 
         for (var entry in this.collection) {
             list.push(this.collection[entry]);
