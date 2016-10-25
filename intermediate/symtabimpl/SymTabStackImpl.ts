@@ -5,7 +5,7 @@ import {SymTab} from '../SymTab';
 
 import {List} from '../../util/List';
 
-export class SymTabStackImpl extends List implements SymTabStack {
+export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
     private currentNestingLevel : number;  // current scope nesting level
     private programId : SymTabEntry;       // entry for the main program id
 
@@ -55,7 +55,7 @@ export class SymTabStackImpl extends List implements SymTabStack {
      * Push a new symbol table onto the symbol table stack.
      * @return the pushed symbol table.
      */
-    public push(symTab : SymTab) : SymTab {
+    public push(symTab? : SymTab) : SymTab {
         if (symTab) {
             ++this.currentNestingLevel;
         } else {

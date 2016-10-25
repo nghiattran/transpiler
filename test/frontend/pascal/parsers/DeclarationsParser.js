@@ -6,6 +6,10 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var PascalParserTD_1 = require('../PascalParserTD');
 var PascalTokenType_1 = require('../PascalTokenType');
+var ConstantDefinitionsParser_1 = require('./ConstantDefinitionsParser');
+var TypeDefinitionsParser_1 = require('./TypeDefinitionsParser');
+var DeclaredRoutineParser_1 = require('./DeclaredRoutineParser');
+var VariableDeclarationsParser_1 = require('./VariableDeclarationsParser');
 var DefinitionImpl_1 = require('../../../intermediate/symtabimpl/DefinitionImpl');
 var List_1 = require('../../../util/List');
 var DeclarationsParser = (function (_super) {
@@ -18,9 +22,9 @@ var DeclarationsParser = (function (_super) {
         _super.call(this, parent);
     }
     DeclarationsParser.initialize = function () {
-        // DeclarationsParser.TYPE_START_SET.remove(PascalTokenType.CONST);
-        // DeclarationsParser.VAR_START_SET.remove(PascalTokenType.PascalTokenType.TYPE);
-        // DeclarationsParser.ROUTINE_START_SET.remove(PascalTokenType.PascalTokenType.VAR);
+        DeclarationsParser.TYPE_START_SET.remove(PascalTokenType_1.PascalTokenType.CONST);
+        DeclarationsParser.VAR_START_SET.remove(PascalTokenType_1.PascalTokenType.TYPE);
+        DeclarationsParser.ROUTINE_START_SET.remove(PascalTokenType_1.PascalTokenType.VAR);
     };
     /**
      * Parse declarations.
@@ -34,26 +38,26 @@ var DeclarationsParser = (function (_super) {
         token = this.synchronize(DeclarationsParser.DECLARATION_START_SET);
         if (token.getType() == PascalTokenType_1.PascalTokenType.CONST) {
             token = this.nextToken(); // consume CONST
-            var constantDefinitionsParser = new ConstantDefinitionsParser(this);
+            var constantDefinitionsParser = new ConstantDefinitionsParser_1.ConstantDefinitionsParser(this);
             constantDefinitionsParser.parse(token, null);
         }
         token = this.synchronize(DeclarationsParser.TYPE_START_SET);
         if (token.getType() == PascalTokenType_1.PascalTokenType.TYPE) {
             token = this.nextToken(); // consume TYPE
-            var typeDefinitionsParser = new TypeDefinitionsParser(this);
+            var typeDefinitionsParser = new TypeDefinitionsParser_1.TypeDefinitionsParser(this);
             typeDefinitionsParser.parse(token, null);
         }
         token = this.synchronize(DeclarationsParser.VAR_START_SET);
         if (token.getType() == PascalTokenType_1.PascalTokenType.VAR) {
             token = this.nextToken(); // consume VAR
-            var variableDeclarationsParser = new VariableDeclarationsParser(this);
+            var variableDeclarationsParser = new VariableDeclarationsParser_1.VariableDeclarationsParser(this);
             variableDeclarationsParser.setDefinition(DefinitionImpl_1.DefinitionImpl.VARIABLE);
             variableDeclarationsParser.parse(token, null);
         }
         token = this.synchronize(DeclarationsParser.ROUTINE_START_SET);
         var tokenType = token.getType();
         while ((tokenType == PascalTokenType_1.PascalTokenType.PROCEDURE) || (tokenType == DefinitionImpl_1.DefinitionImpl.FUNCTION)) {
-            var routineParser = new DeclaredRoutineParser(this);
+            var routineParser = new DeclaredRoutineParser_1.DeclaredRoutineParser(this);
             routineParser.parse(token, parentId);
             // Look for one or more semicolons after a definition.
             token = this.currentToken();
@@ -80,7 +84,4 @@ var DeclarationsParser = (function (_super) {
     return DeclarationsParser;
 }(PascalParserTD_1.PascalParserTD));
 exports.DeclarationsParser = DeclarationsParser;
-var DeclarationsParser;
-(function (DeclarationsParser) {
-    DeclarationsParser.initialize();
-})(DeclarationsParser = exports.DeclarationsParser || (exports.DeclarationsParser = {}));
+DeclarationsParser.initialize();

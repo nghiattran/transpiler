@@ -13,6 +13,7 @@ import {TokenType} from '../../TokenType';
 import {TypeForm} from '../../../intermediate/TypeForm';
 
 import {TypeSpec} from '../../../intermediate/TypeSpec';
+import {SymTabEntry} from '../../../intermediate/SymTabEntry';
 import {TypeFactory} from '../../../intermediate/TypeFactory';
 import {TypeFormImpl} from '../../../intermediate/typeimpl/TypeFormImpl';
 import {TypeKeyImpl} from '../../../intermediate/typeimpl/TypeKeyImpl';
@@ -29,34 +30,34 @@ export class ArrayTypeParser extends TypeSpecificationParser {
     }
 
     // Synchronization set for the [ token.
-    private static LEFT_BRACKET_SET : List=
+    private static LEFT_BRACKET_SET : List<PascalTokenType> =
         SimpleTypeParser.SIMPLE_TYPE_START_SET.clone();
 
     // Synchronization set for the ] token.
-    private static RIGHT_BRACKET_SET : List =
+    private static RIGHT_BRACKET_SET : List<PascalTokenType> =
         new List([
             PascalTokenType.RIGHT_BRACKET, 
             PascalTokenType.OF, 
             PascalTokenType.SEMICOLON]);
 
     // Synchronization set for OF.
-    private static OF_SET : List =
+    private static OF_SET : List<PascalTokenType> =
         TypeSpecificationParser.TYPE_START_SET.clone();
 
     // Synchronization set to start an index type.
-    private static INDEX_START_SET : List =
+    private static INDEX_START_SET : List<PascalTokenType> =
         SimpleTypeParser.SIMPLE_TYPE_START_SET.clone();
     
 
     // Synchronization set to end an index type.
-    private static INDEX_END_SET : List =
+    private static INDEX_END_SET : List<PascalTokenType> =
         new List([
             PascalTokenType.RIGHT_BRACKET, 
             PascalTokenType.OF, 
             PascalTokenType.SEMICOLON]);
 
     // Synchronization set to follow an index type.
-    private static INDEX_FOLLOW_SET : List =
+    private static INDEX_FOLLOW_SET : List<PascalTokenType> =
         ArrayTypeParser.INDEX_START_SET.clone();
     
     static initialize() : void {
@@ -139,7 +140,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
             token = this.synchronize(ArrayTypeParser.INDEX_FOLLOW_SET);
             let tokenType : TokenType = token.getType();
             if ((tokenType != PascalTokenType.COMMA) && (tokenType != PascalTokenType.RIGHT_BRACKET)) {
-                if (ArrayTypeParser.INDEX_START_SET.contains(tokenType)) {
+                if (ArrayTypeParser.INDEX_START_SET.contains(tokenType as PascalTokenType)) {
                     ArrayTypeParser.errorHandler.flag(token, PascalErrorCode.MISSING_COMMA, this);
                     anotherIndex = true;
                 }
@@ -191,7 +192,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
             }
         }
         else if (form == TypeFormImpl.ENUMERATION) {
-            let constants : List = <List>
+            let constants : List<SymTabEntry> = <List<SymTabEntry>>
                 indexType.getAttribute(TypeKeyImpl.ENUMERATION_CONSTANTS);
             count = constants.size();
         }

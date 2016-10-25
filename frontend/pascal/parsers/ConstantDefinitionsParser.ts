@@ -1,39 +1,61 @@
+import {PascalParserTD} from '../PascalParserTD';
+import {PascalTokenType} from '../PascalTokenType';
+import {PascalErrorCode} from '../PascalErrorCode';
+
+import {DeclarationsParser} from './DeclarationsParser';
+
+import {Token} from '../../Token';
+import {TokenType} from '../../TokenType';
+
+import {Definition} from '../../../intermediate/Definition';
+import {SymTabEntry} from '../../../intermediate/SymTabEntry';
+
+import {TypeSpec} from '../../../intermediate/TypeSpec';
+import {TypeFactory} from '../../../intermediate/TypeFactory';
+
+import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
+import {Predefined} from '../../../intermediate/symtabimpl/Predefined';
+import {SymTabKeyImpl} from '../../../intermediate/symtabimpl/SymTabKeyImpl';
+
+import {List} from '../../../util/List';
+import {Util} from '../../../util/Util';
 
 export class ConstantDefinitionsParser extends DeclarationsParser {
     /**
      * Constructor.
      * @param parent the parent parser.
      */
-    public ConstantDefinitionsParser(PascalParserTD parent)
-    {
+    public constructor(parent : PascalParserTD) {
         super(parent);
     }
 
     // Synchronization set for a constant identifier.
-    private static final EnumSet<PascalTokenType> IDENTIFIER_SET =
+    private static IDENTIFIER_SET : List<PascalTokenType> =
         DeclarationsParser.TYPE_START_SET.clone();
-    static {
-        IDENTIFIER_SET.add(IDENTIFIER);
-    }
-
+    // Synchronization set for the start of the next definition or declaration.
+    private static NEXT_START_SET : List<PascalTokenType> =
+        DeclarationsParser.TYPE_START_SET.clone();
     // Synchronization set for starting a constant.
-    static final EnumSet<PascalTokenType> CONSTANT_START_SET =
-        EnumSet.of(IDENTIFIER, INTEGER, REAL, PLUS, MINUS, STRING, SEMICOLON);
+    static CONSTANT_START_SET : List<PascalTokenType> =
+        new List<PascalTokenType>([
+            PascalTokenType.IDENTIFIER, 
+            PascalTokenType.INTEGER, 
+            PascalTokenType.REAL, 
+            PascalTokenType.PLUS, 
+            PascalTokenType.MINUS, 
+            PascalTokenType.STRING, 
+            PascalTokenType.SEMICOLON]);
 
     // Synchronization set for the = token.
-    private static final EnumSet<PascalTokenType> EQUALS_SET =
-        CONSTANT_START_SET.clone();
-    static {
-        EQUALS_SET.add(EQUALS);
-        EQUALS_SET.add(SEMICOLON);
-    }
+    private static EQUALS_SET : List<PascalTokenType> =
+        ConstantDefinitionsParser.CONSTANT_START_SET.clone();
 
-    // Synchronization set for the start of the next definition or declaration.
-    private static final EnumSet<PascalTokenType> NEXT_START_SET =
-        DeclarationsParser.TYPE_START_SET.clone();
-    static {
-        NEXT_START_SET.add(SEMICOLON);
-        NEXT_START_SET.add(IDENTIFIER);
+    static initialize() : void {
+        ConstantDefinitionsParser.IDENTIFIER_SET.add(PascalTokenType.IDENTIFIER);
+        ConstantDefinitionsParser. EQUALS_SET.add(PascalTokenType.EQUALS);
+        ConstantDefinitionsParser.EQUALS_SET.add(PascalTokenType.SEMICOLON);
+        ConstantDefinitionsParser.NEXT_START_SET.add(PascalTokenType.SEMICOLON);
+        ConstantDefinitionsParser.NEXT_START_SET.add(PascalTokenType.IDENTIFIER);
     }
 
     /**
@@ -43,73 +65,71 @@ export class ConstantDefinitionsParser extends DeclarationsParser {
      * @return null
      * @throws Exception if an error occurred.
      */
-    public SymTabEntry parse(Token token, SymTabEntry parentId)
-        throws Exception
-    {
-        token = synchronize(IDENTIFIER_SET);
+    public parse(token : Token, parentId : SymTabEntry) : SymTabEntry{
+        token = this.synchronize(ConstantDefinitionsParser.IDENTIFIER_SET);
 
         // Loop to parse a sequence of constant definitions
         // separated by semicolons.
-        while (token.getType() == IDENTIFIER) {
-            String name = token.getText().toLowerCase();
-            SymTabEntry constantId = symTabStack.lookupLocal(name);
+        while (token.getType() == PascalTokenType.IDENTIFIER) {
+            let name : string = token.getText().toLowerCase();
+            let constantId : SymTabEntry = ConstantDefinitionsParser.symTabStack.lookupLocal(name);
 
             // Enter the new identifier into the symbol table
             // but don't set how it's defined yet.
             if (constantId == null) {
-                constantId = symTabStack.enterLocal(name);
+                constantId = ConstantDefinitionsParser.symTabStack.enterLocal(name);
                 constantId.appendLineNumber(token.getLineNumber());
             }
             else {
-                errorHandler.flag(token, IDENTIFIER_REDEFINED, this);
+                ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_REDEFINED, this);
                 constantId = null;
             }
 
-            token = nextToken();  // consume the identifier token
+            token = this.nextToken();  // consume the identifier token
 
             // Synchronize on the = token.
-            token = synchronize(EQUALS_SET);
-            if (token.getType() == EQUALS) {
-                token = nextToken();  // consume the =
+            token = this.synchronize(ConstantDefinitionsParser.EQUALS_SET);
+            if (token.getType() == PascalTokenType.EQUALS) {
+                token = this.nextToken();  // consume the =
             }
             else {
-                errorHandler.flag(token, MISSING_EQUALS, this);
+                ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.MISSING_EQUALS, this);
             }
 
             // Parse the constant value.
-            Token constantToken = token;
-            Object value = parseConstant(token);
+            let constantToken : Token = token;
+            let value : Object = this.parseConstant(token);
 
             // Set identifier to be a constant and set its value.
             if (constantId != null) {
-                constantId.setDefinition(CONSTANT);
-                constantId.setAttribute(CONSTANT_VALUE, value);
+                constantId.setDefinition(DefinitionImpl.CONSTANT);
+                constantId.setAttribute(SymTabKeyImpl.CONSTANT_VALUE, value);
 
                 // Set the constant's type.
-                TypeSpec constantType =
-                    constantToken.getType() == IDENTIFIER
-                        ? getConstantType(constantToken)
-                        : getConstantType(value);
+                let constantType : TypeSpec =
+                    constantToken.getType() == PascalTokenType.IDENTIFIER
+                        ? this.getConstantType(constantToken)
+                        : this.getConstantType(value);
                 constantId.setTypeSpec(constantType);
             }
 
-            token = currentToken();
-            TokenType tokenType = token.getType();
+            token = this.currentToken();
+            let tokenType : TokenType = token.getType();
 
             // Look for one or more semicolons after a definition.
-            if (tokenType == SEMICOLON) {
-                while (token.getType() == SEMICOLON) {
-                    token = nextToken();  // consume the ;
+            if (tokenType == PascalTokenType.SEMICOLON) {
+                while (token.getType() == PascalTokenType.SEMICOLON) {
+                    token = this.nextToken();  // consume the ;
                 }
             }
 
             // If at the start of the next definition or declaration,
             // then missing a semicolon.
-            else if (NEXT_START_SET.contains(tokenType)) {
-                errorHandler.flag(token, MISSING_SEMICOLON, this);
+            else if (ConstantDefinitionsParser.NEXT_START_SET.contains(tokenType as PascalTokenType)) {
+                ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.MISSING_SEMICOLON, this);
             }
 
-            token = synchronize(IDENTIFIER_SET);
+            token = this.synchronize(ConstantDefinitionsParser.IDENTIFIER_SET);
         }
 
         return null;
@@ -121,51 +141,49 @@ export class ConstantDefinitionsParser extends DeclarationsParser {
      * @return the constant value.
      * @throws Exception if an error occurred.
      */
-    protected Object parseConstant(Token token)
-        throws Exception
-    {
-        TokenType sign = null;
+    public parseConstant(token : Token) : Object{
+        let sign : TokenType = null;
 
         // Synchronize at the start of a constant.
-        token = synchronize(CONSTANT_START_SET);
-        TokenType tokenType = token.getType();
+        token = this.synchronize(ConstantDefinitionsParser.CONSTANT_START_SET);
+        let tokenType : TokenType = token.getType();
 
         // Plus or minus sign?
-        if ((tokenType == PLUS) || (tokenType == MINUS)) {
+        if ((tokenType == PascalTokenType.PLUS) || (tokenType == PascalTokenType.MINUS)) {
             sign = tokenType;
-            token = nextToken();  // consume sign
+            token = this.nextToken();  // consume sign
         }
 
         // Parse the constant.
-        switch ((PascalTokenType) token.getType()) {
+        switch (<PascalTokenType> token.getType()) {
 
-            case IDENTIFIER: {
-                return parseIdentifierConstant(token, sign);
+            case PascalTokenType.IDENTIFIER: {
+                return this.parseIdentifierConstant(token, sign);
             }
 
-            case INTEGER: {
-                Integer value = (Integer) token.getValue();
-                nextToken();  // consume the number
-                return sign == MINUS ? -value : value;
+            case PascalTokenType.INTEGER: {
+                let value : number = <number> token.getValue();
+                this.nextToken();  // consume the number
+                return sign == PascalTokenType.MINUS ? -value : value;
             }
 
-            case REAL: {
-                Float value = (Float) token.getValue();
-                nextToken();  // consume the number
-                return sign == MINUS ? -value : value;
+            case PascalTokenType.REAL: {
+                let value : number = <number> token.getValue();
+                this.nextToken();  // consume the number
+                return sign == PascalTokenType.MINUS ? -value : value;
             }
 
-            case STRING: {
+            case PascalTokenType.STRING: {
                 if (sign != null) {
-                    errorHandler.flag(token, INVALID_CONSTANT, this);
+                    ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.INVALID_CONSTANT, this);
                 }
 
-                nextToken();  // consume the string
-                return (String) token.getValue();
+                this.nextToken();  // consume the string
+                return <string> token.getValue();
             }
 
             default: {
-                errorHandler.flag(token, INVALID_CONSTANT, this);
+                ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.INVALID_CONSTANT, this);
                 return null;
             }
         }
@@ -178,36 +196,35 @@ export class ConstantDefinitionsParser extends DeclarationsParser {
      * @return the constant value.
      * @throws Exception if an error occurred.
      */
-    protected Object parseIdentifierConstant(Token token, TokenType sign)
-        throws Exception
+    protected parseIdentifierConstant(token : Token, sign : TokenType) : Object
     {
-        String name = token.getText().toLowerCase();
-        SymTabEntry id = symTabStack.lookup(name);
+        let name : string = token.getText().toLowerCase();
+        let id : SymTabEntry = ConstantDefinitionsParser.symTabStack.lookup(name);
 
-        nextToken();  // consume the identifier
+        this.nextToken();  // consume the identifier
 
         // The identifier must have already been defined
         // as an constant identifier.
         if (id == null) {
-            errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
+            ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_UNDEFINED, this);
             return null;
         }
+            
+        let definition : Definition = id.getDefinition();
 
-        Definition definition = id.getDefinition();
-
-        if (definition == CONSTANT) {
-            Object value = id.getAttribute(CONSTANT_VALUE);
+        if (definition == DefinitionImpl.CONSTANT) {
+            let value : Object = id.getAttribute(SymTabKeyImpl.CONSTANT_VALUE);
             id.appendLineNumber(token.getLineNumber());
 
-            if (value instanceof Integer) {
-                return sign == MINUS ? -((Integer) value) : value;
+            if (Util.isInteger(<number> value)) {
+                return sign == PascalTokenType.MINUS ? -(<number> value) : value;
             }
-            else if (value instanceof Float) {
-                return sign == MINUS ? -((Float) value) : value;
+            else if (Util.isFloat(<number> value)) {
+                return sign == PascalTokenType.MINUS ? -(<number> value) : value;
             }
             else if (value instanceof String) {
                 if (sign != null) {
-                    errorHandler.flag(token, INVALID_CONSTANT, this);
+                    ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.INVALID_CONSTANT, this);
                 }
 
                 return value;
@@ -216,23 +233,36 @@ export class ConstantDefinitionsParser extends DeclarationsParser {
                 return null;
             }
         }
-        else if (definition == ENUMERATION_CONSTANT) {
-            Object value = id.getAttribute(CONSTANT_VALUE);
+        else if (definition == DefinitionImpl.ENUMERATION_CONSTANT) {
+            let value : Object = id.getAttribute(SymTabKeyImpl.CONSTANT_VALUE);
             id.appendLineNumber(token.getLineNumber());
 
             if (sign != null) {
-                errorHandler.flag(token, INVALID_CONSTANT, this);
+                ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.INVALID_CONSTANT, this);
             }
 
             return value;
         }
         else if (definition == null) {
-            errorHandler.flag(token, NOT_CONSTANT_IDENTIFIER, this);
+            ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.NOT_CONSTANT_IDENTIFIER, this);
             return null;
         }
         else {
-            errorHandler.flag(token, INVALID_CONSTANT, this);
+            ConstantDefinitionsParser.errorHandler.flag(token, PascalErrorCode.INVALID_CONSTANT, this);
             return null;
+        }
+    }
+
+    /**
+     * Return the type of a constant given arbitrary object.
+     * @param value the constant value
+     * @return the type specification.
+     */
+    public getConstantType(object : any) : TypeSpec {
+        if (object instanceof Token) {
+            return this.getConstantTypeByToken(<Token> object)
+        } else {
+            return this.getConstantTypeByObject(object);
         }
     }
 
@@ -241,22 +271,21 @@ export class ConstantDefinitionsParser extends DeclarationsParser {
      * @param value the constant value
      * @return the type specification.
      */
-    protected TypeSpec getConstantType(Object value)
-    {
-        TypeSpec constantType = null;
+    protected getConstantTypeByObject(value : Object) : TypeSpec {
+        let constantType : TypeSpec = null;
 
-        if (value instanceof Integer) {
+        if (Util.isInteger(<number> value)) {
             constantType = Predefined.integerType;
         }
-        else if (value instanceof Float) {
+        else if (Util.isFloat(<number> value)) {
             constantType = Predefined.realType;
         }
         else if (value instanceof String) {
-            if (((String) value).length() == 1) {
+            if ((<string> value).length == 1) {
                 constantType = Predefined.charType;
             }
             else {
-                constantType = TypeFactory.createStringType((String) value);
+                constantType = TypeFactory.createStringType(<string> value);
             }
         }
 
@@ -268,22 +297,22 @@ export class ConstantDefinitionsParser extends DeclarationsParser {
      * @param identifier the constant's identifier.
      * @return the type specification.
      */
-    protected TypeSpec getConstantType(Token identifier)
-    {
-        String name = identifier.getText().toLowerCase();
-        SymTabEntry id = symTabStack.lookup(name);
+    protected getConstantTypeByToken(identifier : Token) : TypeSpec{
+        let name : string = identifier.getText().toLowerCase();
+        let id : SymTabEntry = ConstantDefinitionsParser.symTabStack.lookup(name);
 
         if (id == null) {
             return null;
         }
 
-        Definition definition = id.getDefinition();
+        let definition : Definition = id.getDefinition();
 
-        if ((definition == CONSTANT) || (definition == ENUMERATION_CONSTANT)) {
+        if ((definition == DefinitionImpl.CONSTANT) || (definition == DefinitionImpl.ENUMERATION_CONSTANT)) {
             return id.getTypeSpec();
-        }
-        else {
+        } else {
             return null;
         }
     }
 }
+
+ConstantDefinitionsParser.initialize();

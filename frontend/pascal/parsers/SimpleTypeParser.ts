@@ -28,7 +28,7 @@ export class SimpleTypeParser extends TypeSpecificationParser {
     }
 
     // Synchronization set for starting a simple type specification.
-    static SIMPLE_TYPE_START_SET : List =
+    static SIMPLE_TYPE_START_SET : List<PascalTokenType> =
         ConstantDefinitionsParser.CONSTANT_START_SET.clone();
 
     static initialize() : void {

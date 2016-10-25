@@ -5,6 +5,7 @@ import {PascalErrorCode} from '../PascalErrorCode';
 import {ConstantDefinitionsParser} from './ConstantDefinitionsParser';
 import {TypeDefinitionsParser} from './TypeDefinitionsParser';
 import {DeclaredRoutineParser} from './DeclaredRoutineParser';
+import {VariableDeclarationsParser} from './VariableDeclarationsParser';
 
 import {Token} from '../../Token';
 import {TokenType} from '../../TokenType';
@@ -27,7 +28,7 @@ export class DeclarationsParser extends PascalParserTD {
         super(parent);
     }
 
-    static DECLARATION_START_SET : List =
+    static DECLARATION_START_SET : List<PascalTokenType> =
         new List([
             PascalTokenType.CONST, 
             PascalTokenType.TYPE, 
@@ -35,11 +36,11 @@ export class DeclarationsParser extends PascalParserTD {
             PascalTokenType.PROCEDURE, 
             PascalTokenType.FUNCTION, 
             PascalTokenType.BEGIN]);
-    static TYPE_START_SET =
+    static TYPE_START_SET : List<PascalTokenType> =
         DeclarationsParser.DECLARATION_START_SET.clone();
-    static VAR_START_SET =
+    static VAR_START_SET : List<PascalTokenType> =
         DeclarationsParser.TYPE_START_SET.clone();
-    static ROUTINE_START_SET =
+    static ROUTINE_START_SET : List<PascalTokenType> =
         DeclarationsParser.VAR_START_SET.clone();
 
     static initialize() : void {
@@ -113,6 +114,4 @@ export class DeclarationsParser extends PascalParserTD {
     }
 }
 
-export module DeclarationsParser {
-    DeclarationsParser.initialize();
-}
+DeclarationsParser.initialize();

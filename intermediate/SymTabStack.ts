@@ -32,7 +32,7 @@ export interface SymTabStack {
      * @param symTab the symbol table to push.
      * @return the pushed symbol table.
      */
-    push(symTab : SymTab) : SymTab;
+    push(symTab? : SymTab) : SymTab;
 
     /**
      * Pop a symbol table off the stack.

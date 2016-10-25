@@ -1,9 +1,15 @@
 import {DeclarationsParser} from './DeclarationsParser';
+import {DeclaredRoutineParser} from './DeclaredRoutineParser';
 
 import {PascalParserTD} from '../PascalParserTD';
+import {PascalTokenType} from '../PascalTokenType';
+import {PascalErrorCode} from '../PascalErrorCode';
 
 import {List} from '../../../util/List';
+import {Token} from '../../Token';
 
+import {SymTabEntry} from '../../../intermediate/SymTabEntry';
+    
 export class ProgramParser extends DeclarationsParser {
     /**
      * Constructor.
@@ -14,13 +20,13 @@ export class ProgramParser extends DeclarationsParser {
     }
 
     // Synchronization set to start a program.
-    static PROGRAM_START_SET : List = new List([PROGRAM, SEMICOLON]);
-    // static {
-    //     PROGRAM_START_SET.addAll(DeclarationsParser.DECLARATION_START_SET);
-    // }
+    static PROGRAM_START_SET : List<PascalTokenType> = 
+        new List([
+            PascalTokenType.PROGRAM, 
+            PascalTokenType.SEMICOLON]);
 
     static initialize() : void {
-
+        ProgramParser.PROGRAM_START_SET.addAll(DeclarationsParser.DECLARATION_START_SET);
     }
 
     /**
@@ -31,7 +37,7 @@ export class ProgramParser extends DeclarationsParser {
      * @throws Exception if an error occurred.
      */
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
-        token = this.synchronize(PROGRAM_START_SET);
+        token = this.synchronize(ProgramParser.PROGRAM_START_SET);
 
         // Parse the program.
         let routineParser : DeclaredRoutineParser = new DeclaredRoutineParser(this);
@@ -39,8 +45,8 @@ export class ProgramParser extends DeclarationsParser {
 
         // Look for the final period.
         token = this.currentToken();
-        if (token.getType() != DOT) {
-            ProgramParser.errorHandler.flag(token, MISSING_PERIOD, this);
+        if (token.getType() != PascalTokenType.DOT) {
+            ProgramParser.errorHandler.flag(token, PascalErrorCode.MISSING_PERIOD, this);
         }
 
         return null;

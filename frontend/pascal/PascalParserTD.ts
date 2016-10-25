@@ -2,6 +2,8 @@ import {PascalErrorHandler} from './PascalErrorHandler';
 import {PascalErrorCode} from './PascalErrorCode';
 import {PascalTokenType} from './PascalTokenType';
 
+import {ProgramParser} from './parsers/ProgramParser';
+
 import {Scanner} from '../Scanner';
 import {Parser} from '../Parser';
 import {Token} from '../Token';
@@ -39,31 +41,12 @@ export class PascalParserTD extends Parser {
         // let startTime : number = performance.now();
 
         try {
-            // Loop over each token until the end of file.
-            while (!((token = this.nextToken()) instanceof EofToken)) {
-                var tokenType : TokenType = token.getType();
+            let token : Token = this.nextToken();
 
-                // Cross reference only the identifiers.
-                if (tokenType === (PascalTokenType.IDENTIFIER as TokenType)) {
-                    var name : string = token.getText().toLowerCase();
-
-                    // If it's not already in the symbol table,
-                    // create and enter a new entry for the identifier.
-                    var entry : SymTabEntry = PascalParserTD.symTabStack.lookup(name);
- 
-                    if (!entry) {
-                        entry = PascalParserTD.symTabStack.enterLocal(name);
-                    }
-
-                    // Append the current line number to the entry.
-                    entry.appendLineNumber(token.getLineNumber());
-                }
-
-                else if (tokenType === PascalTokenType.ERROR) {
-                    PascalParserTD.errorHandler.flag(token, <PascalErrorCode> token.getValue(),
-                                      this);
-                }
-            }
+            // Parse a program.
+            let programParser : ProgramParser = new ProgramParser(this);
+            programParser.parse(token, null);
+            token = this.currentToken();
 
             // Send the parser summary message.
             // float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
@@ -94,12 +77,12 @@ export class PascalParserTD extends Parser {
      * @return the token where the parser has synchronized.
      * @throws Exception if an error occurred.
      */
-    public synchronize(syncSet : List) : Token{
+    public synchronize(syncSet : List<PascalTokenType>) : Token{
         let token : Token = this.currentToken();
 
         // If the current token is not in the synchronization set,
         // then it is unexpected and the parser must recover.
-        if (!syncSet.contains(token.getType())) {
+        if (!syncSet.contains(token.getType() as PascalTokenType)) {
 
             // Flag the unexpected token.
             PascalParserTD.errorHandler.flag(token, PascalErrorCode.UNEXPECTED_TOKEN, this);
@@ -109,7 +92,7 @@ export class PascalParserTD extends Parser {
             do {
                 token = this.nextToken();
             } while (!(token instanceof EofToken) &&
-                     !syncSet.contains(token.getType()));
+                     !syncSet.contains(token.getType() as PascalTokenType));
        }
 
        return token;

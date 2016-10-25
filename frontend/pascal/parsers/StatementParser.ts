@@ -19,7 +19,7 @@ import {ICodeKeyImpl} from '../../../intermediate/icodeimpl/ICodeKeyImpl';
 
 export class StatementParser extends PascalParserTD {
     // Synchronization set for starting a statement.
-    protected static STMT_START_SET : List = new List([
+    public static STMT_START_SET : List<PascalTokenType> = new List<PascalTokenType>([
         PascalTokenType.BEGIN, 
         PascalTokenType.CASE, 
         PascalTokenType.FOR, 
@@ -30,7 +30,7 @@ export class StatementParser extends PascalParserTD {
         PascalTokenType.SEMICOLON]);
 
     // Synchronization set for following a statement.
-    protected static STMT_FOLLOW_SET : List = new List([
+    public static STMT_FOLLOW_SET : List<PascalTokenType> = new List<PascalTokenType>([
         PascalTokenType.SEMICOLON, 
         PascalTokenType.END,
         PascalTokenType.ELSE,
@@ -169,12 +169,12 @@ export class StatementParser extends PascalParserTD {
      * @param errorCode the error code if the terminator token is missing.
      * @throws Exception if an error occurred.
      */
-    protected parseList(token : Token, parentNode : ICodeNode,
+    public parseList(token : Token, parentNode : ICodeNode,
                              terminator : PascalTokenType,
                              errorCode : PascalErrorCode) : void
     {
         // Synchronization set for the terminator.
-        let terminatorSet : List = StatementParser.STMT_START_SET.clone();
+        let terminatorSet : List<PascalTokenType> = StatementParser.STMT_START_SET.clone();
         terminatorSet.add(terminator);
 
         // Loop to parse each statement until the END token
@@ -195,7 +195,7 @@ export class StatementParser extends PascalParserTD {
             }
 
             // If at the start of the next statement, then missing a semicolon.
-            else if (StatementParser.STMT_START_SET.contains(tokenType)) {
+            else if (StatementParser.STMT_START_SET.contains(tokenType as PascalTokenType)) {
                 StatementParser.errorHandler.flag(token, PascalErrorCode.MISSING_SEMICOLON, this);
             }
 

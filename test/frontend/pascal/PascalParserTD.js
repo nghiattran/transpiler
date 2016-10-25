@@ -6,7 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var PascalErrorHandler_1 = require('./PascalErrorHandler');
 var PascalErrorCode_1 = require('./PascalErrorCode');
-var PascalTokenType_1 = require('./PascalTokenType');
+var ProgramParser_1 = require('./parsers/ProgramParser');
 var Parser_1 = require('../Parser');
 var EofToken_1 = require('../EofToken');
 var MessageType_1 = require('../../message/MessageType');
@@ -37,29 +37,15 @@ var PascalParserTD = (function (_super) {
         var token;
         // let startTime : number = performance.now();
         try {
-            // Loop over each token until the end of file.
-            while (!((token = this.nextToken()) instanceof EofToken_1.EofToken)) {
-                var tokenType = token.getType();
-                // Cross reference only the identifiers.
-                if (tokenType === PascalTokenType_1.PascalTokenType.IDENTIFIER) {
-                    var name = token.getText().toLowerCase();
-                    // If it's not already in the symbol table,
-                    // create and enter a new entry for the identifier.
-                    var entry = PascalParserTD.symTabStack.lookup(name);
-                    if (!entry) {
-                        entry = PascalParserTD.symTabStack.enterLocal(name);
-                    }
-                    // Append the current line number to the entry.
-                    entry.appendLineNumber(token.getLineNumber());
-                }
-                else if (tokenType === PascalTokenType_1.PascalTokenType.ERROR) {
-                    PascalParserTD.errorHandler.flag(token, token.getValue(), this);
-                }
-            }
+            var token_1 = this.nextToken();
+            // Parse a program.
+            var programParser = new ProgramParser_1.ProgramParser(this);
+            programParser.parse(token_1, null);
+            token_1 = this.currentToken();
             // Send the parser summary message.
             // float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
             var elapsedTime = 0;
-            this.sendMessage(new Message_1.Message(MessageType_1.MessageType.PARSER_SUMMARY, [token.getLineNumber(),
+            this.sendMessage(new Message_1.Message(MessageType_1.MessageType.PARSER_SUMMARY, [token_1.getLineNumber(),
                 this.getErrorCount(),
                 elapsedTime]));
         }

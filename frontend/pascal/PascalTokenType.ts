@@ -153,7 +153,7 @@ export class PascalTokenType implements TokenType {
     private text : string;  // token text
 
     // Set of lower-cased Pascal reserved word text strings.
-    public static RESERVED_WORDS : List = new List();
+    public static RESERVED_WORDS : List<PascalTokenTypeEnum> = new List<PascalTokenTypeEnum>();
 
     // Hash table of Pascal special symbols.  Each special symbol's text
     // is the key to its Pascal token type.

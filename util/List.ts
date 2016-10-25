@@ -1,15 +1,15 @@
-export class List {
-	protected collection : Object[] = [];
+export class List <T>{
+	protected collection : T[] = [];
 
-	constructor(list? : Object[]) {
+	constructor(list? : T[]) {
 		this.collection = list || [];
 	}
 
-	add(value : Object) : void {
+	add(value : T) : void {
 		this.collection.push(value)
 	}
 
-	remove(value? : Object) : void {
+	remove(value? : T) : void {
 		if (value) {
 			let index : number = this.indexOf(value);
 			if (index !== -1)
@@ -19,25 +19,25 @@ export class List {
 		}
 	}
 
-	indexOf(value : Object) : number {
+	indexOf(value : T) : number {
 		return this.collection.indexOf(value);
 	}
 
-	index(value : number) : Object {
+	index(value : number) : T {
 		return this.collection[value];
 	}
 
-	contains(value : Object) : boolean {
+	contains(value : T) : boolean {
 		return this.collection.indexOf(value) !== -1;
 	}
 
-	addAll(value : List) : void {
+	addAll(value : List<T>) : void {
 		for (var i = 0; i < value.size(); i++) {
 			this.add(value.index(i));
 		}
 	}
 
-	clone() : List {
+	clone() : List<T> {
 		// TODO: change it to deep clone
 		return new List(this.collection);
 	}
