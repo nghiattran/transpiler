@@ -7,8 +7,7 @@ import {TypeFactory} from '../TypeFactory';
 
 import {DefinitionImpl} from './DefinitionImpl';
 import {RoutineCodeImpl} from './RoutineCodeImpl';
-
-import {SymTabKeyImpl} from '../symtabimpl/SymTabKeyImpl'
+import {SymTabKeyImpl} from './SymTabKeyImpl'
 
 import {TypeFormImpl} from '../typeimpl/TypeFormImpl'
 

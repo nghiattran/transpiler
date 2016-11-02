@@ -27,7 +27,7 @@ import {TypeFormImpl} from '../../../intermediate/typeimpl/TypeFormImpl';
 
 import {List} from '../../../util/List';
 
-var util = require('util');
+let util = require('util');
 
 export class DeclaredRoutineParser extends DeclarationsParser {
     // Synchronization set for a formal parameter sublist.

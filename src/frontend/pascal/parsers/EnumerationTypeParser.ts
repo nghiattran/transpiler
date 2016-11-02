@@ -21,7 +21,6 @@ import {List} from '../../../util/List';
 import {Util} from '../../../util/Util';
 
 import {DeclarationsParser} from './DeclarationsParser';
-import {ConstantDefinitionsParser} from './ConstantDefinitionsParser';
 import {TypeSpecificationParser} from './TypeSpecificationParser';
 
 export class EnumerationTypeParser extends TypeSpecificationParser {

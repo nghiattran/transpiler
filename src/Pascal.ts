@@ -13,8 +13,8 @@ import {SymTabKeyImpl} from './intermediate/symtabimpl/SymTabKeyImpl';
 
 import {CrossReferencer} from './util/CrossReferencer';
 
-import fs = require("fs");
-import util = require("util");
+let fs = require("fs");
+let util = require("util");
 
 export class Pascal {
     private parser : Parser;            // language-independent parser

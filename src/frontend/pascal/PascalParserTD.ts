@@ -2,8 +2,6 @@ import {PascalErrorHandler} from './PascalErrorHandler';
 import {PascalErrorCode} from './PascalErrorCode';
 import {PascalTokenType} from './PascalTokenType';
 
-import {ProgramParser} from './parsers/ProgramParser';
-
 import {Scanner} from '../Scanner';
 import {Parser} from '../Parser';
 import {Token} from '../Token';
@@ -37,30 +35,7 @@ export class PascalParserTD extends Parser {
      * and the intermediate code.
      */
     public parse(...params) : any {
-        let token : Token;
-        // let startTime : number = performance.now();
-
-        try {
-            let token : Token = this.nextToken();
-
-            // Parse a program.
-            let programParser : ProgramParser = new ProgramParser(this);
-            programParser.parse(token, null);
-            token = this.currentToken();
-
-            // Send the parser summary message.
-            // float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
-            let elapsedTime = 0;
-            this.sendMessage(new Message(MessageType.PARSER_SUMMARY,
-                                [token.getLineNumber(),
-                                  this.getErrorCount(),
-                                  elapsedTime]));
-        }
-        catch (ex) {
-            console.log('Error!!!!!!!!');
-            console.log(ex);
-            PascalParserTD.errorHandler.abortTranslation(PascalErrorCode.IO_ERROR, this);
-        }
+        
     }
 
     /**

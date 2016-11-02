@@ -60,7 +60,4 @@ export class TypeSpecificationParser extends PascalParserTD {
         }
     }
 }
-
-export module TypeSpecificationParser {
-    TypeSpecificationParser.initialize();
-}
+TypeSpecificationParser.initialize();

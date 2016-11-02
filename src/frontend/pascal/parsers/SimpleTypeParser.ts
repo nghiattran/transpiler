@@ -18,7 +18,7 @@ import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 
 import {List} from '../../../util/List';
 
-export class SimpleTypeParser extends TypeSpecificationParser {
+export class SimpleTypeParser extends PascalParserTD {
     /**
      * Constructor.
      * @param parent the parent parser.
@@ -105,6 +105,4 @@ export class SimpleTypeParser extends TypeSpecificationParser {
     }
 }
 
-export module SimpleTypeParser {
-    SimpleTypeParser.initialize();
-}
+SimpleTypeParser.initialize();

@@ -48,7 +48,7 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
      * @return the local symbol table.
      */
     public getLocalSymTab() : SymTab {
-        return this[this.currentNestingLevel];
+        return this.index(this.currentNestingLevel);
     }
 
     /**
@@ -72,7 +72,7 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
      * @return the popped symbol table.
      */
     public pop() : SymTab {
-        var symTab : SymTab = this[this.currentNestingLevel];
+        var symTab : SymTab = this.index(this.currentNestingLevel);
         this.remove();
         this.currentNestingLevel--;
 
@@ -85,7 +85,7 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
      * @return the new entry.
      */
     public enterLocal(name : string) : SymTabEntry {
-        return this[this.currentNestingLevel].enter(name);
+        return this.index(this.currentNestingLevel - 1).enter(name);
     }
 
     /**
@@ -94,7 +94,7 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
      * @return the entry, or null if it does not exist.
      */
     public lookupLocal(name : string) : SymTabEntry{
-        return this[this.currentNestingLevel].lookup(name);
+        return this.index(this.currentNestingLevel).lookup(name);
     }
 
     /**

@@ -1,5 +1,7 @@
 *.js
 .tmp
+dist/
+src/frontend/pascal/parsersBundle.ts
 
 # Logs
 logs
@@ -38,3 +40,4 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+

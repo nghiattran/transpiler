@@ -10,7 +10,7 @@ import {SymTabKeyImpl} from '../intermediate/symtabimpl/SymTabKeyImpl';
 import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
 import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 
-var util = require('util');
+let util = require('util');
 
 export class CrossReferencer {
     private static NAME_WIDTH : number = 16;
