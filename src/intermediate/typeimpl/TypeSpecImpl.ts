@@ -1,6 +1,7 @@
 import {HashMap} from '../../util/HashMap';
 
 import {TypeSpec} from '../TypeSpec';
+import {TypeKey} from '../TypeKey';
 import {SymTabEntry} from '../SymTabEntry';
 import {TypeForm} from '../TypeForm';
 
@@ -10,7 +11,7 @@ import {TypeKeyImpl} from './TypeKeyImpl';
 import {TypeFormImpl} from './TypeFormImpl';
 
 
-export class TypeSpecImpl extends HashMap implements TypeSpec {
+export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
     private form : TypeForm;           // type form
     private identifier : SymTabEntry;  // type identifier
 

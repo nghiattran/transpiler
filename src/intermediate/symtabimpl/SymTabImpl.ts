@@ -1,9 +1,9 @@
-import {HashMap} from '../../util/HashMap';
+import {TreeMap} from '../../util/HashMap';
 import {SymTab} from '../SymTab';
 import {SymTabEntry} from '../SymTabEntry';
 import {SymTabFactory} from '../SymTabFactory';
 
-export class SymTabImpl extends HashMap implements SymTab {
+export class SymTabImpl extends TreeMap<SymTabEntry> implements SymTab {
     private nestingLevel : number;       // scope nesting level of this entry
     private slotNumber : number;         // local variables array slot number
     private maxSlotNumber : number;      // max slot number value

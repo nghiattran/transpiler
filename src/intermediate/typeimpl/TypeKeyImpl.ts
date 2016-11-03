@@ -1,6 +1,7 @@
 import {TypeKey} from '../TypeKey';
+import {PolyfillBaseObject} from '../../util/PolyfillBaseObject';
 
-export class TypeKeyImpl implements TypeKey {
+export class TypeKeyImpl extends PolyfillBaseObject implements TypeKey {
     private text : string;
 
     // Enumeration
@@ -24,6 +25,7 @@ export class TypeKeyImpl implements TypeKey {
      * Constructor.
      */
     constructor(text : string) {
+        super();
         text = text || this.toString().toLowerCase();
     }
 

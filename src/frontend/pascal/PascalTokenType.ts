@@ -1,7 +1,8 @@
 import {TokenType} from '../TokenType';
 
 import {List} from '../../util/List';
-import {HashMap} from '../../util/HashMap';
+import {HashMap, HashSet, TreeMap} from '../../util/HashMap';
+import {PolyfillBaseObject} from '../../util/PolyfillBaseObject';
 
 export enum PascalTokenTypeEnum {
     // Reserved words.
@@ -75,7 +76,7 @@ export namespace PascalTokenTypeEnum {
   }
 }
 
-export class PascalTokenType implements TokenType {
+export class PascalTokenType extends PolyfillBaseObject implements TokenType {
     static AND : PascalTokenType = new PascalTokenType('AND');
     static ARRAY : PascalTokenType = new PascalTokenType('ARRAY');
     static BEGIN : PascalTokenType = new PascalTokenType('BEGIN');
@@ -157,15 +158,16 @@ export class PascalTokenType implements TokenType {
 
     // Hash table of Pascal special symbols.  Each special symbol's text
     // is the key to its Pascal token type.
-    public static SPECIAL_SYMBOLS : HashMap = new HashMap();
+    public static SPECIAL_SYMBOLS : TreeMap<PascalTokenType> = new TreeMap<PascalTokenType>();
 
     /**
      * Constructor.
      * @param text the token text.
      */
     constructor(text : string) {
-      text = text || this.toString().toLowerCase()
-      this.text = text;
+        super();
+        text = text || this.toString().toLowerCase()
+        this.text = text;
     }
 
     static initialize() {
@@ -176,6 +178,7 @@ export class PascalTokenType implements TokenType {
 
         let specialValues : string[] = PascalTokenTypeEnum.names();
         for (var i = PascalTokenType.FIRST_SPECIAL_INDEX; i < PascalTokenType.LAST_SPECIAL_INDEX; ++i) {
+            
             PascalTokenType.SPECIAL_SYMBOLS.put(PascalTokenType[values[i]].getText(), PascalTokenType[values[i]]);
         }
     }
@@ -189,6 +192,4 @@ export class PascalTokenType implements TokenType {
     }
 }
 
-export module PascalTokenType {
-    PascalTokenType.initialize();
-}
+PascalTokenType.initialize();

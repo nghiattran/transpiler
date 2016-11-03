@@ -9,7 +9,8 @@ import {DefinitionImpl} from './DefinitionImpl';
 import {RoutineCodeImpl} from './RoutineCodeImpl';
 import {SymTabKeyImpl} from './SymTabKeyImpl'
 
-import {TypeFormImpl} from '../typeimpl/TypeFormImpl'
+import {TypeFormImpl} from '../typeimpl/TypeFormImpl';
+import {TypeKeyImpl} from '../typeimpl/TypeKeyImpl';
 
 export  class Predefined {
     // Predefined types.
@@ -116,7 +117,7 @@ export  class Predefined {
         var constants: SymTabEntry[] = [];
         constants.push(this.falseId);
         constants.push(this.trueId);
-        this.booleanType.setAttribute(DefinitionImpl.ENUMERATION_CONSTANT, constants);
+        this.booleanType.setAttribute(TypeKeyImpl.ENUMERATION_CONSTANTS, constants);
     }
 
     /**

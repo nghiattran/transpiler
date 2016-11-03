@@ -2,8 +2,6 @@ import {SymTabEntry} from '../SymTabEntry';
 import {SymTab} from '../SymTab';
 import {Definition} from '../Definition';
 import {TypeSpec} from '../TypeSpec';
-import {HashMap} from '../../util/HashMap';
-
 
 export class SymTabEntryImpl extends SymTabEntry {
    

@@ -48,6 +48,7 @@ export class CrossReferencer {
      */
     private printRoutine(routineId : SymTabEntry) : void {
         let definition : Definition = routineId.getDefinition();
+
         console.log("\n*** " + definition.toString() +
                            " " + routineId.getName() + " ***");
         this.printColumnHeadings();
@@ -55,6 +56,7 @@ export class CrossReferencer {
         // Print the entries in the routine's symbol table.
         let symTab : SymTab = routineId.getAttribute(SymTabKeyImpl.ROUTINE_SYMTAB) as SymTab;
         let newRecordTypes : TypeSpec[] = [];
+        
         this.printSymTab(symTab, newRecordTypes);
 
         // Print cross-reference tables for any records defined in the routine.

@@ -11,12 +11,19 @@ import {List} from '../../../util/List';
 import {TypeSpec} from '../../../intermediate/TypeSpec';
 import {ICodeNode} from '../../../intermediate/ICodeNode';
 import {ICodeFactory} from '../../../intermediate/ICodeFactory';
+import {Definition} from '../../../intermediate/Definition';
+import {SymTabEntry} from '../../../intermediate/SymTabEntry';
 
 import {ICodeNodeTypeImpl} from '../../../intermediate/icodeimpl/ICodeNodeTypeImpl';
 import {ICodeKeyImpl} from '../../../intermediate/icodeimpl/ICodeKeyImpl';
 
-// import {CompoundStatementParser} from './CompoundStatementParser';
+import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 
+// import {CompoundStatementParser} from './CompoundStatementParser';
+import {CompoundStatementParser} from './CompoundStatementParser';
+// import {AssignmentStatementParser} from './AssignmentStatementParser';
+
+// AssignmentStatementParser
 export class StatementParser extends PascalParserTD {
     // Synchronization set for starting a statement.
     public static STMT_START_SET : List<PascalTokenType> = new List<PascalTokenType>([
@@ -58,82 +65,82 @@ export class StatementParser extends PascalParserTD {
         switch (<PascalTokenType> token.getType()) {
 
             case PascalTokenType.BEGIN: {
-                // CompoundStatementParser compoundParser =
-                //     new CompoundStatementParser(this);
-                // statementNode = compoundParser.parse(token);
+                let compoundParser : CompoundStatementParser =
+                    new CompoundStatementParser(this);
+                statementNode = compoundParser.parse(token);
                 break;
             }
 
-            // case IDENTIFIER: {
-            //     String name = token.getText().toLowerCase();
-            //     SymTabEntry id = symTabStack.lookup(name);
-            //     Definition idDefn = id != null ? id.getDefinition()
-            //                                    : UNDEFINED;
+            // case PascalTokenType.IDENTIFIER: {
+            //     let name : string = token.getText().toLowerCase();
+            //     let id : SymTabEntry= StatementParser.symTabStack.lookup(name);
+            //     let idDefn : Definition = id != null ? id.getDefinition()
+            //                                    : DefinitionImpl.UNDEFINED;
 
             //     // Assignment statement or procedure call.
-            //     switch ((DefinitionImpl) idDefn) {
+            //     switch (<DefinitionImpl> idDefn) {
 
-            //         case VARIABLE:
-            //         case VALUE_PARM:
-            //         case VAR_PARM:
-            //         case UNDEFINED: {
-            //             AssignmentStatementParser assignmentParser =
+            //         case DefinitionImpl.VARIABLE:
+            //         case DefinitionImpl.VALUE_PARM:
+            //         case DefinitionImpl.VAR_PARM:
+            //         case DefinitionImpl.UNDEFINED: {
+            //             let assignmentParser : AssignmentStatementParser=
             //                 new AssignmentStatementParser(this);
             //             statementNode = assignmentParser.parse(token);
             //             break;
             //         }
 
-            //         case FUNCTION: {
-            //             AssignmentStatementParser assignmentParser =
+            //         case DefinitionImpl.FUNCTION: {
+            //             let assignmentParser : AssignmentStatementParser=
             //                 new AssignmentStatementParser(this);
             //             statementNode =
             //                 assignmentParser.parseFunctionNameAssignment(token);
             //             break;
             //         }
 
-            //         case PROCEDURE: {
-            //             CallParser callParser = new CallParser(this);
-            //             statementNode = callParser.parse(token);
-            //             break;
-            //         }
+            //         // case PROCEDURE: {
+            //         //     let callParser : CallParser = new CallParser(this);
+            //         //     statementNode = callParser.parse(token);
+            //         //     break;
+            //         // }
 
             //         default: {
-            //             errorHandler.flag(token, UNEXPECTED_TOKEN, this);
-            //             token = nextToken();  // consume identifier
+            //             StatementParser.errorHandler.flag(token, UNEXPECTED_TOKEN, this);
+            //             token = this.nextToken();  // consume identifier
             //         }
             //     }
 
             //     break;
             // }
 
-            // case REPEAT: {
-            //     RepeatStatementParser repeatParser =
+            // case PascalTokenType.REPEAT: {
+            //     let repeatParser : RepeatStatementParser =
             //         new RepeatStatementParser(this);
             //     statementNode = repeatParser.parse(token);
             //     break;
             // }
 
-            // case WHILE: {
-            //     WhileStatementParser whileParser =
+            // case PascalTokenType.WHILE: {
+            //     let whileParser : WhileStatementParser =
             //         new WhileStatementParser(this);
             //     statementNode = whileParser.parse(token);
             //     break;
             // }
 
-            // case FOR: {
-            //     ForStatementParser forParser = new ForStatementParser(this);
+            // case PascalTokenType.FOR: {
+            //     let forParser : ForStatementParser= new ForStatementParser(this);
             //     statementNode = forParser.parse(token);
             //     break;
             // }
 
-            // case IF: {
-            //     IfStatementParser ifParser = new IfStatementParser(this);
+            // case PascalTokenType.IF: {
+            //     let ifParser : IfStatementParser = new IfStatementParser(this);
             //     statementNode = ifParser.parse(token);
             //     break;
             // }
 
-            // case CASE: {
-            //     CaseStatementParser caseParser = new CaseStatementParser(this);
+            // case PascalTokenType.CASE: {
+            //     let caseParser : CaseStatementParser = new CaseStatementParser(this);
             //     statementNode = caseParser.parse(token);
             //     break;
             // }

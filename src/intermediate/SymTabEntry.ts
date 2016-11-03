@@ -4,7 +4,7 @@ import {TypeSpec} from './TypeSpec';
 import {SymTabKey} from './SymTabKey';
 import {HashMap} from '../util/HashMap';
 
-export class SymTabEntry extends HashMap {
+export class SymTabEntry extends HashMap<SymTabKey, Object> {
     private name : string;                     // entry name
     private symTab : SymTab;                   // parent symbol table
     private definition : Definition;           // how the identifier is defined

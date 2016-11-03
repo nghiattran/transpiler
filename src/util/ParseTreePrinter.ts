@@ -1,34 +1,11 @@
-package wci.util;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.io.PrintStream;
-
-import wci.intermediate.*;
-import wci.intermediate.icodeimpl.*;
-
-import static wci.intermediate.symtabimpl.SymTabKeyImpl.*;
-import static wci.intermediate.symtabimpl.DefinitionImpl.*;
-
-/**
- * <h1>ParseTreePrinter</h1>
- *
- * <p>Print a parse tree.</p>
- *
- * <p>Copyright (c) 2009 by Ronald Mak</p>
- * <p>For instructional purposes only.  No warranties.</p>
- */
-public class ParseTreePrinter
-{
-    private static final int INDENT_WIDTH = 4;
-    private static final int LINE_WIDTH = 80;
+export class ParseTreePrinter {
+    private static INDENT_WIDTH : number = 4;
+    private static LINE_WIDTH : number = 80;
 
     private PrintStream ps;      // output print stream
-    private int length;          // output line length
-    private String indent;       // indent spaces
-    private String indentation;  // indentation of a line
+    private length : number;          // output line length
+    private indent : string;       // indent spaces
+    private indentation : string;  // indentation of a line
     private StringBuilder line;  // output line
 
     /**
@@ -44,7 +21,7 @@ public class ParseTreePrinter
 
         // The indent is INDENT_WIDTH spaces.
         this.indent = "";
-        for (int i = 0; i < INDENT_WIDTH; ++i) {
+        for (let i = 0; i < ParseTreePrinter.INDENT_WIDTH; ++i) {
             this.indent += " ";
         }
     }
@@ -53,36 +30,34 @@ public class ParseTreePrinter
      * Print the intermediate code as a parse tree.
      * @param symTabStack the symbol table stack.
      */
-    public void print(SymTabStack symTabStack)
-    {
-        ps.println("\n===== INTERMEDIATE CODE =====");
+    public print(symTabStack : SymTabStack) : void{
+        this.ps.println("\n===== INTERMEDIATE CODE =====");
 
-        SymTabEntry programId = symTabStack.getProgramId();
-        printRoutine(programId);
+        let programId : SymTabEntry = symTabStack.getProgramId();
+        this.printRoutine(programId);
     }
 
     /**
      * Print the parse tree for a routine.
      * @param routineId the routine identifier's symbol table entry.
      */
-    private void printRoutine(SymTabEntry routineId)
-    {
-        Definition definition = routineId.getDefinition();
-        System.out.println("\n*** " + definition.toString() +
+    private printRoutine(routineId : SymTabEntry) : void {
+        let definition : Definition = routineId.getDefinition();
+        console.log("\n*** " + definition.toString() +
                            " " + routineId.getName() + " ***\n");
 
         // Print the intermediate code in the routine's symbol table entry.
-        ICode iCode = (ICode) routineId.getAttribute(ROUTINE_ICODE);
+        let iCode : ICode = (ICode) routineId.getAttribute(ROUTINE_ICODE);
         if (iCode.getRoot() != null) {
-            printNode((ICodeNodeImpl) iCode.getRoot());
+            this.printNode(<ICodeNodeImpl> iCode.getRoot());
         }
 
         // Print any procedures and functions defined in the routine.
-        ArrayList<SymTabEntry> routineIds =
-            (ArrayList<SymTabEntry>) routineId.getAttribute(ROUTINE_ROUTINES);
+        let routineIds : List<SymTabEntry> =
+            <List<SymTabEntry>> routineId.getAttribute(ROUTINE_ROUTINES);
         if (routineIds != null) {
-            for (SymTabEntry rtnId : routineIds) {
-                printRoutine(rtnId);
+            for (let rtnId in routineIds) {
+                this.printRoutine(rtnId);
             }
         }
     }
@@ -91,13 +66,13 @@ public class ParseTreePrinter
      * Print a parse tree node.
      * @param node the parse tree node.
      */
-    private void printNode(ICodeNodeImpl node)
-    {
+    private printNode(node : ICodeNodeImpl) : void {
         // Opening tag.
-        append(indentation); append("<" + node.toString());
+        this.append(indentation); 
+        this.append("<" + node.toString());
 
-        printAttributes(node);
-        printTypeSpec(node);
+        this.printAttributes(node);
+        this.printTypeSpec(node);
 
         ArrayList<ICodeNode> childNodes = node.getChildren();
 

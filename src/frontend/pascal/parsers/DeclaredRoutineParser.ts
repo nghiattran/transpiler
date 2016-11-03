@@ -135,7 +135,6 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         // Parse the routine name.
         routineId = this.parseRoutineName(token, dummyName);
         routineId.setDefinition(routineDefn);
-
         token = this.currentToken();
 
         // Create new intermediate code for the routine.

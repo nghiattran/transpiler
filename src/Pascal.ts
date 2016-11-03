@@ -49,7 +49,6 @@ export class Pascal {
             this.call         = flags.indexOf('c') > -1;
             this.returnn      = flags.indexOf('r') > -1;
 
-            // TODO : fix sourse
             this.source = new Source(text);
             this.source.addMessageListener(new SourceMessageListener());
 
@@ -65,8 +64,8 @@ export class Pascal {
             if (this.parser.getErrorCount() === 0) {
                 this.symTabStack = this.parser.getSymTabStack();
                 
-                // var programId : SymTabEntry = this.symTabStack.getProgramId();
-                // this.iCode = programId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE) as ICode;
+                var programId : SymTabEntry = this.symTabStack.getProgramId();
+                this.iCode = programId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE) as ICode;
                 
                 if (this.xref) {
                     var crossReferencer : CrossReferencer = new CrossReferencer();
@@ -327,7 +326,7 @@ class ParserMessageListener implements MessageListener {
                 let statementCount : number = body[0] as number;
                 let syntaxErrors : number = body[1] as number;
                 let elapsedTime : number= body[2] as number;
-                console.log(body);
+
                 // TODO format output
                 var line = util.format(Pascal.PARSER_SUMMARY_FORMAT,
                                   statementCount, syntaxErrors,

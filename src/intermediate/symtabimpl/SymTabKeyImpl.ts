@@ -1,6 +1,8 @@
 import {SymTabKey} from '../SymTabKey';
+import {PolyfillBaseObject} from '../../util/PolyfillBaseObject';
 
-export class SymTabKeyImpl implements SymTabKey {
+
+export class SymTabKeyImpl extends PolyfillBaseObject implements SymTabKey {
     private text : string;
 
     // Constant.
@@ -24,6 +26,7 @@ export class SymTabKeyImpl implements SymTabKey {
      * Constructor.
      */
     constructor(text : string) {
+        super();
         text = text || this.toString().toLowerCase();
     }
 
