@@ -1,7 +1,5 @@
 import {PolyfillBaseObject} from './PolyfillBaseObject';
 
-(new PolyfillBaseObject()).getHash()
-
 export class HashMap <PolyfillBaseObject, E> {
 	protected collection : Object = {};
 
@@ -49,6 +47,10 @@ export class HashMap <PolyfillBaseObject, E> {
         }
 
         return list;
+    }
+
+    public getKeys() : string[] {
+        return Object.keys(this.collection);
     }
 }
 

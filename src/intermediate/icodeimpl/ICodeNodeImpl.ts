@@ -4,11 +4,13 @@ import {TypeSpec} from '../TypeSpec';
 import {ICodeKey} from '../ICodeKey';
 import {ICodeFactory} from '../ICodeFactory';
 
-export class ICodeNodeImpl implements ICodeNode {
-    public colection : Object;
+import {List} from '../../util/List';
+import {HashMap} from '../../util/HashMap';
+
+export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNode {
     private type : ICodeNodeType;             // node type
     private parent : ICodeNode;               // parent node
-    private children : ICodeNode[];           // children array list
+    private children : List<ICodeNode>;           // children array list
     private typeSpec : TypeSpec;              // data type specification
 
     /**
@@ -16,9 +18,10 @@ export class ICodeNodeImpl implements ICodeNode {
      * @param type the node type whose name will be the name of this node.
      */
     public constructor(type : ICodeNodeType) {
+        super();
         this.type = type;
         this.parent = null;
-        this.children = [];
+        this.children = new List<ICodeNode>();
     }
 
     /**
@@ -60,7 +63,7 @@ export class ICodeNodeImpl implements ICodeNode {
      */
     public addChild(node : ICodeNode) : ICodeNode {
         if (node != null) {
-            this.children.push(node);
+            this.children.add(node);
             (node as ICodeNodeImpl).parent = this;
         }
 
@@ -71,7 +74,7 @@ export class ICodeNodeImpl implements ICodeNode {
      * Return an array list of this node's children.
      * @return the array list of children.
      */
-    public getChildren() : ICodeNode[] {
+    public getChildren() : List<ICodeNode> {
         return this.children;
     }
 
@@ -90,11 +93,7 @@ export class ICodeNodeImpl implements ICodeNode {
      * @return the attribute value.
      */
     public getAttribute(key : ICodeKey) : Object{
-        return this.colection[key.toString()];
-    }
-
-    public put(key : ICodeKey, value : Object) : void {
-        this.colection[key.toString()] = value;
+        return this.get(key);
     }
 
     /**
@@ -109,9 +108,10 @@ export class ICodeNodeImpl implements ICodeNode {
         copy = ICodeFactory.createICodeNode(this.type) as ICodeNodeImpl;
         copy.setTypeSpec(this.typeSpec);
 
+
         // Copy attributes
-        for (var key in this.colection) {
-            copy.put(key, this.colection[key])
+        for (var key in this.getKeys()) {
+            copy.put(key, this.get[key])
         }
 
         return copy;

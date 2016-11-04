@@ -2,6 +2,8 @@ import {ICodeNodeType} from './ICodeNodeType';
 import {TypeSpec} from './TypeSpec';
 import {ICodeKey} from './ICodeKey';
 
+import {List} from '../util/List';
+
 export interface ICodeNode {
     /**
      * Getter.
@@ -38,7 +40,7 @@ export interface ICodeNode {
      * Return an array list of this node's children.
      * @return the array list of children.
      */
-    getChildren() : ICodeNode[];
+    getChildren() : List<ICodeNode>;
 
     /**
      * Set a node attribute.

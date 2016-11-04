@@ -12,6 +12,7 @@ import {SymTabEntry} from './intermediate/SymTabEntry';
 import {SymTabKeyImpl} from './intermediate/symtabimpl/SymTabKeyImpl';
 
 import {CrossReferencer} from './util/CrossReferencer';
+import {ParseTreePrinter} from './util/ParseTreePrinter';
 
 let fs = require("fs");
 let util = require("util");
@@ -72,13 +73,13 @@ export class Pascal {
                     crossReferencer.print(this.symTabStack);
                 }
 
-                // if (this.intermediate) {
-                //     var treePrinter : ParseTreePrinter =
-                //                          new ParseTreePrinter(System.out);
-                //     treePrinter.print(this.symTabStack);
-                // }
+                if (this.intermediate) {
+                    var treePrinter : ParseTreePrinter =
+                                         new ParseTreePrinter();
+                    treePrinter.print(this.symTabStack);
+                }
 
-//                backend.process(iCode, symTabStack);
+               // backend.process(iCode, symTabStack);
             }
         } catch (ex) {
             console.log(ex)

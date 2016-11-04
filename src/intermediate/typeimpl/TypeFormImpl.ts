@@ -1,6 +1,7 @@
 import {TypeForm} from '../TypeForm';
+import {PolyfillBaseObject} from '../../util/PolyfillBaseObject';
 
-export class TypeFormImpl implements TypeForm {
+export class TypeFormImpl extends PolyfillBaseObject implements TypeForm {
     private text : string;
 
     public static SCALAR : TypeFormImpl = new TypeFormImpl('SCALAR');
@@ -13,6 +14,7 @@ export class TypeFormImpl implements TypeForm {
      * Constructor.
      */
     constructor(text : string) {
+        super();
         text = text || this.toString().toLowerCase();
     }
 
