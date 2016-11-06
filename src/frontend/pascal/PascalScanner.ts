@@ -33,7 +33,7 @@ export class PascalScanner extends Scanner {
 
         let token : Token;
         let currentChar : string = this.currentChar();
-        
+
         // Construct the next token.  The current character determines the
         // token type.
         if (currentChar === Source.EOF) {
@@ -67,7 +67,7 @@ export class PascalScanner extends Scanner {
     private skipWhiteSpace() : void {
         let currentChar : string = this.currentChar();
 
-        while (currentChar === '\n' || currentChar === ' ' || (currentChar === '{')) {
+        while (currentChar === '\n' || currentChar === ' ' || currentChar === '\t' || (currentChar === '{')) {
             // Start of a comment?
             if (currentChar === '{') {
                 do {

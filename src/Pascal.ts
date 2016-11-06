@@ -370,4 +370,4 @@ class ParserMessageListener implements MessageListener {
 
 let text = fs.readFileSync('./test.pas', 'utf8');
 
-Pascal.main(['compile', 'xi', text])
+Pascal.main(['compile', 'i', text])

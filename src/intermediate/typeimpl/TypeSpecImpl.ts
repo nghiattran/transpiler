@@ -20,7 +20,7 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
         
         if (value instanceof TypeFormImpl) {
             this.formConstructor(value as TypeForm);
-        } else if (value instanceof String) {
+        } else if (typeof value === 'string' || value instanceof String) {
             this.stringConstructor(value as string);
         } else {
             throw "Type not covered";

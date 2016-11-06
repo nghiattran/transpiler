@@ -57,7 +57,7 @@ export class PascalParserTD extends PascalParser {
         }
         catch (ex) {
             console.error('Error!!!!!!!!');
-            console.error(ex);
+            console.info(ex);
             PascalParserTD.errorHandler.abortTranslation(PascalErrorCode.IO_ERROR, this);
         }
     }

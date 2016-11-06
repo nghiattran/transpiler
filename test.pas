@@ -8,5 +8,5 @@ VAR
     root, sqRoot : real;
 
 BEGIN
-    number = 1;
+	write('Enter new number (0 to quit): ');
 END.

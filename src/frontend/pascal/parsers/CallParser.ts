@@ -82,7 +82,7 @@ export class CallParser extends StatementParser {
      * @return the PARAMETERS node, or undefined if there are no actual parameters.
      * @throws Exception if an error occurred.
      */
-    protected parseActualParameters(
+    protected parseActualParameters (
         token : Token, pfId : SymTabEntry,
         isDeclared : boolean,
         isReadReadln : boolean,
@@ -109,11 +109,11 @@ export class CallParser extends StatementParser {
         }
 
         token = this.nextToken();  // consume opening (
-
+        
         // Loop to parse each actual parameter.
         while (token.getType() !== PascalTokenType.RIGHT_PAREN) {
             let actualNode : ICodeNode = expressionParser.parse(token);
-
+            
             // Declared procedure or function: Check the number of actual
             // parameters, and check each actual parameter against the
             // corresponding formal parameter.
@@ -149,7 +149,6 @@ export class CallParser extends StatementParser {
             // scalar, boolean, or a Pascal string. Parse any field width and
             // precision.
             else if (isWriteWriteln) {
-
                 // Create a WRITE_PARM node which adopts the expression node.
                 let exprNode : ICodeNode = actualNode;
                 actualNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.WRITE_PARM);
@@ -178,7 +177,7 @@ export class CallParser extends StatementParser {
             parmsNode.addChild(actualNode);
             token = this.synchronize(CallParser.COMMA_SET);
             let tokenType : TokenType = token.getType();
-
+            
             // Look for the comma.
             if (tokenType === PascalTokenType.COMMA) {
                 token = this.nextToken();  // consume ,
@@ -261,3 +260,5 @@ export class CallParser extends StatementParser {
         }
     }
 }
+
+CallParser.initialize();
