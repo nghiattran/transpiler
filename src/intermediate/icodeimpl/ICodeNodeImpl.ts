@@ -20,7 +20,7 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
     public constructor(type : ICodeNodeType) {
         super();
         this.type = type;
-        this.parent = null;
+        this.parent = undefined;
         this.children = new List<ICodeNode>();
     }
 
@@ -58,11 +58,11 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
 
     /**
      * Add a child node.
-     * @param node the child node. Not added if null.
+     * @param node the child node. Not added if undefined.
      * @return the child node.
      */
     public addChild(node : ICodeNode) : ICodeNode {
-        if (node != null) {
+        if (node !== undefined) {
             this.children.add(node);
             (node as ICodeNodeImpl).parent = this;
         }
@@ -100,9 +100,7 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
      * Make a copy of this node.
      * @return the copy.
      */
-    public copy() : ICodeNode{
-        // TODO: check if it clone correctly
-
+    public copy() : ICodeNode {
         // Create a copy with the same type and type specification.
         var copy : ICodeNodeImpl;
         copy = ICodeFactory.createICodeNode(this.type) as ICodeNodeImpl;
@@ -111,7 +109,7 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
 
         // Copy attributes
         for (var key in this.getKeys()) {
-            copy.put(key, this.get[key])
+            copy.putKeyString(key, this.get[key])
         }
 
         return copy;

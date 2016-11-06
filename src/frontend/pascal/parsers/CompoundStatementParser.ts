@@ -1,6 +1,6 @@
 import {StatementParser} from './StatementParser';
 
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -25,7 +25,7 @@ export class CompoundStatementParser extends StatementParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    public constructor(parent : PascalParserTD) {
+    public constructor(parent : PascalParser) {
         super(parent);
     }
 

@@ -31,7 +31,7 @@ public class CaseStatementParser extends StatementParser
      * Constructor.
      * @param parent the parent parser.
      */
-    public CaseStatementParser(PascalParserTD parent)
+    public CaseStatementParser(PascalParser parent)
     {
         super(parent);
     }
@@ -70,18 +70,18 @@ public class CaseStatementParser extends StatementParser
 
         // Type check: The CASE expression's type must be integer, character,
         //             or enumeration.
-        TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+        TypeSpec exprType = exprNode !== undefined ? exprNode.getTypeSpec()
                                              : Predefined.undefinedType;
         if (!TypeChecker.isInteger(exprType) &&
             !TypeChecker.isChar(exprType) &&
-            (exprType.getForm() != ENUMERATION))
+            (exprType.getForm() !== ENUMERATION))
         {
             errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
         }
 
         // Synchronize at the OF.
         token = synchronize(OF_SET);
-        if (token.getType() == OF) {
+        if (token.getType() === OF) {
             token = nextToken();  // consume the OF
         }
         else {
@@ -93,7 +93,7 @@ public class CaseStatementParser extends StatementParser
 
         // Loop to parse each CASE branch until the END token
         // or the end of the source file.
-        while (!(token instanceof EofToken) && (token.getType() != END)) {
+        while (!(token instanceof EofToken) && (token.getType() !== END)) {
 
             // The SELECT node adopts the CASE branch subtree.
             selectNode.addChild(parseBranch(token, exprType, constantSet));
@@ -102,7 +102,7 @@ public class CaseStatementParser extends StatementParser
             TokenType tokenType = token.getType();
 
             // Look for the semicolon between CASE branches.
-            if (tokenType == SEMICOLON) {
+            if (tokenType === SEMICOLON) {
                 token = nextToken();  // consume the ;
             }
 
@@ -113,7 +113,7 @@ public class CaseStatementParser extends StatementParser
         }
 
         // Look for the END token.
-        if (token.getType() == END) {
+        if (token.getType() === END) {
             token = nextToken();  // consume END
         }
         else {
@@ -149,7 +149,7 @@ public class CaseStatementParser extends StatementParser
 
         // Look for the : token.
         token = currentToken();
-        if (token.getType() == COLON) {
+        if (token.getType() === COLON) {
             token = nextToken();  // consume the :
         }
         else {
@@ -199,7 +199,7 @@ public class CaseStatementParser extends StatementParser
             token = synchronize(COMMA_SET);
 
             // Look for the comma.
-            if (token.getType() == COMMA) {
+            if (token.getType() === COMMA) {
                 token = nextToken();  // consume the ,
             }
 
@@ -222,16 +222,16 @@ public class CaseStatementParser extends StatementParser
                                     HashSet<Object> constantSet)
         throws Exception
     {
-        TokenType sign = null;
-        ICodeNode constantNode = null;
-        TypeSpec constantType = null;
+        TokenType sign = undefined;
+        ICodeNode constantNode = undefined;
+        TypeSpec constantType = undefined;
 
         // Synchronize at the start of a constant.
         token = synchronize(CONSTANT_START_SET);
         TokenType tokenType = token.getType();
 
         // Plus or minus sign?
-        if ((tokenType == PLUS) || (tokenType == MINUS)) {
+        if ((tokenType === PLUS) || (tokenType === MINUS)) {
             sign = tokenType;
             token = nextToken();  // consume sign
         }
@@ -241,7 +241,7 @@ public class CaseStatementParser extends StatementParser
 
             case IDENTIFIER: {
                 constantNode = parseIdentifierConstant(token, sign);
-                if (constantNode != null) {
+                if (constantNode !== undefined) {
                     constantType = constantNode.getTypeSpec();
                 }
 
@@ -269,7 +269,7 @@ public class CaseStatementParser extends StatementParser
         }
 
         // Check for reused constants.
-        if (constantNode != null) {
+        if (constantNode !== undefined) {
             Object value = constantNode.getAttribute(VALUE);
 
             if (constantSet.contains(value)) {
@@ -302,31 +302,31 @@ public class CaseStatementParser extends StatementParser
     private ICodeNode parseIdentifierConstant(Token token, TokenType sign)
         throws Exception
     {
-        ICodeNode constantNode = null;
-        TypeSpec constantType = null;
+        ICodeNode constantNode = undefined;
+        TypeSpec constantType = undefined;
 
         // Look up the identifier in the symbol table stack.
         String name = token.getText().toLowerCase();
         SymTabEntry id = symTabStack.lookup(name);
 
         // Undefined.
-        if (id == null) {
+        if (id === undefined) {
             id = symTabStack.enterLocal(name);
             id.setDefinition(UNDEFINED);
             id.setTypeSpec(Predefined.undefinedType);
             errorHandler.flag(token, IDENTIFIER_UNDEFINED, this);
-            return null;
+            return undefined;
         }
 
         Definition defnCode = id.getDefinition();
 
         // Constant identifier.
-        if ((defnCode == CONSTANT) || (defnCode == ENUMERATION_CONSTANT)) {
+        if ((defnCode === CONSTANT) || (defnCode === ENUMERATION_CONSTANT)) {
             Object constantValue = id.getAttribute(CONSTANT_VALUE);
             constantType = id.getTypeSpec();
 
             // Type check: Leading sign permitted only for integer constants.
-            if ((sign != null) && !TypeChecker.isInteger(constantType)) {
+            if ((sign !== undefined) && !TypeChecker.isInteger(constantType)) {
                 errorHandler.flag(token, INVALID_CONSTANT, this);
             }
 
@@ -336,7 +336,7 @@ public class CaseStatementParser extends StatementParser
 
         id.appendLineNumber(token.getLineNumber());
 
-        if (constantNode != null) {
+        if (constantNode !== undefined) {
             constantNode.setTypeSpec(constantType);
         }
 
@@ -354,7 +354,7 @@ public class CaseStatementParser extends StatementParser
         ICodeNode constantNode = ICodeFactory.createICodeNode(INTEGER_CONSTANT);
         int intValue = Integer.parseInt(value);
 
-        if (sign == MINUS) {
+        if (sign === MINUS) {
             intValue = -intValue;
         }
 
@@ -372,13 +372,13 @@ public class CaseStatementParser extends StatementParser
     private ICodeNode parseCharacterConstant(Token token, String value,
                                              TokenType sign)
     {
-        ICodeNode constantNode = null;
+        ICodeNode constantNode = undefined;
 
-        if (sign != null) {
+        if (sign !== undefined) {
             errorHandler.flag(token, INVALID_CONSTANT, this);
         }
         else {
-            if (value.length() == 1) {
+            if (value.length() === 1) {
                 constantNode = ICodeFactory.createICodeNode(STRING_CONSTANT);
                 constantNode.setAttribute(VALUE, value);
             }

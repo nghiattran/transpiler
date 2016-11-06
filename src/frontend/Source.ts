@@ -76,7 +76,7 @@ export class Source implements MessageProducer {
 
 
         // At end of file?
-        else if (this.line === null) {
+        else if (this.line === undefined) {
             return Source.EOF;
         }
 
@@ -115,7 +115,7 @@ export class Source implements MessageProducer {
      */
     public peekChar() : string {
         this.currentChar();
-        if (this.line === null) {
+        if (this.line === undefined) {
             return Source.EOF;
         }
 
@@ -128,7 +128,7 @@ export class Source implements MessageProducer {
      * @throws Exception if an error occurred.
      */
     public atEol() : boolean {
-        return (this.line != null) && (this.currentPos === this.line.length);
+        return (this.line !== undefined) && (this.currentPos === this.line.length);
     }
 
     /**
@@ -141,7 +141,7 @@ export class Source implements MessageProducer {
             this.readLine();
         }
 
-        return this.line === null;
+        return this.line === undefined;
     }
 
     /**
@@ -150,7 +150,7 @@ export class Source implements MessageProducer {
      * @throws Exception if an error occurred.
      */
     public skipToNextLine() : void {
-        if (this.line != null) {
+        if (this.line !== undefined) {
             this.currentPos = this.line.length + 1;
         }
     }
@@ -159,7 +159,7 @@ export class Source implements MessageProducer {
         var line = '';
 
         if (this.globalPos >= this.text.length) {
-            return null;
+            return undefined;
         }
 
         while(this.text.charAt(this.globalPos) !== Source.EOL 
@@ -170,7 +170,6 @@ export class Source implements MessageProducer {
         }
         this.globalPos++;          // skip \n chacracter
 
-
         return line;
     }
 
@@ -179,17 +178,17 @@ export class Source implements MessageProducer {
      * @throws IOException if an I/O error occurred.
      */
     private readLine() : void {
-        this.line = this.readALine();  // null when at the end of the source
+        this.line = this.readALine();  // undefined when at the end of the source
         
         this.currentPos = -1;
 
-        if (this.line != null) {
+        if (this.line !== undefined) {
             ++this.lineNum;
         }
 
         // Send a source line message containing the line number
         // and the line text to all the listeners.
-        if (this.line != null) {
+        if (this.line !== undefined) {
             this.sendMessage(new Message(MessageType.SOURCE_LINE,
                                     [this.lineNum, this.line]));
         }
@@ -200,7 +199,7 @@ export class Source implements MessageProducer {
      * @throws Exception if an error occurred.
      */
     public close() : void {
-        // if (this.reader !== null) {
+        // if (this.reader !== undefined) {
         //     try {
         //         this.reader.close();
         //     }

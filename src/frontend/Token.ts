@@ -79,7 +79,7 @@ export class Token {
      */
     protected extract() : void {
         this.text = this.currentChar()
-        this.value = null;
+        this.value = undefined;
 
         this.nextChar();  // consume current character
     }

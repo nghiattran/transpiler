@@ -1,4 +1,4 @@
-import {PascalParser} from './pascal/PascalParser';
+import {PascalParserTD} from './pascal/PascalParserTD';
 import {PascalScanner} from './pascal/PascalScanner';
 
 import {Source} from './Source';
@@ -19,7 +19,7 @@ export class FrontendFactory {
             type.toUpperCase() === "top-down".toUpperCase())
         {
             var scanner = new PascalScanner(source);
-            return new PascalParser(scanner);
+            return new PascalParserTD(scanner);
         } else if (language.toUpperCase() !== "Pascal".toUpperCase()) {
             throw new Error("Parser factory: Invalid language '" +
                                 language + "'");

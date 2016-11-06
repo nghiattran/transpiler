@@ -1,7 +1,7 @@
 import {TypeSpecificationParser} from './TypeSpecificationParser';
 import {SimpleTypeParser} from './SimpleTypeParser';
 
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -25,7 +25,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    constructor(parent : PascalParserTD) {
+    constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -51,7 +51,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
 
     // Synchronization set to end an index type.
     private static INDEX_END_SET : List<PascalTokenType> =
-        new List([
+        new List<PascalTokenType>([
             PascalTokenType.RIGHT_BRACKET, 
             PascalTokenType.OF, 
             PascalTokenType.SEMICOLON]);
@@ -84,7 +84,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
 
         // Synchronize at the [ token.
         token = this.synchronize(ArrayTypeParser.LEFT_BRACKET_SET);
-        if (token.getType() != PascalTokenType.LEFT_BRACKET) {
+        if (token.getType() !== PascalTokenType.LEFT_BRACKET) {
             ArrayTypeParser.errorHandler.flag(token, PascalErrorCode.MISSING_LEFT_BRACKET, this);
         }
 
@@ -93,7 +93,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
 
         // Synchronize at the ] token.
         token = this.synchronize(ArrayTypeParser.RIGHT_BRACKET_SET);
-        if (token.getType() == PascalTokenType.RIGHT_BRACKET) {
+        if (token.getType() === PascalTokenType.RIGHT_BRACKET) {
             token = this.nextToken();  // consume [
         }
         else {
@@ -102,7 +102,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
 
         // Synchronize at OF.
         token = this.synchronize(ArrayTypeParser.OF_SET);
-        if (token.getType() == PascalTokenType.OF) {
+        if (token.getType() === PascalTokenType.OF) {
             token = this.nextToken();  // consume OF
         }
         else {
@@ -139,7 +139,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
             // Synchronize at the , token.
             token = this.synchronize(ArrayTypeParser.INDEX_FOLLOW_SET);
             let tokenType : TokenType = token.getType();
-            if ((tokenType != PascalTokenType.COMMA) && (tokenType != PascalTokenType.RIGHT_BRACKET)) {
+            if ((tokenType !== PascalTokenType.COMMA) && (tokenType !== PascalTokenType.RIGHT_BRACKET)) {
                 if (ArrayTypeParser.INDEX_START_SET.contains(tokenType as PascalTokenType)) {
                     ArrayTypeParser.errorHandler.flag(token, PascalErrorCode.MISSING_COMMA, this);
                     anotherIndex = true;
@@ -148,7 +148,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
 
             // Create an ARRAY element type object
             // for each subsequent index type.
-            else if (tokenType == PascalTokenType.COMMA) {
+            else if (tokenType === PascalTokenType.COMMA) {
                 let newElementType : TypeSpec = TypeFactory.createType(PascalTokenType.ARRAY);
                 elementType.setAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE, newElementType);
                 elementType = newElementType;
@@ -172,7 +172,7 @@ export class ArrayTypeParser extends TypeSpecificationParser {
         let indexType : TypeSpec = simpleTypeParser.parse(token);
         arrayType.setAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE, indexType);
 
-        if (indexType == null) {
+        if (indexType === undefined) {
             return;
         }
 
@@ -180,18 +180,18 @@ export class ArrayTypeParser extends TypeSpecificationParser {
         let count : number = 0;
 
         // Check the index type and set the element count.
-        if (form == TypeFormImpl.SUBRANGE) {
+        if (form === TypeFormImpl.SUBRANGE) {
             let minValue : number =
                 <number> indexType.getAttribute(TypeKeyImpl.SUBRANGE_MIN_VALUE);
 
             let maxValue : number =
                 <number> indexType.getAttribute(TypeKeyImpl.SUBRANGE_MAX_VALUE);
 
-            if ((minValue != null) && (maxValue != null)) {
+            if ((minValue !== undefined) && (maxValue !== undefined)) {
                 count = maxValue - minValue + 1;
             }
         }
-        else if (form == TypeFormImpl.ENUMERATION) {
+        else if (form === TypeFormImpl.ENUMERATION) {
             let constants : List<SymTabEntry> = <List<SymTabEntry>>
                 indexType.getAttribute(TypeKeyImpl.ENUMERATION_CONSTANTS);
             count = constants.size();

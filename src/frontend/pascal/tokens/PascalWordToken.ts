@@ -4,6 +4,8 @@ import {PascalToken} from '../PascalToken';
 import {PascalScanner} from '../PascalScanner';
 import {PascalTokenType} from '../PascalTokenType';
 
+import {Util} from '../../../util/Util';
+
 export class PascalWordToken extends PascalToken {
     /**
      * Constructor.
@@ -24,7 +26,7 @@ export class PascalWordToken extends PascalToken {
 
         // Get the word characters (letter or digit).  The scanner has
         // already determined that the first character is a letter.
-        while (PascalScanner.isLetterOrDigit(currentChar)) {
+        while (Util.isLetterOrDigit(currentChar)) {
             textBuffer += currentChar;
             currentChar = this.nextChar();  // consume character
         }

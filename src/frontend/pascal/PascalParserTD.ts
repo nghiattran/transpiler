@@ -1,6 +1,6 @@
-import {PascalErrorHandler} from './PascalErrorHandler';
 import {PascalErrorCode} from './PascalErrorCode';
-import {PascalTokenType} from './PascalTokenType';
+import {PascalParser} from './PascalParser';
+import {ProgramParser} from './parsersBundle';
 
 import {Scanner} from '../Scanner';
 import {Parser} from '../Parser';
@@ -12,12 +12,11 @@ import {MessageType} from '../../message/MessageType';
 import {Message} from '../../message/Message';
 
 import {SymTabEntry} from '../../intermediate/SymTabEntry';
+import {Predefined} from '../../intermediate/symtabimpl/Predefined';
 
 import {List} from '../../util/List';
 
-export class PascalParserTD extends Parser {
-    protected static errorHandler : PascalErrorHandler = new PascalErrorHandler();
-
+export class PascalParserTD extends PascalParser {
     /**
      * Constructor.
      * @param scanner the scanner to be used with this parser.
@@ -35,41 +34,31 @@ export class PascalParserTD extends Parser {
      * and the intermediate code.
      */
     public parse(...params) : any {
-        
-    }
+        let token : Token;
+        // let startTime : number = performance.now();
+        Predefined.initialize(PascalParserTD.symTabStack);
 
-    /**
-     * Return the number of syntax errors found by the parser.
-     * @return the error count.
-     */
-    public getErrorCount() : number {
-        return 0;
-    }
+        try {
+            let token : Token = this.nextToken();
 
-    /**
-     * Synchronize the parser.
-     * @param syncSet the set of token types for synchronizing the parser.
-     * @return the token where the parser has synchronized.
-     * @throws Exception if an error occurred.
-     */
-    public synchronize(syncSet : List<PascalTokenType>) : Token{
-        let token : Token = this.currentToken();
+            // Parse a program.
+            let programParser : ProgramParser = new ProgramParser(this);
+            programParser.parse(token, undefined);
+            
+            token = this.currentToken();
 
-        // If the current token is not in the synchronization set,
-        // then it is unexpected and the parser must recover.
-        if (!syncSet.contains(token.getType() as PascalTokenType)) {
-
-            // Flag the unexpected token.
-            PascalParserTD.errorHandler.flag(token, PascalErrorCode.UNEXPECTED_TOKEN, this);
-
-            // Recover by skipping tokens that are not
-            // in the synchronization set.
-            do {
-                token = this.nextToken();
-            } while (!(token instanceof EofToken) &&
-                     !syncSet.contains(token.getType() as PascalTokenType));
-       }
-
-       return token;
+            // Send the parser summary message.
+            // float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
+            let elapsedTime = 0;
+            this.sendMessage(new Message(MessageType.PARSER_SUMMARY,
+                                [token.getLineNumber(),
+                                  this.getErrorCount(),
+                                  elapsedTime]));
+        }
+        catch (ex) {
+            console.error('Error!!!!!!!!');
+            console.error(ex);
+            PascalParserTD.errorHandler.abortTranslation(PascalErrorCode.IO_ERROR, this);
+        }
     }
 }

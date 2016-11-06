@@ -11,7 +11,7 @@ export class TypeChecker {
      * @return true if integer, else false.
      */
     public static isInteger(type : TypeSpec) : boolean {
-        return (type != null) && (type.baseType() == Predefined.integerType);
+        return (type !== undefined) && (type.baseType() === Predefined.integerType);
     }
 
     /**
@@ -30,7 +30,7 @@ export class TypeChecker {
      * @return true if real, else false.
      */
     public static isReal(type : TypeSpec) : boolean {
-        return (type != null) && (type.baseType() == Predefined.realType);
+        return (type !== undefined) && (type.baseType() === Predefined.realType);
     }
 
     /**
@@ -60,7 +60,7 @@ export class TypeChecker {
      * @return true if boolean, else false.
      */
     public static isBoolean(type : TypeSpec) : boolean{
-        return (type != null) && (type.baseType() == Predefined.booleanType);
+        return (type !== undefined) && (type.baseType() === Predefined.booleanType);
     }
 
     /**
@@ -79,7 +79,7 @@ export class TypeChecker {
      * @return true if char, else false.
      */
     public static isChar(type : TypeSpec) : boolean {
-        return (type != null) && (type.baseType() == Predefined.charType);
+        return (type !== undefined) && (type.baseType() === Predefined.charType);
     }
 
     /**
@@ -91,7 +91,7 @@ export class TypeChecker {
     public static areAssignmentCompatible(targetType : TypeSpec,
                                           valueType : TypeSpec) : boolean
     {
-        if ((targetType == null) || (valueType == null)) {
+        if ((targetType === undefined) || (valueType === undefined)) {
             return false;
         }
 
@@ -101,7 +101,7 @@ export class TypeChecker {
         var compatible : boolean = false;
 
         // Identical types.
-        if (targetType == valueType) {
+        if (targetType === valueType) {
             compatible = true;
         }
 
@@ -128,7 +128,7 @@ export class TypeChecker {
     public static areComparisonCompatible(type1 : TypeSpec,
                                           type2 : TypeSpec) : boolean
     {
-        if ((type1 == null) || (type2 == null)) {
+        if ((type1 === undefined) || (type2 === undefined)) {
             return false;
         }
 

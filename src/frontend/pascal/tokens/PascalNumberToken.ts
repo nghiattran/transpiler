@@ -5,6 +5,8 @@ import {PascalScanner} from '../PascalScanner';
 
 import {Source} from '../../Source';
 
+import {Util} from '../../../util/Util';
+
 export class PascalNumberToken extends PascalToken {
     private static MAX_EXPONENT : number = 37;
 
@@ -33,9 +35,9 @@ export class PascalNumberToken extends PascalToken {
      * @throws Exception if an error occurred.
      */
     protected extractNumber(textBuffer : string) : void{
-        let wholeDigits : string = null;     // digits before the decimal point
-        let fractionDigits : string = null;  // digits after the decimal point
-        let exponentDigits : string = null;  // exponent digits
+        let wholeDigits : string = undefined;     // digits before the decimal point
+        let fractionDigits : string = undefined;  // digits after the decimal point
+        let exponentDigits : string = undefined;  // exponent digits
         let exponentSign : string = '+';       // exponent sign '+' or '-'
         let sawDotDot : boolean = false;     // true if saw .. token
         let currentChar : string;              // current character
@@ -91,7 +93,7 @@ export class PascalNumberToken extends PascalToken {
         if (this.type === PascalTokenType.INTEGER) {
             let integerValue : number = this.computeIntegerValue(wholeDigits);
 
-            if (this.type != PascalTokenType.ERROR) {
+            if (this.type !== PascalTokenType.ERROR) {
                 this.value = Math.floor(integerValue);
             }
         }
@@ -101,7 +103,7 @@ export class PascalNumberToken extends PascalToken {
             let floatValue : number = this.computeFloatValue(wholeDigits, fractionDigits,
                                                  exponentDigits, exponentSign);
 
-            if (this.type != PascalTokenType.ERROR) {
+            if (this.type !== PascalTokenType.ERROR) {
                 this.value = floatValue;
             }
         }
@@ -117,15 +119,15 @@ export class PascalNumberToken extends PascalToken {
         let currentChar : string = this.currentChar();
 
         // Must have at least one digit.
-        if (!PascalScanner.isDigit(currentChar)) {
+        if (!Util.isDigit(currentChar)) {
             this.type = PascalTokenType.ERROR;
             this.value = PascalErrorCode.INVALID_NUMBER;
-            return null;
+            return undefined;
         }
 
         // Extract the digits.
         let digits : string = '';
-        while (PascalScanner.isDigit(currentChar)) {
+        while (Util.isDigit(currentChar)) {
             textBuffer += currentChar
             digits += currentChar;
             currentChar = this.nextChar();  // consume digit
@@ -142,7 +144,7 @@ export class PascalNumberToken extends PascalToken {
      */
     private computeIntegerValue(digits : string) : number {
         // Return 0 if no digits.
-        if (digits === null) {
+        if (digits === undefined) {
             return 0;
         }
 
@@ -155,7 +157,7 @@ export class PascalNumberToken extends PascalToken {
         while ((index < digits.length) && (integerValue >= prevValue)) {
             prevValue = integerValue;
             integerValue = 10*integerValue +
-                           PascalScanner.getNumericValue(digits.charAt(index++))
+                           Util.getNumericValue(digits.charAt(index++))
         }
 
         // No overflow:  Return the integer value.
@@ -193,7 +195,7 @@ export class PascalNumberToken extends PascalToken {
 
         // If there are any fraction digits, adjust the exponent value
         // and append the fraction digits.
-        if (fractionDigits != null) {
+        if (fractionDigits !== undefined) {
             exponentValue -= fractionDigits.length;
             digits += fractionDigits;
         }
@@ -209,11 +211,11 @@ export class PascalNumberToken extends PascalToken {
         let index : number = 0;
         while (index < digits.length) {
             floatValue = 10*floatValue +
-                         PascalScanner.getNumericValue(digits.charAt(index++));
+                         Util.getNumericValue(digits.charAt(index++));
         }
 
         // Adjust the float value based on the exponent value.
-        if (exponentValue != 0) {
+        if (exponentValue !== 0) {
             floatValue *= Math.pow(10, exponentValue);
         }
 

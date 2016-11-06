@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -28,7 +28,7 @@ export class RecordTypeParser extends TypeSpecificationParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    constructor(parent : PascalParserTD) {
+    constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -58,7 +58,7 @@ export class RecordTypeParser extends TypeSpecificationParser {
         let variableDeclarationsParser : VariableDeclarationsParser =
             new VariableDeclarationsParser(this);
         variableDeclarationsParser.setDefinition(DefinitionImpl.FIELD);
-        variableDeclarationsParser.parse(token, null);
+        variableDeclarationsParser.parse(token, undefined);
 
         // Pop off the record's symbol table.
         RecordTypeParser.symTabStack.pop();
@@ -67,7 +67,7 @@ export class RecordTypeParser extends TypeSpecificationParser {
         token = this.synchronize(RecordTypeParser.END_SET);
 
         // Look for the END.
-        if (token.getType() == PascalTokenType.END) {
+        if (token.getType() === PascalTokenType.END) {
             token = this.nextToken();  // consume END
         }
         else {

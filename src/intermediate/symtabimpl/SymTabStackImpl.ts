@@ -84,14 +84,13 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
      * @return the new entry.
      */
     public enterLocal(name : string) : SymTabEntry {
-        console.log(this);
         return this.get(this.currentNestingLevel).enter(name);
     }
 
     /**
      * Look up an existing symbol table entry in the local symbol table.
      * @param name the name of the entry.
-     * @return the entry, or null if it does not exist.
+     * @return the entry, or undefined if it does not exist.
      */
     public lookupLocal(name : string) : SymTabEntry{
         return this.get(this.currentNestingLevel).lookup(name);
@@ -100,14 +99,14 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
     /**
      * Look up an existing symbol table entry throughout the stack.
      * @param name the name of the entry.
-     * @return the entry, or null if it does not exist.
+     * @return the entry, or undefined if it does not exist.
      */
     public lookup(name : string) : SymTabEntry{
-        var foundEntry : SymTabEntry = null;
+        var foundEntry : SymTabEntry = undefined;
 
         // Search the current and enclosing scopes.
-        for (var i = this.currentNestingLevel; (i >= 0) && (foundEntry == null); --i) {
-            foundEntry = this[i].lookup(name);
+        for (var i = this.currentNestingLevel; (i >= 0) && (foundEntry === undefined); --i) {
+            foundEntry = this.get(i).lookup(name);
         }
 
         return foundEntry;

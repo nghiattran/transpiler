@@ -39,6 +39,30 @@ export class HashMap <PolyfillBaseObject, E> {
         return this.collection[key.getHash()];
     }
 
+    /**
+     * Set an attribute of the entry.
+     * @param key the attribute key of string type.
+     * @param value the attribute value.
+     */
+    public putKeyString(key : string, value : E) : void {
+        this.collection[key] = value;
+    }
+
+    /**
+     * Get the value of an attribute of the entry.
+     * @param key the attribute key.
+     * @return the attribute value.
+     */
+    public getKeyString(key : string) : E {
+        return this.collection[key];
+    }
+
+    public copy(copy: HashMap<PolyfillBaseObject, E>) {
+        for (var key in this.getKeys()) {
+            copy.putKeyString(key, this.get[key])
+        }
+    }
+
     public toList() : E[] {
         let list : any[] = [];
 
@@ -56,6 +80,10 @@ export class HashMap <PolyfillBaseObject, E> {
 
 export class TreeMap<E> {
     protected collection : Object = {};
+
+    public containsKey(key : string) : boolean {
+        return this.collection[key] !== undefined;
+    }
 
     /**
      * Set an attribute of the entry.

@@ -27,7 +27,7 @@ public class WhileStatementParser extends StatementParser
      * Constructor.
      * @param parent the parent parser.
      */
-    public WhileStatementParser(PascalParserTD parent)
+    public WhileStatementParser(PascalParser parent)
     {
         super(parent);
     }
@@ -68,7 +68,7 @@ public class WhileStatementParser extends StatementParser
         notNode.addChild(exprNode);
 
         // Type check: The test expression must be boolean.
-        TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+        TypeSpec exprType = exprNode !== undefined ? exprNode.getTypeSpec()
                                              : Predefined.undefinedType;
         if (!TypeChecker.isBoolean(exprType)) {
             errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
@@ -76,7 +76,7 @@ public class WhileStatementParser extends StatementParser
 
         // Synchronize at the DO.
         token = synchronize(DO_SET);
-        if (token.getType() == DO) {
+        if (token.getType() === DO) {
             token = nextToken();  // consume the DO
         }
         else {

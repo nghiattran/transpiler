@@ -50,14 +50,14 @@ export interface SymTabStack {
     /**
      * Look up an existing symbol table entry in the local symbol table.
      * @param name the name of the entry.
-     * @return the entry, or null if it does not exist.
+     * @return the entry, or undefined if it does not exist.
      */
     lookupLocal(name : string) : SymTabEntry;
 
     /**
      * Look up an existing symbol table entry throughout the stack.
      * @param name the name of the entry.
-     * @return the entry, or null if it does not exist.
+     * @return the entry, or undefined if it does not exist.
      */
     lookup(name : string) : SymTabEntry;
 }

@@ -20,7 +20,7 @@ export class DefinitionImpl implements Definition {
      * Constructor.
      */
     constructor(text : string) {
-        text = text || this.toString().toLowerCase();
+        this.text = text;
     }
 
     /**
@@ -28,6 +28,14 @@ export class DefinitionImpl implements Definition {
      * @return the text of the definition code.
      */
     public getText() : string {
-        return this.text;
+        return this.text.toLowerCase();
+    }
+
+    /**
+     * Getter.
+     * @return the text of the definition code.
+     */
+    public toString() : string {
+        return this.getText();
     }
 }

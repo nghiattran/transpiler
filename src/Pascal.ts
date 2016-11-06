@@ -82,8 +82,8 @@ export class Pascal {
                // backend.process(iCode, symTabStack);
             }
         } catch (ex) {
-            console.log(ex)
-            console.log("***** Internal translator error. *****");
+            console.info(ex)
+            console.info("***** Internal translator error. *****");
             ex.printStackTrace();
         }
     }
@@ -123,7 +123,7 @@ export class Pascal {
             }
         }
         catch (ex) {
-            console.log(this.USAGE);
+            console.info(this.USAGE);
         }
     }
 
@@ -246,13 +246,13 @@ class BackendMessageListener implements MessageListener {
                 let lineNumber : number = body[0] as number;
                 let errorMessage : string = body[0] as string;
 
-                console.log("*** RUNTIME ERROR");
-                if (lineNumber != null) {
+                console.info("*** RUNTIME ERROR");
+                if (lineNumber !== undefined) {
                     // TODO: format
-                    // console.log(" AT LINE " +
+                    // console.info(" AT LINE " +
                     //                  String.format("%03d", lineNumber));
                 }
-                console.log(": " + errorMessage);
+                console.info(": " + errorMessage);
                 break;
             }
 
@@ -301,7 +301,7 @@ class SourceMessageListener implements MessageListener {
                 var lineText : string  = body[1] as string;
                 
                 // TODO format output
-                console.log(util.format(Pascal.SOURCE_LINE_FORMAT,
+                console.info(util.format(Pascal.SOURCE_LINE_FORMAT,
                                         lineNumber, lineText));
                 break;
             }
@@ -332,7 +332,7 @@ class ParserMessageListener implements MessageListener {
                 var line = util.format(Pascal.PARSER_SUMMARY_FORMAT,
                                   statementCount, syntaxErrors,
                                   elapsedTime);
-                console.log(line);
+                console.info(line);
                 break;
             }
 
@@ -355,12 +355,12 @@ class ParserMessageListener implements MessageListener {
                 flagBuffer +=  "^\n*** " + errorMessage;
 
                 // Text, if any, of the bad token.
-                if (tokenText != null) {
+                if (tokenText !== undefined) {
                     flagBuffer += " [at \"" + tokenText
                         + "\"]";
                 }
 
-                console.log(flagBuffer);
+                console.info(flagBuffer);
                 break;
             }
         }

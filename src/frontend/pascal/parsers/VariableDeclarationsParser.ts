@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -69,7 +69,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    public constructor(parent : PascalParserTD) {
+    public constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -85,7 +85,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
      * Parse variable declarations.
      * @param token the initial token.
      * @param parentId the symbol table entry of the parent routine's name.
-     * @return null
+     * @return undefined
      * @throws Exception if an error occurred.
      */
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
@@ -93,7 +93,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
 
         // Loop to parse a sequence of variable declarations
         // separated by semicolons.
-        while (token.getType() == PascalTokenType.IDENTIFIER) {
+        while (token.getType() === PascalTokenType.IDENTIFIER) {
 
             // Parse the identifier sublist and its type specification.
             this.parseIdentifierSublist(
@@ -106,8 +106,8 @@ export class VariableDeclarationsParser extends DeclarationsParser {
             let tokenType : TokenType = token.getType();
 
             // Look for one or more semicolons after a definition.
-            if (tokenType == PascalTokenType.SEMICOLON) {
-                while (token.getType() == PascalTokenType.SEMICOLON) {
+            if (tokenType === PascalTokenType.SEMICOLON) {
+                while (token.getType() === PascalTokenType.SEMICOLON) {
                     token = this.nextToken();  // consume the ;
                 }
             }
@@ -121,7 +121,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
             token = this.synchronize(VariableDeclarationsParser.IDENTIFIER_SET);
         }
 
-        return null;
+        return undefined;
     }
 
     /**
@@ -141,7 +141,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
             token = this.synchronize(VariableDeclarationsParser.IDENTIFIER_START_SET);
             let id : SymTabEntry = this.parseIdentifier(token);
 
-            if (id != null) {
+            if (id !== undefined) {
                 sublist.add(id);
             }
 
@@ -149,7 +149,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
             let tokenType : TokenType = token.getType();
 
             // Look for the comma.
-            if (tokenType == PascalTokenType.COMMA) {
+            if (tokenType === PascalTokenType.COMMA) {
                 token = this.nextToken();  // consume the comma
 
                 if (followSet.contains(token.getType() as PascalTokenType)) {
@@ -161,7 +161,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
             }
         } while (!followSet.contains(token.getType() as PascalTokenType));
 
-        if (this.definition != DefinitionImpl.PROGRAM_PARM) {
+        if (this.definition !== DefinitionImpl.PROGRAM_PARM) {
 
             // Parse the type specification.
             let type : TypeSpec = this.parseTypeSpec(token);
@@ -182,14 +182,14 @@ export class VariableDeclarationsParser extends DeclarationsParser {
      * @throws Exception if an error occurred.
      */
     private parseIdentifier(token : Token) : SymTabEntry {
-        let id : SymTabEntry = null;
+        let id : SymTabEntry = undefined;
 
-        if (token.getType() == PascalTokenType.IDENTIFIER) {
+        if (token.getType() === PascalTokenType.IDENTIFIER) {
             let name : string = token.getText().toLowerCase();
             id = VariableDeclarationsParser.symTabStack.lookupLocal(name);
 
             // Enter a new identifier into the symbol table.
-            if (id == null) {
+            if (id === undefined) {
                 id = VariableDeclarationsParser.symTabStack.enterLocal(name);
                 id.setDefinition(this.definition);
                 id.appendLineNumber(token.getLineNumber());
@@ -220,7 +220,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
     public parseTypeSpec(token : Token) : TypeSpec {
         // Synchronize on the : token.
         token = this.synchronize(VariableDeclarationsParser.COLON_SET);
-        if (token.getType() == PascalTokenType.COLON) {
+        if (token.getType() === PascalTokenType.COLON) {
             token = this.nextToken(); // consume the :
         }
         else {
@@ -233,9 +233,9 @@ export class VariableDeclarationsParser extends DeclarationsParser {
         let type : TypeSpec = typeSpecificationParser.parse(token);
 
         // Formal parameters and functions must have named types.
-        if ((this.definition != DefinitionImpl.VARIABLE) && 
-            (this.definition != DefinitionImpl.FIELD) &&
-            (type != null) && (type.getIdentifier() == null))
+        if ((this.definition !== DefinitionImpl.VARIABLE) && 
+            (this.definition !== DefinitionImpl.FIELD) &&
+            (type !== undefined) && (type.getIdentifier() === undefined))
         {
             VariableDeclarationsParser.errorHandler.flag(token, PascalErrorCode.INVALID_TYPE, this);
         }

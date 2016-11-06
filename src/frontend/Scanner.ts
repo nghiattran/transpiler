@@ -90,8 +90,4 @@ export abstract class Scanner {
     public skipToNextLine() : void {
         this.source.skipToNextLine();
     }
-
-    public static isDigit(n) : boolean {
-      return !isNaN(parseFloat(n)) && isFinite(n);
-    }
 }

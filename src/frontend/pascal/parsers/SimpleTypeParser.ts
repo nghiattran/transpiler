@@ -3,7 +3,7 @@ import {ConstantDefinitionsParser} from './ConstantDefinitionsParser';
 import {SubrangeTypeParser} from './SubrangeTypeParser';
 import {EnumerationTypeParser} from './EnumerationTypeParser';
 
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -18,12 +18,12 @@ import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 
 import {List} from '../../../util/List';
 
-export class SimpleTypeParser extends PascalParserTD {
+export class SimpleTypeParser extends PascalParser {
     /**
      * Constructor.
      * @param parent the parent parser.
      */
-    constructor(parent : PascalParserTD) {
+    constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -53,23 +53,23 @@ export class SimpleTypeParser extends PascalParserTD {
                 let name : string = token.getText().toLowerCase();
                 let id : SymTabEntry = SimpleTypeParser.symTabStack.lookup(name);
 
-                if (id != null) {
+                if (id !== undefined) {
                     let definition : Definition = id.getDefinition();
 
                     // It's either a type identifier
                     // or the start of a subrange type.
-                    if (definition == DefinitionImpl.TYPE) {
+                    if (definition === DefinitionImpl.TYPE) {
                         id.appendLineNumber(token.getLineNumber());
                         token = this.nextToken();  // consume the identifier
 
                         // Return the type of the referent type.
                         return id.getTypeSpec();
                     }
-                    else if ((definition != DefinitionImpl.CONSTANT) &&
-                             (definition != DefinitionImpl.ENUMERATION_CONSTANT)) {
+                    else if ((definition !== DefinitionImpl.CONSTANT) &&
+                             (definition !== DefinitionImpl.ENUMERATION_CONSTANT)) {
                         SimpleTypeParser.errorHandler.flag(token, PascalErrorCode.NOT_TYPE_IDENTIFIER, this);
                         token = this.nextToken();  // consume the identifier
-                        return null;
+                        return undefined;
                     }
                     else {
                         let subrangeTypeParser : SubrangeTypeParser =
@@ -80,7 +80,7 @@ export class SimpleTypeParser extends PascalParserTD {
                 else {
                     SimpleTypeParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_UNDEFINED, this);
                     token = this.nextToken();  // consume the identifier
-                    return null;
+                    return undefined;
                 }
             }
 
@@ -93,7 +93,7 @@ export class SimpleTypeParser extends PascalParserTD {
             case PascalTokenType.COMMA:
             case PascalTokenType.SEMICOLON: {
                 SimpleTypeParser.errorHandler.flag(token, PascalErrorCode.INVALID_TYPE, this);
-                return null;
+                return undefined;
             }
 
             default: {

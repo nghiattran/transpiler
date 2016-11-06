@@ -28,7 +28,7 @@ public class ForStatementParser extends StatementParser
      * Constructor.
      * @param parent the parent parser.
      */
-    public ForStatementParser(PascalParserTD parent)
+    public ForStatementParser(PascalParser parent)
     {
         super(parent);
     }
@@ -71,7 +71,7 @@ public class ForStatementParser extends StatementParser
         AssignmentStatementParser assignmentParser =
             new AssignmentStatementParser(this);
         ICodeNode initAssignNode = assignmentParser.parse(token);
-        TypeSpec controlType = initAssignNode != null
+        TypeSpec controlType = initAssignNode !== undefined
                                    ? initAssignNode.getTypeSpec()
                                    : Predefined.undefinedType;
 
@@ -81,7 +81,7 @@ public class ForStatementParser extends StatementParser
         // Type check: The control variable's type must be integer
         //             or enumeration.
         if (!TypeChecker.isInteger(controlType) &&
-            (controlType.getForm() != ENUMERATION))
+            (controlType.getForm() !== ENUMERATION))
         {
             errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
         }
@@ -96,7 +96,7 @@ public class ForStatementParser extends StatementParser
         TokenType direction = token.getType();
 
         // Look for the TO or DOWNTO.
-        if ((direction == TO) || (direction == DOWNTO)) {
+        if ((direction === TO) || (direction === DOWNTO)) {
             token = nextToken();  // consume the TO or DOWNTO
         }
         else {
@@ -105,7 +105,7 @@ public class ForStatementParser extends StatementParser
         }
 
         // Create a relational operator node: GT for TO, or LT for DOWNTO.
-        ICodeNode relOpNode = ICodeFactory.createICodeNode(direction == TO
+        ICodeNode relOpNode = ICodeFactory.createICodeNode(direction === TO
                                                            ? GT : LT);
         relOpNode.setTypeSpec(Predefined.booleanType);
 
@@ -122,7 +122,7 @@ public class ForStatementParser extends StatementParser
 
         // Type check: The termination expression type must be assignment
         //             compatible with the control variable's type.
-        TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+        TypeSpec exprType = exprNode !== undefined ? exprNode.getTypeSpec()
                                              : Predefined.undefinedType;
         if (!TypeChecker.areAssignmentCompatible(controlType, exprType)) {
             errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
@@ -135,7 +135,7 @@ public class ForStatementParser extends StatementParser
 
         // Synchronize at the DO.
         token = synchronize(DO_SET);
-        if (token.getType() == DO) {
+        if (token.getType() === DO) {
             token = nextToken();  // consume the DO
         }
         else {
@@ -155,7 +155,7 @@ public class ForStatementParser extends StatementParser
 
         // Create the arithmetic operator node:
         // ADD for TO, or SUBTRACT for DOWNTO.
-        ICodeNode arithOpNode = ICodeFactory.createICodeNode(direction == TO
+        ICodeNode arithOpNode = ICodeFactory.createICodeNode(direction === TO
                                                              ? ADD : SUBTRACT);
         arithOpNode.setTypeSpec(Predefined.integerType);
 

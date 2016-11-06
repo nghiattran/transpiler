@@ -42,7 +42,7 @@ export class SymTabImpl extends TreeMap<SymTabEntry> implements SymTab {
     /**
      * Look up an existing symbol table entry.
      * @param name the name of the entry.
-     * @return the entry, or null if it does not exist.
+     * @return the entry, or undefined if it does not exist.
      */
     public lookup(name : string) : SymTabEntry {
         return this.get(name) as SymTabEntry;

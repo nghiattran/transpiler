@@ -27,7 +27,7 @@ public class IfStatementParser extends StatementParser
      * Constructor.
      * @param parent the parent parser.
      */
-    public IfStatementParser(PascalParserTD parent)
+    public IfStatementParser(PascalParser parent)
     {
         super(parent);
     }
@@ -61,7 +61,7 @@ public class IfStatementParser extends StatementParser
         ifNode.addChild(exprNode);
 
         // Type check: The expression type must be boolean.
-        TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+        TypeSpec exprType = exprNode !== undefined ? exprNode.getTypeSpec()
                                              : Predefined.undefinedType;
         if (!TypeChecker.isBoolean(exprType)) {
             errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
@@ -69,7 +69,7 @@ public class IfStatementParser extends StatementParser
 
         // Synchronize at the THEN.
         token = synchronize(THEN_SET);
-        if (token.getType() == THEN) {
+        if (token.getType() === THEN) {
             token = nextToken();  // consume the THEN
         }
         else {
@@ -83,7 +83,7 @@ public class IfStatementParser extends StatementParser
         token = currentToken();
 
         // Look for an ELSE.
-        if (token.getType() == ELSE) {
+        if (token.getType() === ELSE) {
             token = nextToken();  // consume the THEN
 
             // Parse the ELSE statement.

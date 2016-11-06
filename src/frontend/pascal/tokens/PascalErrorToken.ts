@@ -1,5 +1,6 @@
 import {PascalToken} from '../PascalToken';
 import {PascalErrorCode} from '../PascalErrorCode';
+import {PascalTokenType} from '../PascalTokenType';
 
 import {Source} from '../../Source';
 
@@ -17,7 +18,7 @@ export class PascalErrorToken extends PascalToken {
         super(source);
 
         this.text = tokenText;
-        this.type = ERROR;
+        this.type = PascalTokenType.ERROR;
         this.value = errorCode;
     }
 

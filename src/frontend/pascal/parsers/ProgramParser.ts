@@ -1,7 +1,7 @@
 import {DeclarationsParser} from './DeclarationsParser';
 import {DeclaredRoutineParser} from './DeclaredRoutineParser';
 
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -15,7 +15,7 @@ export class ProgramParser extends DeclarationsParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    public constructor(parent : PascalParserTD) {
+    public constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -33,7 +33,7 @@ export class ProgramParser extends DeclarationsParser {
      * Parse a program.
      * @param token the initial token.
      * @param parentId the symbol table entry of the parent routine's name.
-     * @return null
+     * @return undefined
      * @throws Exception if an error occurred.
      */
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
@@ -42,18 +42,16 @@ export class ProgramParser extends DeclarationsParser {
         // Parse the program.
         let routineParser : DeclaredRoutineParser = new DeclaredRoutineParser(this);
         routineParser.parse(token, parentId);
-
+        
         // Look for the final period.
         token = this.currentToken();
-        if (token.getType() != PascalTokenType.DOT) {
+        if (token.getType() !== PascalTokenType.DOT) {
             ProgramParser.errorHandler.flag(token, PascalErrorCode.MISSING_PERIOD, this);
         }
 
-        return null;
+        return undefined;
     }
 }
 
 
-export module ProgramParser {
-    ProgramParser.initialize();
-}
+ProgramParser.initialize();

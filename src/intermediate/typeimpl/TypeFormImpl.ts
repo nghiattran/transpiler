@@ -15,7 +15,7 @@ export class TypeFormImpl extends PolyfillBaseObject implements TypeForm {
      */
     constructor(text : string) {
         super();
-        text = text || this.toString().toLowerCase();
+        this.text = text || this.toString().toLowerCase();
     }
 
     /**
@@ -27,6 +27,6 @@ export class TypeFormImpl extends PolyfillBaseObject implements TypeForm {
     }
 
     public toString() : string {
-        return this.toString().toLowerCase();
+        return this.getText().toLowerCase();
     }
 }

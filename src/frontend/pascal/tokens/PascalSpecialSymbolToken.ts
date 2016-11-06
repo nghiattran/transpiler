@@ -22,7 +22,7 @@ export class PascalSpecialSymbolToken extends PascalToken {
         let currentChar : string = this.currentChar();
 
         this.text = currentChar;
-        this.type = null;
+        this.type = undefined;
 
         switch (currentChar) {
 
@@ -94,7 +94,7 @@ export class PascalSpecialSymbolToken extends PascalToken {
         }
 
         // Set the type if it wasn't an error.
-        if (this.type === null) {
+        if (this.type === undefined) {
             this.type = PascalTokenType.SPECIAL_SYMBOLS.get(this.text);
         }
     }

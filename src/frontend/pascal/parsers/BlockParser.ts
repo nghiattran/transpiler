@@ -1,7 +1,7 @@
 import {StatementParser} from './StatementParser';
 import {DeclarationsParser} from './DeclarationsParser';
 
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -15,12 +15,12 @@ import {ICodeFactory} from '../../../intermediate/ICodeFactory';
 
 import {ICodeNodeTypeImpl} from '../../../intermediate/icodeimpl/ICodeNodeTypeImpl';
 
-export class BlockParser extends PascalParserTD {
+export class BlockParser extends PascalParser {
     /**
      * Constructor.
      * @param parent the parent parser.
      */
-    public constructor(parent : PascalParserTD) {
+    public constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -40,10 +40,10 @@ export class BlockParser extends PascalParserTD {
 
         token = this.synchronize(StatementParser.STMT_START_SET);
         let tokenType : TokenType = token.getType();
-        let rootNode : ICodeNode = null;
+        let rootNode : ICodeNode = undefined;
 
         // Look for the BEGIN token to parse a compound statement.
-        if (tokenType == PascalTokenType.BEGIN) {
+        if (tokenType === PascalTokenType.BEGIN) {
             rootNode = statementParser.parse(token);
         }
 

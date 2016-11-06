@@ -17,9 +17,10 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
 
     public constructor(value) {
         super();
-        if (typeof value === 'TypeForm') {
+        
+        if (value instanceof TypeFormImpl) {
             this.formConstructor(value as TypeForm);
-        } else if (typeof value === 'string') {
+        } else if (value instanceof String) {
             this.stringConstructor(value as string);
         } else {
             throw "Type not covered";
@@ -32,7 +33,7 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
      */
     public formConstructor(form : TypeForm) {
         this.form = form;
-        this.identifier = null;
+        this.identifier = undefined;
     }
 
     /**
@@ -85,8 +86,8 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
             var elmtType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE) as TypeSpec;
             var indexType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE) as TypeSpec;
 
-            return (elmtType.baseType()  == Predefined.charType) &&
-                   (indexType.baseType() == Predefined.integerType);
+            return (elmtType.baseType()  === Predefined.charType) &&
+                   (indexType.baseType() === Predefined.integerType);
         }
         else {
             return false;
@@ -97,7 +98,7 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
      * @return the base type of this type.
      */
     public baseType() : TypeSpec {
-        return this.form == TypeFormImpl.SUBRANGE ? this.getAttribute(TypeKeyImpl.SUBRANGE_BASE_TYPE) as TypeSpec
+        return this.form === TypeFormImpl.SUBRANGE ? this.getAttribute(TypeKeyImpl.SUBRANGE_BASE_TYPE) as TypeSpec
                                 : this;
     }
 }

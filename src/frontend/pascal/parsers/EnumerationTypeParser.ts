@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -28,7 +28,7 @@ export class EnumerationTypeParser extends TypeSpecificationParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    constructor(parent : PascalParserTD) {
+    constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -70,7 +70,7 @@ export class EnumerationTypeParser extends TypeSpecificationParser {
             let tokenType : TokenType = token.getType();
 
             // Look for the comma.
-            if (tokenType == PascalTokenType.COMMA) {
+            if (tokenType === PascalTokenType.COMMA) {
                 token = this.nextToken();  // consume the comma
 
                 if (EnumerationTypeParser.ENUM_DEFINITION_FOLLOW_SET.contains(token.getType() as PascalTokenType)) {
@@ -83,7 +83,7 @@ export class EnumerationTypeParser extends TypeSpecificationParser {
         } while (!EnumerationTypeParser.ENUM_DEFINITION_FOLLOW_SET.contains(token.getType() as PascalTokenType));
 
         // Look for the closing ).
-        if (token.getType() == PascalTokenType.RIGHT_PAREN) {
+        if (token.getType() === PascalTokenType.RIGHT_PAREN) {
             token = this.nextToken();  // consume the )
         }
         else {
@@ -110,11 +110,11 @@ export class EnumerationTypeParser extends TypeSpecificationParser {
     {
         let tokenType : TokenType = token.getType();
 
-        if (tokenType == PascalTokenType.IDENTIFIER) {
+        if (tokenType === PascalTokenType.IDENTIFIER) {
             let name : string = token.getText().toLowerCase();
             let constantId : SymTabEntry = EnumerationTypeParser.symTabStack.lookupLocal(name);
 
-            if (constantId != null) {
+            if (constantId !== undefined) {
                 EnumerationTypeParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_REDEFINED, this);
             }
             else {

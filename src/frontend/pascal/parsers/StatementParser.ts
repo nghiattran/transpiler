@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -19,12 +19,12 @@ import {ICodeKeyImpl} from '../../../intermediate/icodeimpl/ICodeKeyImpl';
 
 import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 
-// import {CompoundStatementParser} from './CompoundStatementParser';
+import {CallParser} from './CallParser';
 import {CompoundStatementParser} from './CompoundStatementParser';
-// import {AssignmentStatementParser} from './AssignmentStatementParser';
+import {AssignmentStatementParser} from './AssignmentStatementParser';
 
 // AssignmentStatementParser
-export class StatementParser extends PascalParserTD {
+export class StatementParser extends PascalParser {
     // Synchronization set for starting a statement.
     public static STMT_START_SET : List<PascalTokenType> = new List<PascalTokenType>([
         PascalTokenType.BEGIN, 
@@ -48,7 +48,7 @@ export class StatementParser extends PascalParserTD {
      * Constructor.
      * @param parent the parent parser.
      */
-    public constructor(parent : PascalParserTD) {
+    public constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -60,8 +60,8 @@ export class StatementParser extends PascalParserTD {
      * @throws Exception if an error occurred.
      */
     public parse(token : Token): ICodeNode {
-        let statementNode : ICodeNode= null;
-
+        let statementNode : ICodeNode= undefined;
+        
         switch (<PascalTokenType> token.getType()) {
 
             case PascalTokenType.BEGIN: {
@@ -71,47 +71,47 @@ export class StatementParser extends PascalParserTD {
                 break;
             }
 
-            // case PascalTokenType.IDENTIFIER: {
-            //     let name : string = token.getText().toLowerCase();
-            //     let id : SymTabEntry= StatementParser.symTabStack.lookup(name);
-            //     let idDefn : Definition = id != null ? id.getDefinition()
-            //                                    : DefinitionImpl.UNDEFINED;
+            case PascalTokenType.IDENTIFIER: {
+                let name : string = token.getText().toLowerCase();
+                let id : SymTabEntry= StatementParser.symTabStack.lookup(name);
+                let idDefn : Definition = id !== undefined ? id.getDefinition()
+                                               : DefinitionImpl.UNDEFINED;
 
-            //     // Assignment statement or procedure call.
-            //     switch (<DefinitionImpl> idDefn) {
+                // Assignment statement or procedure call.
+                switch (<DefinitionImpl> idDefn) {
 
-            //         case DefinitionImpl.VARIABLE:
-            //         case DefinitionImpl.VALUE_PARM:
-            //         case DefinitionImpl.VAR_PARM:
-            //         case DefinitionImpl.UNDEFINED: {
-            //             let assignmentParser : AssignmentStatementParser=
-            //                 new AssignmentStatementParser(this);
-            //             statementNode = assignmentParser.parse(token);
-            //             break;
-            //         }
+                    case DefinitionImpl.VARIABLE:
+                    case DefinitionImpl.VALUE_PARM:
+                    case DefinitionImpl.VAR_PARM:
+                    case DefinitionImpl.UNDEFINED: {
+                        let assignmentParser : AssignmentStatementParser =
+                            new AssignmentStatementParser(this);
+                        statementNode = assignmentParser.parse(token);
+                        break;
+                    }
 
-            //         case DefinitionImpl.FUNCTION: {
-            //             let assignmentParser : AssignmentStatementParser=
-            //                 new AssignmentStatementParser(this);
-            //             statementNode =
-            //                 assignmentParser.parseFunctionNameAssignment(token);
-            //             break;
-            //         }
+                    case DefinitionImpl.FUNCTION: {
+                        let assignmentParser : AssignmentStatementParser =
+                            new AssignmentStatementParser(this);
+                        statementNode =
+                            assignmentParser.parseFunctionNameAssignment(token);
+                        break;
+                    }
 
-            //         // case PROCEDURE: {
-            //         //     let callParser : CallParser = new CallParser(this);
-            //         //     statementNode = callParser.parse(token);
-            //         //     break;
-            //         // }
+                    case DefinitionImpl.PROCEDURE: {
+                        let callParser : CallParser = new CallParser(this);
+                        statementNode = callParser.parse(token);
+                        break;
+                    }
 
-            //         default: {
-            //             StatementParser.errorHandler.flag(token, UNEXPECTED_TOKEN, this);
-            //             token = this.nextToken();  // consume identifier
-            //         }
-            //     }
+                    default: {
+                        StatementParser.errorHandler.flag(token, PascalErrorCode.UNEXPECTED_TOKEN, this);
+                        token = this.nextToken();  // consume identifier
+                    }
+                }
 
-            //     break;
-            // }
+                break;
+            }
 
             // case PascalTokenType.REPEAT: {
             //     let repeatParser : RepeatStatementParser =
@@ -163,7 +163,7 @@ export class StatementParser extends PascalParserTD {
      * @param token Token
      */
     protected setLineNumber(node : ICodeNode, token : Token) : void {
-        if (node != null) {
+        if (node !== undefined) {
             node.setAttribute(ICodeKeyImpl.LINE, token.getLineNumber());
         }
     }
@@ -187,7 +187,7 @@ export class StatementParser extends PascalParserTD {
         // Loop to parse each statement until the END token
         // or the end of the source file.
         while (!(token instanceof EofToken) &&
-               (token.getType() != terminator)) {
+               (token.getType() !== terminator)) {
 
             // Parse a statement.  The parent node adopts the statement node.
             let statementNode : ICodeNode = this.parse(token);
@@ -197,7 +197,7 @@ export class StatementParser extends PascalParserTD {
             let tokenType : TokenType = token.getType();
 
             // Look for the semicolon between statements.
-            if (tokenType == PascalTokenType.SEMICOLON) {
+            if (tokenType === PascalTokenType.SEMICOLON) {
                 token = this.nextToken();  // consume the ;
             }
 
@@ -212,7 +212,7 @@ export class StatementParser extends PascalParserTD {
         }
 
         // Look for the terminator token.
-        if (token.getType() == terminator) {
+        if (token.getType() === terminator) {
             token = this.nextToken();  // consume the terminator token
         }
         else {

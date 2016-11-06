@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -28,7 +28,7 @@ export class SubrangeTypeParser extends TypeSpecificationParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    constructor(parent : PascalParserTD) {
+    constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -40,8 +40,8 @@ export class SubrangeTypeParser extends TypeSpecificationParser {
      */
     public parse(token : Token) {
         let subrangeType : TypeSpec = TypeFactory.createType(TypeFormImpl.SUBRANGE);
-        let minValue : Object = null;
-        let maxValue : Object = null;
+        let minValue : Object = undefined;
+        let maxValue : Object = undefined;
 
         // Parse the minimum constant.
         let constantToken : Token = token;
@@ -50,7 +50,7 @@ export class SubrangeTypeParser extends TypeSpecificationParser {
         minValue = constantParser.parseConstant(token);
 
         // Set the minimum constant's type.
-        let minType : TypeSpec = constantToken.getType() == PascalTokenType.IDENTIFIER
+        let minType : TypeSpec = constantToken.getType() === PascalTokenType.IDENTIFIER
                                ? constantParser.getConstantType(constantToken)
                                : constantParser.getConstantType(minValue);
 
@@ -60,7 +60,7 @@ export class SubrangeTypeParser extends TypeSpecificationParser {
         let sawDotDot : boolean = false;
 
         // Look for the .. token.
-        if (token.getType() == PascalTokenType.DOT_DOT) {
+        if (token.getType() === PascalTokenType.DOT_DOT) {
             token = this.nextToken();  // consume the .. token
             sawDotDot = true;
         }
@@ -79,24 +79,24 @@ export class SubrangeTypeParser extends TypeSpecificationParser {
             maxValue = constantParser.parseConstant(token);
 
             // Set the maximum constant's type.
-            let maxType : TypeSpec = constantToken.getType() == PascalTokenType.IDENTIFIER
+            let maxType : TypeSpec = constantToken.getType() === PascalTokenType.IDENTIFIER
                                ? constantParser.getConstantType(constantToken)
                                : constantParser.getConstantType(maxValue);
 
             maxValue = this.checkValueType(constantToken, maxValue, maxType);
 
             // Are the min and max value types valid?
-            if ((minType == null) || (maxType == null)) {
+            if ((minType === undefined) || (maxType === undefined)) {
                 SubrangeTypeParser.errorHandler.flag(constantToken, PascalErrorCode.INCOMPATIBLE_TYPES, this);
             }
 
             // Are the min and max value types the same?
-            else if (minType != maxType) {
+            else if (minType !== maxType) {
                 SubrangeTypeParser.errorHandler.flag(constantToken, PascalErrorCode.INVALID_SUBRANGE_TYPE, this);
             }
 
             // Min value > max value?
-            else if ((minValue != null) && (maxValue != null) &&
+            else if ((minValue !== undefined) && (maxValue !== undefined) &&
                      (Math.floor(<number> minValue) >= Math.floor(<number> maxValue))) {
                 SubrangeTypeParser.errorHandler.flag(constantToken, PascalErrorCode.MIN_GT_MAX, this);
             }
@@ -120,17 +120,17 @@ export class SubrangeTypeParser extends TypeSpecificationParser {
      * @return the value.
      */
     private checkValueType(token : Token, value : Object, type : TypeSpec) : Object{
-        if (type == null) {
+        if (type === undefined) {
             return value;
         }
-        if (type == Predefined.integerType) {
+        if (type === Predefined.integerType) {
             return value;
         }
-        else if (type == Predefined.charType) {
+        else if (type === Predefined.charType) {
             let ch :string = (<string> value).charAt(0);
             return Number(ch);;
         }
-        else if (type.getForm() == TypeFormImpl.ENUMERATION) {
+        else if (type.getForm() === TypeFormImpl.ENUMERATION) {
             return value;
         }
         else {

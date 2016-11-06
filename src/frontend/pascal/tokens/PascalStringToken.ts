@@ -32,7 +32,7 @@ export class PascalStringToken extends PascalToken {
                 currentChar = ' ';
             }
 
-            if ((currentChar != '\'') && (currentChar != Source.EOF)) {
+            if ((currentChar !== '\'') && (currentChar !== Source.EOF)) {
                 textBuffer += currentChar;
                 valueBuffer += currentChar;
                 currentChar = this.nextChar();  // consume character
@@ -47,7 +47,7 @@ export class PascalStringToken extends PascalToken {
                     currentChar = this.nextChar();
                 }
             }
-        } while ((currentChar != '\'') && (currentChar != Source.EOF));
+        } while ((currentChar !== '\'') && (currentChar !== Source.EOF));
 
         if (currentChar === '\'') {
             this.nextChar();  // consume final quote

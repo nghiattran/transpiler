@@ -16,6 +16,7 @@ import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 import {ICodeNodeImpl} from '../intermediate/icodeimpl/ICodeNodeImpl';
 
 import {List} from './List';
+import {PolyfillBaseObject} from './PolyfillBaseObject';
 
 export class ParseTreePrinter {
     private static INDENT_WIDTH : number = 4;
@@ -31,8 +32,7 @@ export class ParseTreePrinter {
      * Constructor
      * @param ps the output print stream.
      */
-    public constructor()
-    {
+    public constructor() {
         this.ps = '';
         this.length = 0;
         this.indentation = '';
@@ -50,7 +50,7 @@ export class ParseTreePrinter {
      * @param symTabStack the symbol table stack.
      */
     public print(symTabStack : SymTabStack) : void{
-        console.log("\n===== INTERMEDIATE CODE =====");
+        console.info("\n===== INTERMEDIATE CODE =====");
 
         let programId : SymTabEntry = symTabStack.getProgramId();
         this.printRoutine(programId);
@@ -62,12 +62,13 @@ export class ParseTreePrinter {
      */
     private printRoutine(routineId : SymTabEntry) : void {
         let definition : Definition = routineId.getDefinition();
-        console.log("\n*** " + definition.toString() +
+        console.info("\n*** " + definition.toString() +
                            " " + routineId.getName() + " ***\n");
 
         // Print the intermediate code in the routine's symbol table entry.
         let iCode : ICode = <ICode> routineId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE);
-        if (iCode.getRoot() != null) {
+        
+        if (iCode.getRoot() !== undefined) {
             this.printNode(<ICodeNodeImpl> iCode.getRoot());
         }
 
@@ -75,7 +76,7 @@ export class ParseTreePrinter {
         let routineIds : List<SymTabEntry> =
             <List<SymTabEntry>> routineId.getAttribute(SymTabKeyImpl.ROUTINE_ROUTINES);
 
-        if (routineIds != null) {
+        if (routineIds !== undefined) {
             for (var i = 0; i < routineIds.size(); i++) {
                 this.printRoutine(routineIds[i]);
             }
@@ -88,7 +89,7 @@ export class ParseTreePrinter {
      */
     private printNode(node : ICodeNodeImpl) : void {
         // Opening tag.
-        this.append(this.indentation); 
+        this.append(this.indentation);
         this.append("<" + node.toString());
 
         this.printAttributes(node);
@@ -97,12 +98,13 @@ export class ParseTreePrinter {
         let childNodes : List<ICodeNode> = node.getChildren();
 
         // Print the node's children followed by the closing tag.
-        if ((childNodes != null) && (childNodes.size() > 0)) {
+        if ((childNodes !== undefined) && (childNodes.size() > 0)) {
             this.append(">");
             this.printLine();
 
             this.printChildNodes(childNodes);
             this.append(this.indentation); 
+
             this.append("</" + node.toString() + ">");
         }
 
@@ -123,17 +125,12 @@ export class ParseTreePrinter {
         let saveIndentation : string = this.indentation;
         this.indentation += this.indent;
 
-        // Set<Map.Entry<ICodeKey, Object>> attributes = node.entrySet();
-        // Iterator<Map.Entry<ICodeKey, Object>> it = attributes.iterator();
-        // node.toList()
-        // // Iterate to print each attribute.
-        // while (it.hasNext()) {
-        //     Map.Entry<ICodeKey, Object> attribute = it.next();
-        //     this.printAttribute(attribute.getKey().toString(), attribute.getValue());
-        // }
         let keys = node.getKeys();
         for (var i = 0; i < keys.length; ++i) {
-            this.printAttribute(keys[i], node.get(keys[i]));
+            this.printAttribute(
+                PolyfillBaseObject.getObject(keys[i]).toString(),
+                node.getKeyString(keys[i])
+            );
         }
 
         this.indentation = saveIndentation;
@@ -172,7 +169,7 @@ export class ParseTreePrinter {
         this.indentation += this.indent;
 
         for (var i = 0; i < childNodes.size(); i++) {
-            this.printNode(childNodes[i]);
+            this.printNode(<ICodeNodeImpl>childNodes.get(i));
         }
 
         this.indentation = saveIndentation;
@@ -185,7 +182,7 @@ export class ParseTreePrinter {
     private printTypeSpec(node : ICodeNodeImpl) : void{
         let typeSpec : TypeSpec = node.getTypeSpec();
 
-        if (typeSpec != null) {
+        if (typeSpec !== undefined) {
             let saveMargin :string = this.indentation;
             this.indentation += this.indent;
 
@@ -193,7 +190,7 @@ export class ParseTreePrinter {
             let typeId : SymTabEntry = typeSpec.getIdentifier();
 
             // Named type: Print the type identifier's name.
-            if (typeId != null) {
+            if (typeId !== undefined) {
                 typeName = typeId.getName();
             }
 
@@ -220,17 +217,17 @@ export class ParseTreePrinter {
         let lineBreak : boolean = false;
 
         // Wrap lines that are too long.
-        if (length + textLength > ParseTreePrinter.LINE_WIDTH) {
+        if (this.length + textLength > ParseTreePrinter.LINE_WIDTH) {
             this.printLine();
             this.line += this.indentation;
-            length = this.indentation.length;
+            this.length = this.indentation.length;
             lineBreak = true;
         }
 
         // Append the text.
         if (!(lineBreak && text === ' ')) {
             this.line += text;
-            length += textLength;
+            this.length += textLength;
         }
     }
 
@@ -238,10 +235,10 @@ export class ParseTreePrinter {
      * Print an output line.
      */
     private printLine() : void {
-        if (length > 0) {
-            console.log(this.line);
+        if (this.length > 0) {
+            console.info(this.line);
             this.line = '';
-            length = 0;
+            this.length = 0;
         }
     }
 }

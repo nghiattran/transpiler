@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -80,7 +80,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    public constructor(parent : PascalParserTD) {
+    public constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -94,9 +94,9 @@ export class DeclaredRoutineParser extends DeclarationsParser {
      * @throws Exception if an error occurred.
      */
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
-        let routineDefn : Definition = null;
-        let dummyName : string = null;
-        let routineId : SymTabEntry = null;
+        let routineDefn : Definition = undefined;
+        let dummyName : string = undefined;
+        let routineId : SymTabEntry = undefined;
         let routineType : TokenType = token.getType();
 
         // Initialize.
@@ -144,7 +144,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
 
         // Push the routine's new symbol table onto the stack.
         // If it was forwarded, push its existing symbol table.
-        if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) == RoutineCodeImpl.FORWARD) {
+        if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) === RoutineCodeImpl.FORWARD) {
             let symTab : SymTab = <SymTab> routineId.getAttribute(SymTabKeyImpl.ROUTINE_SYMTAB);
             DeclaredRoutineParser.symTabStack.push(symTab);
         }
@@ -154,14 +154,14 @@ export class DeclaredRoutineParser extends DeclarationsParser {
 
         // Program: Set the program identifier in the symbol table stack.
         // Set the initial local variables array slot number to 1.
-        if (routineDefn == DefinitionImpl.PROGRAM) {
+        if (routineDefn === DefinitionImpl.PROGRAM) {
             DeclaredRoutineParser.symTabStack.setProgramId(routineId);
             DeclaredRoutineParser.symTabStack.getLocalSymTab().nextSlotNumber();  // bump slot number
         }
 
         // Non-forwarded procedure or function: Append to the parent's list
         //                                      of routines.
-        else if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) != RoutineCodeImpl.FORWARD) {
+        else if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) !== RoutineCodeImpl.FORWARD) {
             let subroutines : List<SymTabEntry> = <List<SymTabEntry>>
                                        parentId.getAttribute(SymTabKeyImpl.ROUTINE_ROUTINES);
             subroutines.add(routineId);
@@ -170,8 +170,8 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         // If the routine was forwarded, there should not be
         // any formal parameters or a function return type.
         // But parse them anyway if they're there.
-        if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) == RoutineCodeImpl.FORWARD) {
-            if (token.getType() != PascalTokenType.SEMICOLON) {
+        if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) === RoutineCodeImpl.FORWARD) {
+            if (token.getType() !== PascalTokenType.SEMICOLON) {
                 DeclaredRoutineParser.errorHandler.flag(token, PascalErrorCode.ALREADY_FORWARDED, this);
                 this.parseHeader(token, routineId);
             }
@@ -184,18 +184,18 @@ export class DeclaredRoutineParser extends DeclarationsParser {
 
         // Look for the semicolon.
         token = this.currentToken();
-        if (token.getType() == PascalTokenType.SEMICOLON) {
+        if (token.getType() === PascalTokenType.SEMICOLON) {
             do {
                 token = this.nextToken();  // consume ;
-            } while (token.getType() == PascalTokenType.SEMICOLON);
+            } while (token.getType() === PascalTokenType.SEMICOLON);
         }
         else {
             DeclaredRoutineParser.errorHandler.flag(token, PascalErrorCode.MISSING_SEMICOLON, this);
         }
 
         // Parse the routine's block or forward declaration.
-        if ((token.getType() == PascalTokenType.IDENTIFIER) &&
-            (token.getText().toLowerCase() == 'forward'))
+        if ((token.getType() === PascalTokenType.IDENTIFIER) &&
+            (token.getText().toLowerCase() === 'forward'))
         {
             token = this.nextToken();  // consume forward
             routineId.setAttribute(SymTabKeyImpl.ROUTINE_CODE, RoutineCodeImpl.FORWARD);
@@ -223,21 +223,21 @@ export class DeclaredRoutineParser extends DeclarationsParser {
      * @throws Exception if an error occurred.
      */
     private parseRoutineName(token : Token, dummyName : string) : SymTabEntry{
-        let routineId : SymTabEntry = null;
+        let routineId : SymTabEntry = undefined;
 
         // Parse the routine name identifier.
-        if (token.getType() == PascalTokenType.IDENTIFIER) {
+        if (token.getType() === PascalTokenType.IDENTIFIER) {
             let routineName : string = token.getText().toLowerCase();
             routineId = DeclaredRoutineParser.symTabStack.lookupLocal(routineName);
-
+           
             // Not already defined locally: Enter into the local symbol table.
-            if (routineId == null) {
+            if (routineId === undefined) {
                 routineId = DeclaredRoutineParser.symTabStack.enterLocal(routineName);
             }
 
             // If already defined, it should be a forward definition.
-            else if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) != RoutineCodeImpl.FORWARD) {
-                routineId = null;
+            else if (routineId.getAttribute(SymTabKeyImpl.ROUTINE_CODE) !== RoutineCodeImpl.FORWARD) {
+                routineId = undefined;
                 DeclaredRoutineParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_REDEFINED, this);
             }
 
@@ -248,7 +248,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         }
 
         // If necessary, create a dummy routine name symbol table entry.
-        if (routineId == null) {
+        if (routineId === undefined) {
             routineId = DeclaredRoutineParser.symTabStack.enterLocal(dummyName);
         }
 
@@ -267,7 +267,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         token = this.currentToken();
 
         // If this is a function, parse and set its return type.
-        if (routineId.getDefinition() == DefinitionImpl.FUNCTION) {
+        if (routineId.getDefinition() === DefinitionImpl.FUNCTION) {
             let variableDeclarationsParser : VariableDeclarationsParser=
                 new VariableDeclarationsParser(this);
             variableDeclarationsParser.setDefinition(DefinitionImpl.FUNCTION);
@@ -276,10 +276,10 @@ export class DeclaredRoutineParser extends DeclarationsParser {
             token = this.currentToken();
 
             // The return type cannot be an array or record.
-            if (type != null) {
+            if (type !== undefined) {
                 let form : TypeForm = type.getForm();
-                if ((form == TypeFormImpl.ARRAY) ||
-                    (form == TypeFormImpl.RECORD))
+                if ((form === TypeFormImpl.ARRAY) ||
+                    (form === TypeFormImpl.RECORD))
                 {
                     DeclaredRoutineParser.errorHandler.flag(token, PascalErrorCode.INVALID_TYPE, this);
                 }
@@ -304,7 +304,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
     protected parseFormalParameters(token : Token, routineId : SymTabEntry) : void {
         // Parse the formal parameters if there is an opening left parenthesis.
         token = this.synchronize(DeclaredRoutineParser.LEFT_PAREN_SET);
-        if (token.getType() == PascalTokenType.LEFT_PAREN) {
+        if (token.getType() === PascalTokenType.LEFT_PAREN) {
             token = this.nextToken();  // consume (
 
             let parms : List<SymTabEntry> = new List<SymTabEntry>();
@@ -313,14 +313,14 @@ export class DeclaredRoutineParser extends DeclarationsParser {
             let tokenType : TokenType = token.getType();
 
             // Loop to parse sublists of formal parameter declarations.
-            while ((tokenType == PascalTokenType.IDENTIFIER) || (tokenType == PascalTokenType.VAR)) {
+            while ((tokenType === PascalTokenType.IDENTIFIER) || (tokenType === PascalTokenType.VAR)) {
                 parms.addAll(this.parseParmSublist(token, routineId));
                 token = this.currentToken();
                 tokenType = token.getType();
             }
 
             // Closing right parenthesis.
-            if (token.getType() == PascalTokenType.RIGHT_PAREN) {
+            if (token.getType() === PascalTokenType.RIGHT_PAREN) {
                 token = this.nextToken();  // consume )
             }
             else {
@@ -340,12 +340,12 @@ export class DeclaredRoutineParser extends DeclarationsParser {
      */
     private parseParmSublist(token : Token,
                             routineId : SymTabEntry) : List<SymTabEntry> {
-        let isProgram : boolean = routineId.getDefinition() == DefinitionImpl.PROGRAM;
-        let parmDefn : Definition = isProgram ? DefinitionImpl.PROGRAM_PARM : null;
+        let isProgram : boolean = routineId.getDefinition() === DefinitionImpl.PROGRAM;
+        let parmDefn : Definition = isProgram ? DefinitionImpl.PROGRAM_PARM : undefined;
         let tokenType : TokenType = token.getType();
 
         // VAR or value parameter?
-        if (tokenType == PascalTokenType.VAR) {
+        if (tokenType === PascalTokenType.VAR) {
             if (!isProgram) {
                 parmDefn = DefinitionImpl.VAR_PARM;
             }
@@ -373,8 +373,8 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         if (!isProgram) {
 
             // Look for one or more semicolons after a sublist.
-            if (tokenType == PascalTokenType.SEMICOLON) {
-                while (token.getType() == PascalTokenType.SEMICOLON) {
+            if (tokenType === PascalTokenType.SEMICOLON) {
+                while (token.getType() === PascalTokenType.SEMICOLON) {
                     token = this.nextToken();  // consume the ;
                 }
             }

@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 
 import {Token} from '../../Token';
@@ -11,12 +11,12 @@ import {SimpleTypeParser} from './SimpleTypeParser';
 import {ArrayTypeParser} from './ArrayTypeParser';
 import {RecordTypeParser} from './RecordTypeParser';
 
-export class TypeSpecificationParser extends PascalParserTD {
+export class TypeSpecificationParser extends PascalParser {
     /**
      * Constructor.
      * @param parent the parent parser.
      */
-    constructor(parent : PascalParserTD) {
+    constructor(parent : PascalParser) {
         super(parent);
     }
 

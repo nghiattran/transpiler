@@ -1,4 +1,4 @@
-import {PascalParserTD} from '../PascalParserTD';
+import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';
 import {PascalErrorCode} from '../PascalErrorCode';
 
@@ -23,7 +23,7 @@ export class TypeDefinitionsParser extends DeclarationsParser {
      * Constructor.
      * @param parent the parent parser.
      */
-    public constructor(parent : PascalParserTD) {
+    public constructor(parent : PascalParser) {
         super(parent);
     }
 
@@ -56,7 +56,7 @@ export class TypeDefinitionsParser extends DeclarationsParser {
      * Parse type definitions.
      * @param token the initial token.
      * @param parentId the symbol table entry of the parent routine's name.
-     * @return null
+     * @return undefined
      * @throws Exception if an error occurred.
      */
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
@@ -64,26 +64,26 @@ export class TypeDefinitionsParser extends DeclarationsParser {
 
         // Loop to parse a sequence of type definitions
         // separated by semicolons.
-        while (token.getType() == PascalTokenType.IDENTIFIER) {
+        while (token.getType() === PascalTokenType.IDENTIFIER) {
             let name : string = token.getText().toLowerCase();
             let typeId : SymTabEntry = TypeDefinitionsParser.symTabStack.lookupLocal(name);
 
             // Enter the new identifier into the symbol table
             // but don't set how it's defined yet.
-            if (typeId == null) {
+            if (typeId === undefined) {
                 typeId = TypeDefinitionsParser.symTabStack.enterLocal(name);
                 typeId.appendLineNumber(token.getLineNumber());
             }
             else {
                 TypeDefinitionsParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_REDEFINED, this);
-                typeId = null;
+                typeId = undefined;
             }
 
             token = this.nextToken();  // consume the identifier token
 
             // Synchronize on the = token.
             token = this.synchronize(TypeDefinitionsParser.EQUALS_SET);
-            if (token.getType() == PascalTokenType.EQUALS) {
+            if (token.getType() === PascalTokenType.EQUALS) {
                 token = this.nextToken();  // consume the =
             }
             else {
@@ -96,13 +96,13 @@ export class TypeDefinitionsParser extends DeclarationsParser {
             let type : TypeSpec = typeSpecificationParser.parse(token);
 
             // Set identifier to be a type and set its type specificationt.
-            if (typeId != null) {
+            if (typeId !== undefined) {
                 typeId.setDefinition(PascalTokenType.TYPE);
             }
-
+            
             // Cross-link the type identifier and the type specification.
-            if ((type != null) && (typeId != null)) {
-                if (type.getIdentifier() == null) {
+            if ((type !== undefined) && (typeId !== undefined)) {
+                if (type.getIdentifier() === undefined) {
                     type.setIdentifier(typeId);
                 }
                 typeId.setTypeSpec(type);
@@ -115,8 +115,8 @@ export class TypeDefinitionsParser extends DeclarationsParser {
             let tokenType : TokenType = token.getType();
 
             // Look for one or more semicolons after a definition.
-            if (tokenType == PascalTokenType.SEMICOLON) {
-                while (token.getType() == PascalTokenType.SEMICOLON) {
+            if (tokenType === PascalTokenType.SEMICOLON) {
+                while (token.getType() === PascalTokenType.SEMICOLON) {
                     token = this.nextToken();  // consume the ;
                 }
             }
@@ -130,6 +130,6 @@ export class TypeDefinitionsParser extends DeclarationsParser {
             token = this.synchronize(TypeDefinitionsParser.IDENTIFIER_SET);
         }
 
-        return null;
+        return undefined;
     }
 }

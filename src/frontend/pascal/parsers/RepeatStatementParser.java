@@ -24,7 +24,7 @@ public class RepeatStatementParser extends StatementParser
      * Constructor.
      * @param parent the parent parser.
      */
-    public RepeatStatementParser(PascalParserTD parent)
+    public RepeatStatementParser(PascalParser parent)
     {
         super(parent);
     }
@@ -58,7 +58,7 @@ public class RepeatStatementParser extends StatementParser
         loopNode.addChild(testNode);
 
         // Type check: The test expression must be boolean.
-        TypeSpec exprType = exprNode != null ? exprNode.getTypeSpec()
+        TypeSpec exprType = exprNode !== undefined ? exprNode.getTypeSpec()
                                              : Predefined.undefinedType;
         if (!TypeChecker.isBoolean(exprType)) {
             errorHandler.flag(token, INCOMPATIBLE_TYPES, this);
