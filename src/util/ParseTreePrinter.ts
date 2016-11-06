@@ -16,7 +16,7 @@ import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 import {ICodeNodeImpl} from '../intermediate/icodeimpl/ICodeNodeImpl';
 
 import {List} from './List';
-import {PolyfillBaseObject} from './PolyfillBaseObject';
+import {PolyfillObject} from './PolyfillObject';
 
 export class ParseTreePrinter {
     private static INDENT_WIDTH : number = 4;
@@ -128,7 +128,7 @@ export class ParseTreePrinter {
         let keys = node.getKeys();
         for (var i = 0; i < keys.length; ++i) {
             this.printAttribute(
-                PolyfillBaseObject.getObject(keys[i]).toString(),
+                PolyfillObject.getObject(keys[i]).toString(),
                 node.getKeyString(keys[i])
             );
         }

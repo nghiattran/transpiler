@@ -1,4 +1,4 @@
-import {PolyfillBaseObject} from '../util/PolyfillBaseObject';
+import {PolyfillObject} from '../util/PolyfillObject';
 
-export interface SymTabKey extends PolyfillBaseObject {
+export interface SymTabKey extends PolyfillObject {
 }

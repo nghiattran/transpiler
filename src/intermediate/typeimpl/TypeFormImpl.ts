@@ -1,7 +1,7 @@
 import {TypeForm} from '../TypeForm';
-import {PolyfillBaseObject} from '../../util/PolyfillBaseObject';
+import {PolyfillObject} from '../../util/PolyfillObject';
 
-export class TypeFormImpl extends PolyfillBaseObject implements TypeForm {
+export class TypeFormImpl extends PolyfillObject implements TypeForm {
     private text : string;
 
     public static SCALAR : TypeFormImpl = new TypeFormImpl('SCALAR');

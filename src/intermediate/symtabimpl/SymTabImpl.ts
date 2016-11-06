@@ -1,4 +1,4 @@
-import {TreeMap} from '../../util/HashMap';
+import {TreeMap} from '../../util/TreeMap';
 import {SymTab} from '../SymTab';
 import {SymTabEntry} from '../SymTabEntry';
 import {SymTabFactory} from '../SymTabFactory';

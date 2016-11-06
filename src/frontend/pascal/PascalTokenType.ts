@@ -1,8 +1,8 @@
 import {TokenType} from '../TokenType';
 
 import {List} from '../../util/List';
-import {HashMap, HashSet, TreeMap} from '../../util/HashMap';
-import {PolyfillBaseObject} from '../../util/PolyfillBaseObject';
+import {TreeMap} from '../../util/TreeMap';
+import {PolyfillObject} from '../../util/PolyfillObject';
 
 export enum PascalTokenTypeEnum {
     // Reserved words.
@@ -76,7 +76,7 @@ export namespace PascalTokenTypeEnum {
   }
 }
 
-export class PascalTokenType extends PolyfillBaseObject implements TokenType {
+export class PascalTokenType extends PolyfillObject implements TokenType {
     static AND : PascalTokenType = new PascalTokenType('AND');
     static ARRAY : PascalTokenType = new PascalTokenType('ARRAY');
     static BEGIN : PascalTokenType = new PascalTokenType('BEGIN');

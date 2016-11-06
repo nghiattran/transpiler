@@ -1,14 +1,21 @@
-import {PolyfillBaseObject} from './PolyfillBaseObject';
+import {PolyfillObject} from './PolyfillObject';
 
-export class HashMap <PolyfillBaseObject, E> {
+export class HashMap <T, E> {
 	protected collection : Object = {};
+
+    public getKey(key : T) : string {
+        if(key instanceof PolyfillObject) {
+            return (<PolyfillObject> key).getHash();
+        }
+        throw 'Key must be a instance of PolyfillObject or a String.';
+    }
 
 	/**
      * Set an attribute of the entry.
      * @param key the attribute key.
      * @param value the attribute value.
      */
-    public setAttribute(key : PolyfillBaseObject, value : E) : void {
+    public setAttribute(key : T, value : E) : void {
         this.put(key, value)
     }
 
@@ -17,7 +24,7 @@ export class HashMap <PolyfillBaseObject, E> {
      * @param key the attribute key.
      * @return the attribute value.
      */
-    public getAttribute(key : PolyfillBaseObject) : E {
+    public getAttribute(key : T) : E {
         return this.get(key)
     }
 
@@ -26,8 +33,8 @@ export class HashMap <PolyfillBaseObject, E> {
      * @param key the attribute key.
      * @param value the attribute value.
      */
-    public put(key : PolyfillBaseObject, value : E) : void {
-        this.collection[key.getHash()] = value;
+    public put(key : T, value : E) : void {
+        this.collection[this.getKey(key)] = value;
     }
 
     /**
@@ -35,8 +42,8 @@ export class HashMap <PolyfillBaseObject, E> {
      * @param key the attribute key.
      * @return the attribute value.
      */
-    public get(key : PolyfillBaseObject) : E {
-        return this.collection[key.getHash()];
+    public get(key : T) : E {
+        return this.collection[this.getKey(key)];
     }
 
     /**
@@ -57,7 +64,7 @@ export class HashMap <PolyfillBaseObject, E> {
         return this.collection[key];
     }
 
-    public copy(copy: HashMap<PolyfillBaseObject, E>) {
+    public copy(copy: HashMap<PolyfillObject, E>) {
         for (var key in this.getKeys()) {
             copy.putKeyString(key, this.get[key])
         }
@@ -78,106 +85,6 @@ export class HashMap <PolyfillBaseObject, E> {
     }
 }
 
-export class TreeMap<E> {
-    protected collection : Object = {};
-
-    public containsKey(key : string) : boolean {
-        return this.collection[key] !== undefined;
-    }
-
-    /**
-     * Set an attribute of the entry.
-     * @param key the attribute key.
-     * @param value the attribute value.
-     */
-    public setAttribute(key : string, value : E) : void {
-        this.put(key, value)
-    }
-
-    /**
-     * Get the value of an attribute of the entry.
-     * @param key the attribute key.
-     * @return the attribute value.
-     */
-    public getAttribute(key : string) : E {
-        return this.get(key)
-    }
-
-    /**
-     * Set an attribute of the entry.
-     * @param key the attribute key.
-     * @param value the attribute value.
-     */
-    public put(key : string, value : E) : void {
-        this.collection[key] = value;
-    }
-
-    /**
-     * Get the value of an attribute of the entry.
-     * @param key the attribute key.
-     * @return the attribute value.
-     */
-    public get(key : string) : E {
-        return this.collection[key];
-    }
-
-    public toList() : E[] {
-        let list : any[] = [];
-
-        for (var entry in this.collection) {
-            list.push(this.collection[entry]);
-        }
-
-        return list;
-    }
-}
-
-export class HashSet <PolyfillBaseObject> {
-    protected collection : Object = {};
-
-    /**
-     * Set an attribute of the entry.
-     * @param key the attribute key.
-     * @param value the attribute value.
-     */
-    public setAttribute(key : PolyfillBaseObject, value : Object) : void {
-        this.collection[key.getHash()] = value;
-    }
-
-    /**
-     * Get the value of an attribute of the entry.
-     * @param key the attribute key.
-     * @return the attribute value.
-     */
-    public getAttribute(key : PolyfillBaseObject) : Object{
-        return this.collection[key.getHash()];
-    }
-
-    /**
-     * Set an attribute of the entry.
-     * @param key the attribute key.
-     * @param value the attribute value.
-     */
-    public put(key : PolyfillBaseObject, value : Object) : void {
-        this.collection[key.getHash()] = value;
-    }
-
-    /**
-     * Get the value of an attribute of the entry.
-     * @param key the attribute key.
-     * @return the attribute value.
-     */
-    public get(key : PolyfillBaseObject) : Object {
-        return this.collection[key.getHash()];
-    }
-
-    public toList() : Object[] {
-        let list : any[] = [];
-
-        for (var entry in this.collection) {
-            list.push(this.collection[entry]);
-        }
-
-        return list;
-    }
+export class HashSet<T> extends HashMap<T, Object> {
+    
 }

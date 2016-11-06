@@ -8,5 +8,5 @@ VAR
     root, sqRoot : real;
 
 BEGIN
-    number = 5
+    number = 1;
 END.

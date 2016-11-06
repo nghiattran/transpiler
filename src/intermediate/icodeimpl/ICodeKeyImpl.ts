@@ -1,7 +1,7 @@
 import {ICodeKey} from '../ICodeKey';
-import {PolyfillBaseObject} from '../../util/PolyfillBaseObject'; 
+import {PolyfillObject} from '../../util/PolyfillObject'; 
 
-export class ICodeKeyImpl extends PolyfillBaseObject implements ICodeKey {
+export class ICodeKeyImpl extends PolyfillObject implements ICodeKey {
 	private text : string;
 
     public static LINE : ICodeKeyImpl = new ICodeKeyImpl('LINE');

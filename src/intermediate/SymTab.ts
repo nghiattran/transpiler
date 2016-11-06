@@ -1,5 +1,5 @@
 import {SymTabEntry} from './SymTabEntry';
-import {TreeMap} from '../util/HashMap';
+import {TreeMap} from '../util/TreeMap';
 
 export interface SymTab extends TreeMap<SymTabEntry> {
     /**

@@ -1,8 +1,8 @@
 import {SymTabKey} from '../SymTabKey';
-import {PolyfillBaseObject} from '../../util/PolyfillBaseObject';
+import {PolyfillObject} from '../../util/PolyfillObject';
 
 
-export class SymTabKeyImpl extends PolyfillBaseObject implements SymTabKey {
+export class SymTabKeyImpl extends PolyfillObject implements SymTabKey {
     private text : string;
 
     // Constant.
