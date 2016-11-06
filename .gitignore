@@ -1,4 +1,3 @@
-*.js
 .tmp
 dist/
 src/frontend/pascal/parsersBundle.ts
