@@ -118,7 +118,7 @@ export class PascalTokenType extends PolyfillObject implements TokenType {
     static STAR : PascalTokenType = new PascalTokenType('*');
     static SLASH : PascalTokenType = new PascalTokenType('/');
     static COLON_EQUALS : PascalTokenType = new PascalTokenType(':=');
-    static DOT : PascalTokenType = new PascalTokenType('/');
+    static DOT : PascalTokenType = new PascalTokenType('.');
     static COMMA : PascalTokenType = new PascalTokenType(',');
     static SEMICOLON : PascalTokenType = new PascalTokenType(';');
     static COLON : PascalTokenType = new PascalTokenType(':');

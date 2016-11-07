@@ -14,8 +14,8 @@ import {SymTabKeyImpl} from './intermediate/symtabimpl/SymTabKeyImpl';
 import {CrossReferencer} from './util/CrossReferencer';
 import {ParseTreePrinter} from './util/ParseTreePrinter';
 
-let fs = require("fs");
-let util = require("util");
+let fs = require('fs');
+let util = require('util');
 
 export class Pascal {
     private parser : Parser;            // language-independent parser
@@ -36,7 +36,7 @@ export class Pascal {
 
     /**
      * Compile or interpret a Pascal source program.
-     * @param operation either "compile" or "execute".
+     * @param operation either 'compile' or 'execute'.
      * @param filePath the source file path.
      * @param flags the command line flags.
      */
@@ -52,15 +52,13 @@ export class Pascal {
 
             this.source = new Source(text);
             this.source.addMessageListener(new SourceMessageListener());
-
-            this.parser = FrontendFactory.createParser("Pascal", "top-down", this.source);
+            
+            this.parser = FrontendFactory.createParser('Pascal', 'top-down', this.source);
             this.parser.addMessageListener(new ParserMessageListener());
-
-//            backend = BackendFactory.createBackend(operation);
-//            backend.addMessageListener(new BackendMessageListener());
-    
+            
             this.parser.parse();
             this.source.close();
+            
 
             if (this.parser.getErrorCount() === 0) {
                 this.symTabStack = this.parser.getSymTabStack();
@@ -83,18 +81,18 @@ export class Pascal {
             }
         } catch (ex) {
             console.info(ex)
-            console.info("***** Internal translator error. *****");
+            console.info('***** Internal translator error. *****');
             ex.printStackTrace();
         }
     }
 
-    private static FLAGS : string = "[-ixlafcr]";
+    private static FLAGS : string = '[-ixlafcr]';
     private static USAGE : string =
-        "Usage: Pascal execute|compile " + Pascal.FLAGS + " <source file path>";
+        'Usage: Pascal execute|compile ' + Pascal.FLAGS + ' <source file path>';
 
     /**
      * The main method.
-     * @param args command-line arguments: "compile" or "execute" followed by
+     * @param args command-line arguments: 'compile' or 'execute' followed by
      *             optional flags followed by the source file path.
      */
     public static main(args : string []) : void {
@@ -102,13 +100,13 @@ export class Pascal {
             var operation : string = args[0];
 
             // Operation.
-            if (!(operation.toLowerCase() === "compile"
-                  || operation.toLowerCase() === "execute")) {
+            if (!(operation.toLowerCase() === 'compile'
+                  || operation.toLowerCase() === 'execute')) {
                 throw new Error();
             }
 
             var i : number = 0;
-            var flags : string = "";
+            var flags : string = '';
 
             // Flags.
             flags = args[1];
@@ -127,38 +125,38 @@ export class Pascal {
         }
     }
 
-    public static SOURCE_LINE_FORMAT : string = "%d %s";
+    public static SOURCE_LINE_FORMAT : string = '%d %s';
 
     public static PARSER_SUMMARY_FORMAT : string =
-        "\n%d source lines." +
-        "\n%d syntax errors." +
-        "\n%d seconds total parsing time.\n";
+        '\n%d source lines.' +
+        '\n%d syntax errors.' +
+        '\n%d seconds total parsing time.\n';
 
     public static PREFIX_WIDTH : number = 5;
 
     public static INTERPRETER_SUMMARY_FORMAT : string =
-        "\n%,20d statements executed." +
-        "\n%,20d runtime errors." +
-        "\n%,20.2f seconds total execution time.\n";
+        '\n%,20d statements executed.' +
+        '\n%,20d runtime errors.' +
+        '\n%,20.2f seconds total execution time.\n';
 
     public static COMPILER_SUMMARY_FORMAT : string =
-        "\n%,20d instructions generated." +
-        "\n%,20.2f seconds total code generation time.\n";
+        '\n%,20d instructions generated.' +
+        '\n%,20.2f seconds total code generation time.\n';
 
     public static LINE_FORMAT : string =
-        ">>> AT LINE %03d\n";
+        '>>> AT LINE %03d\n';
 
     public static ASSIGN_FORMAT : string =
-        ">>> AT LINE %03d: %s = %s\n";
+        '>>> AT LINE %03d: %s = %s\n';
 
     public static FETCH_FORMAT : string =
-        ">>> AT LINE %03d: %s : %s\n";
+        '>>> AT LINE %03d: %s : %s\n';
 
     public static CALL_FORMAT : string =
-        ">>> AT LINE %03d: CALL %s\n";
+        '>>> AT LINE %03d: CALL %s\n';
 
     public static RETURN_FORMAT : string =
-        ">>> AT LINE %03d: RETURN FROM %s\n";
+        '>>> AT LINE %03d: RETURN FROM %s\n';
 }
 
 /**
@@ -246,13 +244,13 @@ class BackendMessageListener implements MessageListener {
                 let lineNumber : number = body[0] as number;
                 let errorMessage : string = body[0] as string;
 
-                console.info("*** RUNTIME ERROR");
+                console.info('*** RUNTIME ERROR');
                 if (lineNumber !== undefined) {
                     // TODO: format
-                    // console.info(" AT LINE " +
-                    //                  String.format("%03d", lineNumber));
+                    // console.info(' AT LINE ' +
+                    //                  String.format('%03d', lineNumber));
                 }
-                console.info(": " + errorMessage);
+                console.info(': ' + errorMessage);
                 break;
             }
 
@@ -352,12 +350,12 @@ class ParserMessageListener implements MessageListener {
                 }
 
                 // A pointer to the error followed by the error message.
-                flagBuffer +=  "^\n*** " + errorMessage;
+                flagBuffer +=  '^\n*** ' + errorMessage;
 
                 // Text, if any, of the bad token.
                 if (tokenText !== undefined) {
-                    flagBuffer += " [at \"" + tokenText
-                        + "\"]";
+                    flagBuffer += ' [at \'' + tokenText
+                        + '\']';
                 }
 
                 console.info(flagBuffer);

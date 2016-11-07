@@ -120,7 +120,6 @@ export class VariableParser extends StatementParser {
         let variableType : TypeSpec = variableId.getTypeSpec();
 
         if (!this.isFunctionTarget) {
-
             // Parse array subscripts or record fields.
             while (VariableParser.SUBSCRIPT_FIELD_START_SET.contains(<PascalTokenType>token.getType())) {
                 let subFldNode : ICodeNode = token.getType() === PascalTokenType.LEFT_BRACKET
@@ -136,6 +135,7 @@ export class VariableParser extends StatementParser {
         }
 
         variableNode.setTypeSpec(variableType);
+        
         return variableNode;
     }
 

@@ -57,6 +57,7 @@ export class PascalScanner extends Scanner {
                                          currentChar);
             this.nextChar();  // consume character
         }
+        
         return token;
     }
 

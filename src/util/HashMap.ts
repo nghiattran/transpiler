@@ -83,6 +83,10 @@ export class HashMap <T, E> {
     public getKeys() : string[] {
         return Object.keys(this.collection);
     }
+
+    public containsKey(key : T) : boolean {
+        return this.collection[this.getKey(key)]
+    }
 }
 
 export class HashSet<T> extends HashMap<T, Object> {

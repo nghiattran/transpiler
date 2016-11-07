@@ -22,6 +22,10 @@ files = `./src/frontend/pascal/parsers/StatementParser.ts
 ./src/frontend/pascal/parsers/ExpressionParser.ts
 ./src/frontend/pascal/parsers/AssignmentStatementParser.ts
 ./src/frontend/pascal/parsers/ForStatementParser.ts
+./src/frontend/pascal/parsers/WhileStatementParser.ts
+./src/frontend/pascal/parsers/IfStatementParser.ts
+./src/frontend/pascal/parsers/CaseStatementParser.ts
+./src/frontend/pascal/parsers/RepeatStatementParser.ts
 ./src/frontend/pascal/parsers/CallParser.ts
 ./src/frontend/pascal/parsers/CallDeclaredParser.ts
 ./src/frontend/pascal/parsers/CallStandardParser.ts

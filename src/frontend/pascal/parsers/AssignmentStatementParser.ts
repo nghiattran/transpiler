@@ -83,6 +83,7 @@ export class AssignmentStatementParser extends StatementParser {
         // Parse the expression.  The ASSIGN node adopts the expression's
         // node as its second child.
         let expressionParser : ExpressionParser = new ExpressionParser(this);
+        
         let exprNode : ICodeNode = expressionParser.parse(token);
         assignNode.addChild(exprNode);
 

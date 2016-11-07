@@ -1,7 +1,5 @@
 import {StatementParser} from './StatementParser';
 import {ExpressionParser} from './ExpressionParser';
-import {AssignmentStatementParser} from './AssignmentStatementParser';
-import {CallDeclaredParser} from './CallDeclaredParser';
 
 import {PascalParser} from '../PascalParser';
 import {PascalTokenType} from '../PascalTokenType';

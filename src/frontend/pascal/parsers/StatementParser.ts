@@ -22,6 +22,11 @@ import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 import {CallParser} from './CallParser';
 import {CompoundStatementParser} from './CompoundStatementParser';
 import {AssignmentStatementParser} from './AssignmentStatementParser';
+import {ForStatementParser} from './ForStatementParser';
+import {WhileStatementParser} from './WhileStatementParser';
+import {RepeatStatementParser} from './RepeatStatementParser';
+import {IfStatementParser} from './IfStatementParser';
+import {CaseStatementParser} from './CaseStatementParser';
 
 // AssignmentStatementParser
 export class StatementParser extends PascalParser {
@@ -60,7 +65,7 @@ export class StatementParser extends PascalParser {
      * @throws Exception if an error occurred.
      */
     public parse(token : Token): ICodeNode {
-        let statementNode : ICodeNode= undefined;
+        let statementNode : ICodeNode = undefined;
         
         switch (<PascalTokenType> token.getType()) {
 
@@ -79,7 +84,6 @@ export class StatementParser extends PascalParser {
 
                 // Assignment statement or procedure call.
                 switch (<DefinitionImpl> idDefn) {
-
                     case DefinitionImpl.VARIABLE:
                     case DefinitionImpl.VALUE_PARM:
                     case DefinitionImpl.VAR_PARM:
@@ -113,37 +117,37 @@ export class StatementParser extends PascalParser {
                 break;
             }
 
-            // case PascalTokenType.REPEAT: {
-            //     let repeatParser : RepeatStatementParser =
-            //         new RepeatStatementParser(this);
-            //     statementNode = repeatParser.parse(token);
-            //     break;
-            // }
+            case PascalTokenType.REPEAT: {
+                let repeatParser : RepeatStatementParser =
+                    new RepeatStatementParser(this);
+                statementNode = repeatParser.parse(token);
+                break;
+            }
 
-            // case PascalTokenType.WHILE: {
-            //     let whileParser : WhileStatementParser =
-            //         new WhileStatementParser(this);
-            //     statementNode = whileParser.parse(token);
-            //     break;
-            // }
+            case PascalTokenType.WHILE: {
+                let whileParser : WhileStatementParser =
+                    new WhileStatementParser(this);
+                statementNode = whileParser.parse(token);
+                break;
+            }
 
-            // case PascalTokenType.FOR: {
-            //     let forParser : ForStatementParser= new ForStatementParser(this);
-            //     statementNode = forParser.parse(token);
-            //     break;
-            // }
+            case PascalTokenType.FOR: {
+                let forParser : ForStatementParser= new ForStatementParser(this);
+                statementNode = forParser.parse(token);
+                break;
+            }
 
-            // case PascalTokenType.IF: {
-            //     let ifParser : IfStatementParser = new IfStatementParser(this);
-            //     statementNode = ifParser.parse(token);
-            //     break;
-            // }
+            case PascalTokenType.IF: {
+                let ifParser : IfStatementParser = new IfStatementParser(this);
+                statementNode = ifParser.parse(token);
+                break;
+            }
 
-            // case PascalTokenType.CASE: {
-            //     let caseParser : CaseStatementParser = new CaseStatementParser(this);
-            //     statementNode = caseParser.parse(token);
-            //     break;
-            // }
+            case PascalTokenType.CASE: {
+                let caseParser : CaseStatementParser = new CaseStatementParser(this);
+                statementNode = caseParser.parse(token);
+                break;
+            }
 
             default: {
                 statementNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.NO_OP);

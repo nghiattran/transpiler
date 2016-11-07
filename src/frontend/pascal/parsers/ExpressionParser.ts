@@ -309,13 +309,16 @@ export class ExpressionParser extends StatementParser {
      * @throws Exception if an error occurred.
      */
     private parseTerm(token : Token) : ICodeNode {
+
         // Parse a factor and make its node the root node.
         let rootNode : ICodeNode = this.parseFactor(token);
+
         let resultType : TypeSpec = rootNode !== undefined ? rootNode.getTypeSpec()
                                                : Predefined.undefinedType;
-
         token = this.currentToken();
+
         let tokenType : TokenType = token.getType();
+        
 
         // Loop over multiplicative operators.
         while (ExpressionParser.MULT_OPS.contains(<PascalTokenType>tokenType)) {
@@ -423,7 +426,6 @@ export class ExpressionParser extends StatementParser {
         let rootNode : ICodeNode = undefined;
 
         switch (<PascalTokenType> tokenType) {
-
             case PascalTokenType.IDENTIFIER: {
                 return this.parseIdentifier(token);
             }
@@ -598,7 +600,6 @@ export class ExpressionParser extends StatementParser {
                 break;
             }
         }
-
         return rootNode;
     }
 }
