@@ -2,9 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 
-let files   = [];
-
-files = `./src/frontend/pascal/parsers/StatementParser.ts
+let files = `./src/frontend/pascal/parsers/StatementParser.ts
 ./src/frontend/pascal/parsers/BlockParser.ts
 ./src/frontend/pascal/parsers/CompoundStatementParser.ts
 ./src/frontend/pascal/parsers/DeclarationsParser.ts

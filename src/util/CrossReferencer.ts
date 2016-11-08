@@ -10,14 +10,12 @@ import {SymTabKeyImpl} from '../intermediate/symtabimpl/SymTabKeyImpl';
 import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
 import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 
-let util = require('util');
-
 export class CrossReferencer {
     private static NAME_WIDTH : number = 16;
-    private static NAME_FORMAT : string       = "%s";
-    private static NUMBERS_LABEL : string     = " Line numbers    ";
-    private static NUMBERS_UNDERLINE : string = " ------------    ";
-    private static NUMBER_FORMAT : string     = " %03d";
+    private static NAME_FORMAT : string       = '%s';
+    private static NUMBERS_LABEL : string     = ' Line numbers    ';
+    private static NUMBERS_UNDERLINE : string = ' ------------    ';
+    private static NUMBER_FORMAT : string     = ' %03d';
 
     private static LABEL_WIDTH : number = CrossReferencer.NUMBERS_LABEL.length;
     private static INDENT_WIDTH : number = CrossReferencer.NAME_WIDTH + CrossReferencer.LABEL_WIDTH;
@@ -29,7 +27,7 @@ export class CrossReferencer {
      * @param symTabStack the symbol table stack.
      */
     public print(symTabStack : SymTabStack) : void {
-        console.info("\n===== CROSS-REFERENCE TABLE =====");
+        console.info('\n===== CROSS-REFERENCE TABLE =====');
 
         let programId : SymTabEntry = symTabStack.getProgramId();
         
@@ -43,8 +41,8 @@ export class CrossReferencer {
     private printRoutine(routineId : SymTabEntry) : void {
         let definition : Definition = routineId.getDefinition();
 
-        console.info("\n*** " + definition.toString() +
-                           " " + routineId.getName() + " ***");
+        console.info('\n*** ' + definition.toString() +
+                           ' ' + routineId.getName() + ' ***');
         this.printColumnHeadings();
 
         // Print the entries in the routine's symbol table.
@@ -73,10 +71,10 @@ export class CrossReferencer {
      * Print column headings.
      */
     private printColumnHeadings() : void {
-        console.info(util.format(CrossReferencer.NAME_FORMAT, "Identifier")
-                           + CrossReferencer.NUMBERS_LABEL +     "Type specification");
-        console.info(util.format(CrossReferencer.NAME_FORMAT, "----------")
-                           + CrossReferencer.NUMBERS_UNDERLINE + "------------------");
+        console.info(CrossReferencer.NAME_FORMAT, 'Identifier',
+                    CrossReferencer.NUMBERS_LABEL +     'Type specification');
+        console.info(CrossReferencer.NAME_FORMAT, '----------',
+                    CrossReferencer.NUMBERS_UNDERLINE + '------------------');
     }
     
     /**
@@ -120,8 +118,8 @@ export class CrossReferencer {
     private printEntry(entry : SymTabEntry, recordTypes : TypeSpec[]) : void {
         let definition : Definition = entry.getDefinition();
         let nestingLevel : number = entry.getSymTab().getNestingLevel();
-        console.info(CrossReferencer.INDENT + "Defined as: " + definition.getText());
-        console.info(CrossReferencer.INDENT + "Scope nesting level: " + nestingLevel);
+        console.info(CrossReferencer.INDENT + 'Defined as: ' + definition.getText());
+        console.info(CrossReferencer.INDENT + 'Scope nesting level: ' + nestingLevel);
 
         // Print the type specification.
         let type : TypeSpec = entry.getTypeSpec();
@@ -130,7 +128,7 @@ export class CrossReferencer {
         switch (<DefinitionImpl> definition) {
             case DefinitionImpl.CONSTANT: {
                 let value : Object = entry.getAttribute(SymTabKeyImpl.CONSTANT_VALUE);
-                console.info(CrossReferencer.INDENT + "Value = " + value);
+                console.info(CrossReferencer.INDENT + 'Value = ' + value);
 
                 // Print the type details only if the type is unnamed.
                 if (type.getIdentifier() === undefined) {
@@ -142,7 +140,7 @@ export class CrossReferencer {
 
             case DefinitionImpl.ENUMERATION_CONSTANT: {
                 let value : Object = entry.getAttribute(SymTabKeyImpl.CONSTANT_VALUE);
-                console.info(CrossReferencer.INDENT + "Value = " + value);
+                console.info(CrossReferencer.INDENT + 'Value = ' + value);
 
                 break;
             }
@@ -177,14 +175,14 @@ export class CrossReferencer {
         if (type !== undefined) {
             let form : TypeForm = type.getForm();
             let typeId : SymTabEntry = type.getIdentifier();
-            let typeName : string = typeId !== undefined ? typeId.getName() : "<unnamed>";
+            let typeName : string = typeId !== undefined ? typeId.getName() : '<unnamed>';
 
-            console.info(CrossReferencer.INDENT + "Type form = " + form +
-                               ", Type id = " + typeName);
+            console.info(CrossReferencer.INDENT + 'Type form = ' + form +
+                               ', Type id = ' + typeName);
         }
     }
 
-    private static ENUM_CONST_FORMAT : string = "%" + CrossReferencer.NAME_WIDTH + "s = %s";
+    private static ENUM_CONST_FORMAT : string = '%' + CrossReferencer.NAME_WIDTH + 's = %s';
 
     /**
      * Print the details of a type specification.
@@ -200,7 +198,7 @@ export class CrossReferencer {
                 let constantIds : SymTabEntry[] =
                     type.getAttribute(TypeKeyImpl.ENUMERATION_CONSTANTS) as SymTabEntry[];
 
-                console.info(CrossReferencer.INDENT + "--- Enumeration constants ---");
+                console.info(CrossReferencer.INDENT + '--- Enumeration constants ---');
 
                 for (let constantId of constantIds) {
                     let name : string = constantId.getName();
@@ -219,7 +217,7 @@ export class CrossReferencer {
                 let baseTypeSpec : TypeSpec =
                     type.getAttribute(TypeKeyImpl.SUBRANGE_BASE_TYPE) as TypeSpec;
 
-                console.info(CrossReferencer.INDENT + "--- Base type ---");
+                console.info(CrossReferencer.INDENT + '--- Base type ---');
                 this.printType(baseTypeSpec);
 
                 // Print the base type details only if the type is unnamed.
@@ -227,8 +225,8 @@ export class CrossReferencer {
                     this.printTypeDetail(baseTypeSpec, recordTypes);
                 }
 
-                console.info(CrossReferencer.INDENT + "Range = ");
-                console.info(this.toString(minValue) + ".." +
+                console.info(CrossReferencer.INDENT + 'Range = ');
+                console.info(this.toString(minValue) + '..' +
                                    this.toString(maxValue));
 
                 break;
@@ -241,7 +239,7 @@ export class CrossReferencer {
                     type.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE) as TypeSpec;
                 let count :number = type.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_COUNT) as number;
 
-                console.info(CrossReferencer.INDENT + "--- INDEX TYPE ---");
+                console.info(CrossReferencer.INDENT + '--- INDEX TYPE ---');
                 this.printType(indexType);
 
                 // Print the index type details only if the type is unnamed.
@@ -249,9 +247,9 @@ export class CrossReferencer {
                     this.printTypeDetail(indexType, recordTypes);
                 }
 
-                console.info(CrossReferencer.INDENT + "--- ELEMENT TYPE ---");
+                console.info(CrossReferencer.INDENT + '--- ELEMENT TYPE ---');
                 this.printType(elementType);
-                console.info(CrossReferencer.INDENT.toString() + count + " elements");
+                console.info(CrossReferencer.INDENT.toString() + count + ' elements');
 
                 // Print the element type details only if the type is unnamed.
                 if (elementType.getIdentifier() === undefined) {
@@ -275,9 +273,9 @@ export class CrossReferencer {
     private printRecords(recordTypes : TypeSpec[]) : void {
         for (let recordType of recordTypes) {
             let recordId : SymTabEntry = recordType.getIdentifier();
-            let name : string = recordId !== undefined ? recordId.getName() : "<unnamed>";
+            let name : string = recordId !== undefined ? recordId.getName() : '<unnamed>';
 
-            console.info("\n--- RECORD " + name + " ---");
+            console.info('\n--- RECORD ' + name + ' ---');
             this.printColumnHeadings();
 
             // Print the entries in the record's symbol table.
@@ -298,7 +296,7 @@ export class CrossReferencer {
      * @return the string.
      */
     private toString(value : Object) : string {
-        return value instanceof String ? "'" + value as string + "'"
+        return value instanceof String ? '"' + value as string + '"'
                                        : value.toString();
     }
 }

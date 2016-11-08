@@ -15,7 +15,6 @@ import {CrossReferencer} from './util/CrossReferencer';
 import {ParseTreePrinter} from './util/ParseTreePrinter';
 
 let fs = require('fs');
-let util = require('util');
 
 export class Pascal {
     private parser : Parser;            // language-independent parser

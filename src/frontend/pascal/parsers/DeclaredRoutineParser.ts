@@ -27,8 +27,6 @@ import {TypeFormImpl} from '../../../intermediate/typeimpl/TypeFormImpl';
 
 import {List} from '../../../util/List';
 
-let util = require('util');
-
 export class DeclaredRoutineParser extends DeclarationsParser {
     // Synchronization set for a formal parameter sublist.
     private static PARAMETER_SET : List<PascalTokenType> =
@@ -103,29 +101,29 @@ export class DeclaredRoutineParser extends DeclarationsParser {
             case PascalTokenType.PROGRAM: {
                 token = this.nextToken();  // consume PROGRAM
                 routineDefn = DefinitionImpl.PROGRAM;
-                dummyName = "DummyProgramName".toLowerCase();
+                dummyName = 'DummyProgramName'.toLowerCase();
                 break;
             }
 
             case PascalTokenType.PROCEDURE: {
                 token = this.nextToken();  // consume PROCEDURE
                 routineDefn = DefinitionImpl.PROCEDURE;
-                dummyName = "DummyProcedureName_".toLowerCase() +
-                            util.format("%03d", ++DeclaredRoutineParser.dummyCounter);
+                dummyName = 'DummyProcedureName_'.toLowerCase() +
+                            console.info('%03d', ++DeclaredRoutineParser.dummyCounter);
                 break;
             }
 
             case PascalTokenType.FUNCTION: {
                 token = this.nextToken();  // consume FUNCTION
                 routineDefn = DefinitionImpl.FUNCTION;
-                dummyName = "DummyFunctionName_".toLowerCase() +
-                            util.format("%03d", ++DeclaredRoutineParser.dummyCounter);
+                dummyName = 'DummyFunctionName_'.toLowerCase() +
+                            console.info('%03d', ++DeclaredRoutineParser.dummyCounter);
                 break;
             }
 
             default: {
                 routineDefn = DefinitionImpl.PROGRAM;
-                dummyName = "DummyProgramName".toLowerCase();
+                dummyName = 'DummyProgramName'.toLowerCase();
                 break;
             }
         }
