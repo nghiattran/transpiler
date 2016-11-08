@@ -5,7 +5,7 @@ import {SymTabFactory} from '../SymTabFactory';
 
 export class SymTabImpl extends TreeMap<SymTabEntry> implements SymTab {
     private nestingLevel : number;       // scope nesting level of this entry
-    private slotNumber : number;         // local letiables array slot number
+    private slotNumber : number;         // local variables array slot number
     private maxSlotNumber : number;      // max slot number value
 
     /**
@@ -56,7 +56,7 @@ export class SymTabImpl extends TreeMap<SymTabEntry> implements SymTab {
     }
 
     /**
-     * @return the next local letiables array slot number.
+     * @return the next local variables array slot number.
      */
     public nextSlotNumber() : number {
         this.maxSlotNumber = ++this.slotNumber;
@@ -64,7 +64,7 @@ export class SymTabImpl extends TreeMap<SymTabEntry> implements SymTab {
     }
 
     /**
-     * @return the maximum local letiables array slot number.
+     * @return the maximum local variables array slot number.
      */
     public getMaxSlotNumber() : number {
         return this.maxSlotNumber;

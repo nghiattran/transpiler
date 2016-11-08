@@ -20,7 +20,7 @@ import {TypeSpecificationParser} from './TypeSpecificationParser';
 export class VariableDeclarationsParser extends DeclarationsParser {
     private definition : Definition;  // how to define the identifier
 
-    // Synchronization set for a letiable identifier.
+    // Synchronization set for a variable identifier.
     static IDENTIFIER_SET : List<PascalTokenType> =
         DeclarationsParser.VAR_START_SET.clone();
     
@@ -82,7 +82,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
     }
 
     /**
-     * Parse letiable declarations.
+     * Parse variable declarations.
      * @param token the initial token.
      * @param parentId the symbol table entry of the parent routine's name.
      * @return undefined
@@ -91,7 +91,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
         token = this.synchronize(VariableDeclarationsParser.IDENTIFIER_SET);
         
-        // Loop to parse a sequence of letiable declarations
+        // Loop to parse a sequence of variable declarations
         // separated by semicolons.
         while (token.getType() === PascalTokenType.IDENTIFIER) {
             // Parse the identifier sublist and its type specification.
@@ -195,7 +195,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
                 id.setDefinition(this.definition);
                 id.appendLineNumber(token.getLineNumber());
 
-                // Set its slot number in the local letiables array.
+                // Set its slot number in the local variables array.
                 let slot : number = id.getSymTab().nextSlotNumber();
                 id.setAttribute(SymTabKeyImpl.SLOT, slot);
             }

@@ -88,7 +88,7 @@ export class ForStatementParser extends StatementParser {
         // Set the current line number attribute.
         this.setLineNumber(initAssignNode, targetToken);
 
-        // Type check: The control letiable's type must be integer
+        // Type check: The control variable's type must be integer
         //             or enumeration.
         if (!TypeChecker.isInteger(controlType) &&
             (controlType.getForm() !== TypeFormImpl.ENUMERATION))
@@ -131,7 +131,7 @@ export class ForStatementParser extends StatementParser {
         relOpNode.addChild(exprNode);
 
         // Type check: The termination expression type must be assignment
-        //             compatible with the control letiable's type.
+        //             compatible with the control variable's type.
         let exprType : TypeSpec = exprNode !== undefined ? exprNode.getTypeSpec()
                                              : Predefined.undefinedType;
         if (!TypeChecker.areAssignmentCompatible(controlType, exprType)) {
@@ -157,8 +157,8 @@ export class ForStatementParser extends StatementParser {
         let statementParser : StatementParser = new StatementParser(this);
         loopNode.addChild(statementParser.parse(token));
 
-        // Create an assignment with a copy of the control letiable
-        // to advance the value of the letiable.
+        // Create an assignment with a copy of the control variable
+        // to advance the value of the variable.
         let nextAssignNode : ICodeNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.ASSIGN);
         nextAssignNode.setTypeSpec(controlType);
         nextAssignNode.addChild(controlVarNode.copy());
@@ -169,7 +169,7 @@ export class ForStatementParser extends StatementParser {
                                                              ? ICodeNodeTypeImpl.ADD : ICodeNodeTypeImpl.SUBTRACT);
         arithOpNode.setTypeSpec(Predefined.integerType);
 
-        // The next operator node adopts a copy of the loop letiable as its
+        // The next operator node adopts a copy of the loop variable as its
         // first child and the value 1 as its second child.
         arithOpNode.addChild(controlVarNode.copy());
         let oneNode : ICodeNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.INTEGER_CONSTANT);

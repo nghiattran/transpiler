@@ -60,15 +60,15 @@ export class AssignmentStatementParser extends StatementParser {
         // Create the ASSIGN node.
         let assignNode : ICodeNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.ASSIGN);
 
-        // Parse the target letiable.
-        let letiableParser : VariableParser = new VariableParser(this);
+        // Parse the target variable.
+        let variableParser : VariableParser = new VariableParser(this);
         let targetNode : ICodeNode = this.isFunctionTarget
-                               ? letiableParser.parseFunctionNameTarget(token)
-                               : letiableParser.parse(token);
+                               ? variableParser.parseFunctionNameTarget(token)
+                               : variableParser.parse(token);
         let targetType : TypeSpec = targetNode !== undefined ? targetNode.getTypeSpec()
                                                  : Predefined.undefinedType;
 
-        // The ASSIGN node adopts the letiable node as its first child.
+        // The ASSIGN node adopts the variable node as its first child.
         assignNode.addChild(targetNode);
 
         // Synchronize on the := token.

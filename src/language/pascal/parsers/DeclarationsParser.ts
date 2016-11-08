@@ -87,10 +87,10 @@ export class DeclarationsParser extends PascalParser {
         if (token.getType() === PascalTokenType.VAR) {
             token = this.nextToken();  // consume VAR
             
-            let letiableDeclarationsParser : VariableDeclarationsParser =
+            let variableDeclarationsParser : VariableDeclarationsParser =
                 new VariableDeclarationsParser(this);
-            letiableDeclarationsParser.setDefinition(DefinitionImpl.VARIABLE);
-            letiableDeclarationsParser.parse(token, undefined);
+            variableDeclarationsParser.setDefinition(DefinitionImpl.VARIABLE);
+            variableDeclarationsParser.parse(token, undefined);
         }
 
         token = this.synchronize(DeclarationsParser.ROUTINE_START_SET);

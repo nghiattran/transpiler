@@ -185,11 +185,11 @@ class BackendMessageListener implements MessageListener {
                 if (this.parent.assign) {
                     let body : Object[] = message.getBody() as Object[];
                     let lineNumber : number = body[0] as number;
-                    let letiableName : string = body[1] as string;
+                    let variableName : string = body[1] as string;
                     let value : Object = body[2] as Object;
 
                     console.info(Pascal.ASSIGN_FORMAT,
-                                      lineNumber, letiableName, value);
+                                      lineNumber, variableName, value);
                 }
                 break;
             }
@@ -198,11 +198,11 @@ class BackendMessageListener implements MessageListener {
                 if (this.parent.fetch) {
                     let body : Object[] = message.getBody() as Object[];
                     let lineNumber : number = body[0] as number;
-                    let letiableName : string = body[1] as string;
+                    let variableName : string = body[1] as string;
                     let value : Object = body[2] as Object;
 
                     console.info(Pascal.FETCH_FORMAT,
-                                      lineNumber, letiableName, value);
+                                      lineNumber, variableName, value);
                 }
                 break;
             }

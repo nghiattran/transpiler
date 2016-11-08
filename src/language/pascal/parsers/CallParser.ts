@@ -127,7 +127,7 @@ export class CallParser extends StatementParser {
                 }
             }
 
-            // read or readln: Each actual parameter must be a letiable that is
+            // read or readln: Each actual parameter must be a variable that is
             //                 a scalar, boolean, or subrange of integer.
             else if (isReadReadln) {
                 let type : TypeSpec = actualNode.getTypeSpec();
@@ -216,7 +216,7 @@ export class CallParser extends StatementParser {
         let formalType : TypeSpec = formalId.getTypeSpec();
         let actualType : TypeSpec = actualNode.getTypeSpec();
 
-        // VAR parameter: The actual parameter must be a letiable of the same
+        // VAR parameter: The actual parameter must be a variable of the same
         //                type as the formal parameter.
         if (formalDefn === DefinitionImpl.VAR_PARM) {
             if ((actualNode.getType() !== ICodeNodeTypeImpl.VARIABLE) ||

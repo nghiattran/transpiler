@@ -149,7 +149,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         }
 
         // Program: Set the program identifier in the symbol table stack.
-        // Set the initial local letiables array slot number to 1.
+        // Set the initial local variables array slot number to 1.
         if (routineDefn === DefinitionImpl.PROGRAM) {
             DeclaredRoutineParser.symTabStack.setProgramId(routineId);
             DeclaredRoutineParser.symTabStack.getLocalSymTab().nextSlotNumber();  // bump slot number
@@ -264,10 +264,10 @@ export class DeclaredRoutineParser extends DeclarationsParser {
 
         // If this is a function, parse and set its return type.
         if (routineId.getDefinition() === DefinitionImpl.FUNCTION) {
-            let letiableDeclarationsParser : VariableDeclarationsParser=
+            let variableDeclarationsParser : VariableDeclarationsParser=
                 new VariableDeclarationsParser(this);
-            letiableDeclarationsParser.setDefinition(DefinitionImpl.FUNCTION);
-            let type : TypeSpec = letiableDeclarationsParser.parseTypeSpec(token);
+            variableDeclarationsParser.setDefinition(DefinitionImpl.FUNCTION);
+            let type : TypeSpec = variableDeclarationsParser.parseTypeSpec(token);
 
             token = this.currentToken();
 
@@ -356,12 +356,12 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         }
 
         // Parse the parameter sublist and its type specification.
-        let letiableDeclarationsParser : VariableDeclarationsParser =
+        let variableDeclarationsParser : VariableDeclarationsParser =
             new VariableDeclarationsParser(this);
-        letiableDeclarationsParser.setDefinition(parmDefn);
+        variableDeclarationsParser.setDefinition(parmDefn);
         
         let sublist : List<SymTabEntry> =
-            letiableDeclarationsParser.parseIdentifierSublist(
+            variableDeclarationsParser.parseIdentifierSublist(
                                            token, DeclaredRoutineParser.PARAMETER_FOLLOW_SET,
                                            DeclaredRoutineParser.COMMA_SET);
         token = this.currentToken();

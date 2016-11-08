@@ -412,10 +412,10 @@ export class DeclarationsParser extends PascalParser {
         if (token.getType() === PascalTokenType.VAR) {
             token = this.nextToken();  // consume VAR
             
-            let letiableDeclarationsParser : VariableDeclarationsParser =
+            let variableDeclarationsParser : VariableDeclarationsParser =
                 new VariableDeclarationsParser(this);
-            letiableDeclarationsParser.setDefinition(DefinitionImpl.VARIABLE);
-            letiableDeclarationsParser.parse(token, undefined);
+            variableDeclarationsParser.setDefinition(DefinitionImpl.VARIABLE);
+            variableDeclarationsParser.parse(token, undefined);
         }
 
         token = this.synchronize(DeclarationsParser.ROUTINE_START_SET);
@@ -1403,7 +1403,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         }
 
         // Program: Set the program identifier in the symbol table stack.
-        // Set the initial local letiables array slot number to 1.
+        // Set the initial local variables array slot number to 1.
         if (routineDefn === DefinitionImpl.PROGRAM) {
             DeclaredRoutineParser.symTabStack.setProgramId(routineId);
             DeclaredRoutineParser.symTabStack.getLocalSymTab().nextSlotNumber();  // bump slot number
@@ -1518,10 +1518,10 @@ export class DeclaredRoutineParser extends DeclarationsParser {
 
         // If this is a function, parse and set its return type.
         if (routineId.getDefinition() === DefinitionImpl.FUNCTION) {
-            let letiableDeclarationsParser : VariableDeclarationsParser=
+            let variableDeclarationsParser : VariableDeclarationsParser=
                 new VariableDeclarationsParser(this);
-            letiableDeclarationsParser.setDefinition(DefinitionImpl.FUNCTION);
-            let type : TypeSpec = letiableDeclarationsParser.parseTypeSpec(token);
+            variableDeclarationsParser.setDefinition(DefinitionImpl.FUNCTION);
+            let type : TypeSpec = variableDeclarationsParser.parseTypeSpec(token);
 
             token = this.currentToken();
 
@@ -1610,12 +1610,12 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         }
 
         // Parse the parameter sublist and its type specification.
-        let letiableDeclarationsParser : VariableDeclarationsParser =
+        let variableDeclarationsParser : VariableDeclarationsParser =
             new VariableDeclarationsParser(this);
-        letiableDeclarationsParser.setDefinition(parmDefn);
+        variableDeclarationsParser.setDefinition(parmDefn);
         
         let sublist : List<SymTabEntry> =
-            letiableDeclarationsParser.parseIdentifierSublist(
+            variableDeclarationsParser.parseIdentifierSublist(
                                            token, DeclaredRoutineParser.PARAMETER_FOLLOW_SET,
                                            DeclaredRoutineParser.COMMA_SET);
         token = this.currentToken();
@@ -1861,10 +1861,10 @@ export class RecordTypeParser extends TypeSpecificationParser {
         recordType.setAttribute(TypeKeyImpl.RECORD_SYMTAB, RecordTypeParser.symTabStack.push());
 
         // Parse the field declarations.
-        let letiableDeclarationsParser : VariableDeclarationsParser =
+        let variableDeclarationsParser : VariableDeclarationsParser =
             new VariableDeclarationsParser(this);
-        letiableDeclarationsParser.setDefinition(DefinitionImpl.FIELD);
-        letiableDeclarationsParser.parse(token, undefined);
+        variableDeclarationsParser.setDefinition(DefinitionImpl.FIELD);
+        variableDeclarationsParser.parse(token, undefined);
 
         // Pop off the record's symbol table.
         RecordTypeParser.symTabStack.pop();
@@ -2020,7 +2020,7 @@ export class SubrangeTypeParser extends TypeSpecificationParser {
 export class VariableDeclarationsParser extends DeclarationsParser {
     private definition : Definition;  // how to define the identifier
 
-    // Synchronization set for a letiable identifier.
+    // Synchronization set for a variable identifier.
     static IDENTIFIER_SET : List<PascalTokenType> =
         DeclarationsParser.VAR_START_SET.clone();
     
@@ -2082,7 +2082,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
     }
 
     /**
-     * Parse letiable declarations.
+     * Parse variable declarations.
      * @param token the initial token.
      * @param parentId the symbol table entry of the parent routine's name.
      * @return undefined
@@ -2091,7 +2091,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
         token = this.synchronize(VariableDeclarationsParser.IDENTIFIER_SET);
         
-        // Loop to parse a sequence of letiable declarations
+        // Loop to parse a sequence of variable declarations
         // separated by semicolons.
         while (token.getType() === PascalTokenType.IDENTIFIER) {
             // Parse the identifier sublist and its type specification.
@@ -2195,7 +2195,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
                 id.setDefinition(this.definition);
                 id.appendLineNumber(token.getLineNumber());
 
-                // Set its slot number in the local letiables array.
+                // Set its slot number in the local variables array.
                 let slot : number = id.getSymTab().nextSlotNumber();
                 id.setAttribute(SymTabKeyImpl.SLOT, slot);
             }
@@ -2814,8 +2814,8 @@ export class ExpressionParser extends StatementParser {
             }
 
             default: {
-                let letiableParser : VariableParser = new VariableParser(this);
-                rootNode = letiableParser.parse(token, id);
+                let variableParser : VariableParser = new VariableParser(this);
+                rootNode = variableParser.parse(token, id);
                 break;
             }
         }
@@ -2864,15 +2864,15 @@ export class AssignmentStatementParser extends StatementParser {
         // Create the ASSIGN node.
         let assignNode : ICodeNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.ASSIGN);
 
-        // Parse the target letiable.
-        let letiableParser : VariableParser = new VariableParser(this);
+        // Parse the target variable.
+        let variableParser : VariableParser = new VariableParser(this);
         let targetNode : ICodeNode = this.isFunctionTarget
-                               ? letiableParser.parseFunctionNameTarget(token)
-                               : letiableParser.parse(token);
+                               ? variableParser.parseFunctionNameTarget(token)
+                               : variableParser.parse(token);
         let targetType : TypeSpec = targetNode !== undefined ? targetNode.getTypeSpec()
                                                  : Predefined.undefinedType;
 
-        // The ASSIGN node adopts the letiable node as its first child.
+        // The ASSIGN node adopts the variable node as its first child.
         assignNode.addChild(targetNode);
 
         // Synchronize on the := token.
@@ -2975,7 +2975,7 @@ export class ForStatementParser extends StatementParser {
         // Set the current line number attribute.
         this.setLineNumber(initAssignNode, targetToken);
 
-        // Type check: The control letiable's type must be integer
+        // Type check: The control variable's type must be integer
         //             or enumeration.
         if (!TypeChecker.isInteger(controlType) &&
             (controlType.getForm() !== TypeFormImpl.ENUMERATION))
@@ -3018,7 +3018,7 @@ export class ForStatementParser extends StatementParser {
         relOpNode.addChild(exprNode);
 
         // Type check: The termination expression type must be assignment
-        //             compatible with the control letiable's type.
+        //             compatible with the control variable's type.
         let exprType : TypeSpec = exprNode !== undefined ? exprNode.getTypeSpec()
                                              : Predefined.undefinedType;
         if (!TypeChecker.areAssignmentCompatible(controlType, exprType)) {
@@ -3044,8 +3044,8 @@ export class ForStatementParser extends StatementParser {
         let statementParser : StatementParser = new StatementParser(this);
         loopNode.addChild(statementParser.parse(token));
 
-        // Create an assignment with a copy of the control letiable
-        // to advance the value of the letiable.
+        // Create an assignment with a copy of the control variable
+        // to advance the value of the variable.
         let nextAssignNode : ICodeNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.ASSIGN);
         nextAssignNode.setTypeSpec(controlType);
         nextAssignNode.addChild(controlVarNode.copy());
@@ -3056,7 +3056,7 @@ export class ForStatementParser extends StatementParser {
                                                              ? ICodeNodeTypeImpl.ADD : ICodeNodeTypeImpl.SUBTRACT);
         arithOpNode.setTypeSpec(Predefined.integerType);
 
-        // The next operator node adopts a copy of the loop letiable as its
+        // The next operator node adopts a copy of the loop variable as its
         // first child and the value 1 as its second child.
         arithOpNode.addChild(controlVarNode.copy());
         let oneNode : ICodeNode = ICodeFactory.createICodeNode(ICodeNodeTypeImpl.INTEGER_CONSTANT);
@@ -3767,7 +3767,7 @@ export class CallParser extends StatementParser {
                 }
             }
 
-            // read or readln: Each actual parameter must be a letiable that is
+            // read or readln: Each actual parameter must be a variable that is
             //                 a scalar, boolean, or subrange of integer.
             else if (isReadReadln) {
                 let type : TypeSpec = actualNode.getTypeSpec();
@@ -3856,7 +3856,7 @@ export class CallParser extends StatementParser {
         let formalType : TypeSpec = formalId.getTypeSpec();
         let actualType : TypeSpec = actualNode.getTypeSpec();
 
-        // VAR parameter: The actual parameter must be a letiable of the same
+        // VAR parameter: The actual parameter must be a variable of the same
         //                type as the formal parameter.
         if (formalDefn === DefinitionImpl.VAR_PARM) {
             if ((actualNode.getType() !== ICodeNodeTypeImpl.VARIABLE) ||
@@ -4409,30 +4409,30 @@ export class VariableParser extends StatementParser {
     }
 
     /**
-     * Parse a letiable.
+     * Parse a variable.
      * @param token the initial token.
-     * @param letiableId the symbol table entry of the letiable identifier.
+     * @param variableId the symbol table entry of the variable identifier.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    public parse(token : Token, letiableId? : SymTabEntry) : ICodeNode{
-        if(letiableId) {
-            return this.parseTokenSymTab(token, letiableId);
+    public parse(token : Token, variableId? : SymTabEntry) : ICodeNode{
+        if(variableId) {
+            return this.parseTokenSymTab(token, variableId);
         } else {
             return this.parseTokenOnly(token);
         }
     }
 
     /**
-     * Parse a letiable.
+     * Parse a variable.
      * @param token the initial token.
-     * @param letiableId the symbol table entry of the letiable identifier.
+     * @param variableId the symbol table entry of the variable identifier.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    public parseTokenSymTab(token : Token, letiableId : SymTabEntry) : ICodeNode{
-        // Check how the letiable is defined.
-        let defnCode : Definition = letiableId.getDefinition();
+    public parseTokenSymTab(token : Token, variableId : SymTabEntry) : ICodeNode{
+        // Check how the variable is defined.
+        let defnCode : Definition = variableId.getDefinition();
         if (! ( (defnCode === DefinitionImpl.VARIABLE) || (defnCode === DefinitionImpl.VALUE_PARM) ||
                 (defnCode === DefinitionImpl.VAR_PARM) ||
                 (this.isFunctionTarget && (defnCode === DefinitionImpl.FUNCTION) )
@@ -4442,37 +4442,37 @@ export class VariableParser extends StatementParser {
             VariableParser.errorHandler.flag(token, PascalErrorCode.INVALID_IDENTIFIER_USAGE, this);
         }
 
-        letiableId.appendLineNumber(token.getLineNumber());
+        variableId.appendLineNumber(token.getLineNumber());
 
-        let letiableNode : ICodeNode =
+        let variableNode : ICodeNode =
             ICodeFactory.createICodeNode(ICodeNodeTypeImpl.VARIABLE);
-        letiableNode.setAttribute(ICodeKeyImpl.ID, letiableId);
+        variableNode.setAttribute(ICodeKeyImpl.ID, variableId);
 
         token = this.nextToken();  // consume the identifier
-        let letiableType : TypeSpec = letiableId.getTypeSpec();
+        let variableType : TypeSpec = variableId.getTypeSpec();
 
         if (!this.isFunctionTarget) {
             // Parse array subscripts or record fields.
             while (VariableParser.SUBSCRIPT_FIELD_START_SET.contains(<PascalTokenType>token.getType())) {
                 let subFldNode : ICodeNode = token.getType() === PascalTokenType.LEFT_BRACKET
-                                       ? this.parseSubscripts(letiableType)
-                                       : this.parseField(letiableType);
+                                       ? this.parseSubscripts(variableType)
+                                       : this.parseField(variableType);
                 token = this.currentToken();
 
-                // Update the letiable's type.
-                // The letiable node adopts the SUBSCRIPTS or FIELD node.
-                letiableType = subFldNode.getTypeSpec();
-                letiableNode.addChild(subFldNode);
+                // Update the variable's type.
+                // The variable node adopts the SUBSCRIPTS or FIELD node.
+                variableType = subFldNode.getTypeSpec();
+                variableNode.addChild(subFldNode);
             }
         }
 
-        letiableNode.setTypeSpec(letiableType);
+        variableNode.setTypeSpec(variableType);
         
-        return letiableNode;
+        return variableNode;
     }
 
     /**
-     * Parse a letiable.
+     * Parse a variable.
      * @param token the initial token.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
@@ -4480,27 +4480,27 @@ export class VariableParser extends StatementParser {
     public parseTokenOnly(token : Token) : ICodeNode {
         // Look up the identifier in the symbol table stack.
         let name : string = token.getText().toLowerCase();
-        let letiableId : SymTabEntry = VariableParser.symTabStack.lookup(name);
+        let variableId : SymTabEntry = VariableParser.symTabStack.lookup(name);
 
         // If not found, flag the error and enter the identifier
         // as an undefined identifier with an undefined type.
-        if (letiableId === undefined) {
+        if (variableId === undefined) {
             VariableParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_UNDEFINED, this);
-            letiableId = VariableParser.symTabStack.enterLocal(name);
-            letiableId.setDefinition(DefinitionImpl.UNDEFINED);
-            letiableId.setTypeSpec(Predefined.undefinedType);
+            variableId = VariableParser.symTabStack.enterLocal(name);
+            variableId.setDefinition(DefinitionImpl.UNDEFINED);
+            variableId.setTypeSpec(Predefined.undefinedType);
         }
 
-        return this.parse(token, letiableId);
+        return this.parse(token, variableId);
     }
 
     /**
      * Parse a set of comma-separated subscript expressions.
-     * @param letiableType the type of the array letiable.
+     * @param variableType the type of the array variable.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    private parseSubscripts(letiableType : TypeSpec) : ICodeNode{
+    private parseSubscripts(variableType : TypeSpec) : ICodeNode{
         let token : Token;
         let expressionParser : ExpressionParser = new ExpressionParser(this);
 
@@ -4510,8 +4510,8 @@ export class VariableParser extends StatementParser {
         do {
             token = this.nextToken();  // consume the [ or , token
 
-            // The current letiable is an array.
-            if (letiableType.getForm() === TypeFormImpl.ARRAY) {
+            // The current variable is an array.
+            if (variableType.getForm() === TypeFormImpl.ARRAY) {
 
                 // Parse the subscript expression.
                 let exprNode : ICodeNode = expressionParser.parse(token);
@@ -4521,7 +4521,7 @@ export class VariableParser extends StatementParser {
                 // The subscript expression type must be assignment
                 // compatible with the array index type.
                 let indexType : TypeSpec =
-                    <TypeSpec> letiableType.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE);
+                    <TypeSpec> variableType.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE);
                 if (!TypeChecker.areAssignmentCompatible(indexType, exprType)) {
                     VariableParser.errorHandler.flag(token, PascalErrorCode.INCOMPATIBLE_TYPES, this);
                 }
@@ -4529,9 +4529,9 @@ export class VariableParser extends StatementParser {
                 // The SUBSCRIPTS node adopts the subscript expression tree.
                 subscriptsNode.addChild(exprNode);
 
-                // Update the letiable's type.
-                letiableType =
-                    <TypeSpec> letiableType.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE);
+                // Update the variable's type.
+                variableType =
+                    <TypeSpec> variableType.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE);
             }
 
             // Not an array type, so too many subscripts.
@@ -4552,31 +4552,31 @@ export class VariableParser extends StatementParser {
             VariableParser.errorHandler.flag(token, PascalErrorCode.MISSING_RIGHT_BRACKET, this);
         }
 
-        subscriptsNode.setTypeSpec(letiableType);
+        subscriptsNode.setTypeSpec(variableType);
         return subscriptsNode;
     }
 
     /**
      * Parse a record field.
-     * @param letiableType the type of the record letiable.
+     * @param variableType the type of the record variable.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    private parseField(letiableType : TypeSpec) : ICodeNode {
+    private parseField(variableType : TypeSpec) : ICodeNode {
         // Create a FIELD node.
         let fieldNode : ICodeNode = ICodeFactory.createICodeNode(DefinitionImpl.FIELD);
 
         let token : Token = this.nextToken();  // consume the . token
         let tokenType : TokenType = token.getType();
-        let letiableForm : TypeForm = letiableType.getForm();
+        let variableForm : TypeForm = variableType.getForm();
 
-        if ((tokenType === PascalTokenType.IDENTIFIER) && (letiableForm === TypeFormImpl.RECORD)) {
-            let symTab : SymTab = <SymTab> letiableType.getAttribute(TypeKeyImpl.RECORD_SYMTAB);
+        if ((tokenType === PascalTokenType.IDENTIFIER) && (variableForm === TypeFormImpl.RECORD)) {
+            let symTab : SymTab = <SymTab> variableType.getAttribute(TypeKeyImpl.RECORD_SYMTAB);
             let fieldName : string = token.getText().toLowerCase();
             let fieldId : SymTabEntry = symTab.lookup(fieldName);
 
             if (fieldId !== undefined) {
-                letiableType = fieldId.getTypeSpec();
+                variableType = fieldId.getTypeSpec();
                 fieldId.appendLineNumber(token.getLineNumber());
 
                 // Set the field identifier's name.
@@ -4592,7 +4592,7 @@ export class VariableParser extends StatementParser {
 
         token = this.nextToken();  // consume the field identifier
 
-        fieldNode.setTypeSpec(letiableType);
+        fieldNode.setTypeSpec(variableType);
         return fieldNode;
     }
 }

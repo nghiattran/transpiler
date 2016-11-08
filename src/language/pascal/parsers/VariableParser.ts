@@ -77,30 +77,30 @@ export class VariableParser extends StatementParser {
     }
 
     /**
-     * Parse a letiable.
+     * Parse a variable.
      * @param token the initial token.
-     * @param letiableId the symbol table entry of the letiable identifier.
+     * @param variableId the symbol table entry of the variable identifier.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    public parse(token : Token, letiableId? : SymTabEntry) : ICodeNode{
-        if(letiableId) {
-            return this.parseTokenSymTab(token, letiableId);
+    public parse(token : Token, variableId? : SymTabEntry) : ICodeNode{
+        if(variableId) {
+            return this.parseTokenSymTab(token, variableId);
         } else {
             return this.parseTokenOnly(token);
         }
     }
 
     /**
-     * Parse a letiable.
+     * Parse a variable.
      * @param token the initial token.
-     * @param letiableId the symbol table entry of the letiable identifier.
+     * @param variableId the symbol table entry of the variable identifier.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    public parseTokenSymTab(token : Token, letiableId : SymTabEntry) : ICodeNode{
-        // Check how the letiable is defined.
-        let defnCode : Definition = letiableId.getDefinition();
+    public parseTokenSymTab(token : Token, variableId : SymTabEntry) : ICodeNode{
+        // Check how the variable is defined.
+        let defnCode : Definition = variableId.getDefinition();
         if (! ( (defnCode === DefinitionImpl.VARIABLE) || (defnCode === DefinitionImpl.VALUE_PARM) ||
                 (defnCode === DefinitionImpl.VAR_PARM) ||
                 (this.isFunctionTarget && (defnCode === DefinitionImpl.FUNCTION) )
@@ -110,37 +110,37 @@ export class VariableParser extends StatementParser {
             VariableParser.errorHandler.flag(token, PascalErrorCode.INVALID_IDENTIFIER_USAGE, this);
         }
 
-        letiableId.appendLineNumber(token.getLineNumber());
+        variableId.appendLineNumber(token.getLineNumber());
 
-        let letiableNode : ICodeNode =
+        let variableNode : ICodeNode =
             ICodeFactory.createICodeNode(ICodeNodeTypeImpl.VARIABLE);
-        letiableNode.setAttribute(ICodeKeyImpl.ID, letiableId);
+        variableNode.setAttribute(ICodeKeyImpl.ID, variableId);
 
         token = this.nextToken();  // consume the identifier
-        let letiableType : TypeSpec = letiableId.getTypeSpec();
+        let variableType : TypeSpec = variableId.getTypeSpec();
 
         if (!this.isFunctionTarget) {
             // Parse array subscripts or record fields.
             while (VariableParser.SUBSCRIPT_FIELD_START_SET.contains(<PascalTokenType>token.getType())) {
                 let subFldNode : ICodeNode = token.getType() === PascalTokenType.LEFT_BRACKET
-                                       ? this.parseSubscripts(letiableType)
-                                       : this.parseField(letiableType);
+                                       ? this.parseSubscripts(variableType)
+                                       : this.parseField(variableType);
                 token = this.currentToken();
 
-                // Update the letiable's type.
-                // The letiable node adopts the SUBSCRIPTS or FIELD node.
-                letiableType = subFldNode.getTypeSpec();
-                letiableNode.addChild(subFldNode);
+                // Update the variable's type.
+                // The variable node adopts the SUBSCRIPTS or FIELD node.
+                variableType = subFldNode.getTypeSpec();
+                variableNode.addChild(subFldNode);
             }
         }
 
-        letiableNode.setTypeSpec(letiableType);
+        variableNode.setTypeSpec(variableType);
         
-        return letiableNode;
+        return variableNode;
     }
 
     /**
-     * Parse a letiable.
+     * Parse a variable.
      * @param token the initial token.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
@@ -148,27 +148,27 @@ export class VariableParser extends StatementParser {
     public parseTokenOnly(token : Token) : ICodeNode {
         // Look up the identifier in the symbol table stack.
         let name : string = token.getText().toLowerCase();
-        let letiableId : SymTabEntry = VariableParser.symTabStack.lookup(name);
+        let variableId : SymTabEntry = VariableParser.symTabStack.lookup(name);
 
         // If not found, flag the error and enter the identifier
         // as an undefined identifier with an undefined type.
-        if (letiableId === undefined) {
+        if (variableId === undefined) {
             VariableParser.errorHandler.flag(token, PascalErrorCode.IDENTIFIER_UNDEFINED, this);
-            letiableId = VariableParser.symTabStack.enterLocal(name);
-            letiableId.setDefinition(DefinitionImpl.UNDEFINED);
-            letiableId.setTypeSpec(Predefined.undefinedType);
+            variableId = VariableParser.symTabStack.enterLocal(name);
+            variableId.setDefinition(DefinitionImpl.UNDEFINED);
+            variableId.setTypeSpec(Predefined.undefinedType);
         }
 
-        return this.parse(token, letiableId);
+        return this.parse(token, variableId);
     }
 
     /**
      * Parse a set of comma-separated subscript expressions.
-     * @param letiableType the type of the array letiable.
+     * @param variableType the type of the array variable.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    private parseSubscripts(letiableType : TypeSpec) : ICodeNode{
+    private parseSubscripts(variableType : TypeSpec) : ICodeNode{
         let token : Token;
         let expressionParser : ExpressionParser = new ExpressionParser(this);
 
@@ -178,8 +178,8 @@ export class VariableParser extends StatementParser {
         do {
             token = this.nextToken();  // consume the [ or , token
 
-            // The current letiable is an array.
-            if (letiableType.getForm() === TypeFormImpl.ARRAY) {
+            // The current variable is an array.
+            if (variableType.getForm() === TypeFormImpl.ARRAY) {
 
                 // Parse the subscript expression.
                 let exprNode : ICodeNode = expressionParser.parse(token);
@@ -189,7 +189,7 @@ export class VariableParser extends StatementParser {
                 // The subscript expression type must be assignment
                 // compatible with the array index type.
                 let indexType : TypeSpec =
-                    <TypeSpec> letiableType.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE);
+                    <TypeSpec> variableType.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE);
                 if (!TypeChecker.areAssignmentCompatible(indexType, exprType)) {
                     VariableParser.errorHandler.flag(token, PascalErrorCode.INCOMPATIBLE_TYPES, this);
                 }
@@ -197,9 +197,9 @@ export class VariableParser extends StatementParser {
                 // The SUBSCRIPTS node adopts the subscript expression tree.
                 subscriptsNode.addChild(exprNode);
 
-                // Update the letiable's type.
-                letiableType =
-                    <TypeSpec> letiableType.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE);
+                // Update the variable's type.
+                variableType =
+                    <TypeSpec> variableType.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE);
             }
 
             // Not an array type, so too many subscripts.
@@ -220,31 +220,31 @@ export class VariableParser extends StatementParser {
             VariableParser.errorHandler.flag(token, PascalErrorCode.MISSING_RIGHT_BRACKET, this);
         }
 
-        subscriptsNode.setTypeSpec(letiableType);
+        subscriptsNode.setTypeSpec(variableType);
         return subscriptsNode;
     }
 
     /**
      * Parse a record field.
-     * @param letiableType the type of the record letiable.
+     * @param variableType the type of the record variable.
      * @return the root node of the generated parse tree.
      * @throws Exception if an error occurred.
      */
-    private parseField(letiableType : TypeSpec) : ICodeNode {
+    private parseField(variableType : TypeSpec) : ICodeNode {
         // Create a FIELD node.
         let fieldNode : ICodeNode = ICodeFactory.createICodeNode(DefinitionImpl.FIELD);
 
         let token : Token = this.nextToken();  // consume the . token
         let tokenType : TokenType = token.getType();
-        let letiableForm : TypeForm = letiableType.getForm();
+        let variableForm : TypeForm = variableType.getForm();
 
-        if ((tokenType === PascalTokenType.IDENTIFIER) && (letiableForm === TypeFormImpl.RECORD)) {
-            let symTab : SymTab = <SymTab> letiableType.getAttribute(TypeKeyImpl.RECORD_SYMTAB);
+        if ((tokenType === PascalTokenType.IDENTIFIER) && (variableForm === TypeFormImpl.RECORD)) {
+            let symTab : SymTab = <SymTab> variableType.getAttribute(TypeKeyImpl.RECORD_SYMTAB);
             let fieldName : string = token.getText().toLowerCase();
             let fieldId : SymTabEntry = symTab.lookup(fieldName);
 
             if (fieldId !== undefined) {
-                letiableType = fieldId.getTypeSpec();
+                variableType = fieldId.getTypeSpec();
                 fieldId.appendLineNumber(token.getLineNumber());
 
                 // Set the field identifier's name.
@@ -260,7 +260,7 @@ export class VariableParser extends StatementParser {
 
         token = this.nextToken();  // consume the field identifier
 
-        fieldNode.setTypeSpec(letiableType);
+        fieldNode.setTypeSpec(variableType);
         return fieldNode;
     }
 }

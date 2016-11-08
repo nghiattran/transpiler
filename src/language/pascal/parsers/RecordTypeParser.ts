@@ -55,10 +55,10 @@ export class RecordTypeParser extends TypeSpecificationParser {
         recordType.setAttribute(TypeKeyImpl.RECORD_SYMTAB, RecordTypeParser.symTabStack.push());
 
         // Parse the field declarations.
-        let letiableDeclarationsParser : VariableDeclarationsParser =
+        let variableDeclarationsParser : VariableDeclarationsParser =
             new VariableDeclarationsParser(this);
-        letiableDeclarationsParser.setDefinition(DefinitionImpl.FIELD);
-        letiableDeclarationsParser.parse(token, undefined);
+        variableDeclarationsParser.setDefinition(DefinitionImpl.FIELD);
+        variableDeclarationsParser.parse(token, undefined);
 
         // Pop off the record's symbol table.
         RecordTypeParser.symTabStack.pop();

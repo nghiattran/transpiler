@@ -595,8 +595,8 @@ export class ExpressionParser extends StatementParser {
             }
 
             default: {
-                let letiableParser : VariableParser = new VariableParser(this);
-                rootNode = letiableParser.parse(token, id);
+                let variableParser : VariableParser = new VariableParser(this);
+                rootNode = variableParser.parse(token, id);
                 break;
             }
         }

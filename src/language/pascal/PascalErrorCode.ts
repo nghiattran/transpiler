@@ -30,7 +30,7 @@ export class PascalErrorCode {
     static MISSING_DOT_DOT : PascalErrorCode = new PascalErrorCode('Missing ..');
     static MISSING_END : PascalErrorCode = new PascalErrorCode('Missing END');
     static MISSING_EQUALS : PascalErrorCode = new PascalErrorCode('Missing =');
-    static MISSING_FOR_CONTROL : PascalErrorCode = new PascalErrorCode('Invalid FOR control letiable');
+    static MISSING_FOR_CONTROL : PascalErrorCode = new PascalErrorCode('Invalid FOR control variable');
     static MISSING_IDENTIFIER : PascalErrorCode = new PascalErrorCode('Missing identifier');
     static MISSING_LEFT_BRACKET : PascalErrorCode = new PascalErrorCode('Missing [');
     static MISSING_OF : PascalErrorCode = new PascalErrorCode('Missing OF');
@@ -42,9 +42,9 @@ export class PascalErrorCode {
     static MISSING_THEN : PascalErrorCode = new PascalErrorCode('Missing THEN');
     static MISSING_TO_DOWNTO : PascalErrorCode = new PascalErrorCode('Missing TO or DOWNTO');
     static MISSING_UNTIL : PascalErrorCode = new PascalErrorCode('Missing UNTIL');
-    static MISSING_VARIABLE : PascalErrorCode = new PascalErrorCode('Missing letiable');
+    static MISSING_VARIABLE : PascalErrorCode = new PascalErrorCode('Missing variable');
     static NOT_CONSTANT_IDENTIFIER : PascalErrorCode = new PascalErrorCode('Not a constant identifier');
-    static NOT_RECORD_VARIABLE : PascalErrorCode = new PascalErrorCode('Not a record letiable');
+    static NOT_RECORD_VARIABLE : PascalErrorCode = new PascalErrorCode('Not a record variable');
     static NOT_TYPE_IDENTIFIER : PascalErrorCode = new PascalErrorCode('Not a type identifier');
     static RANGE_INTEGER : PascalErrorCode = new PascalErrorCode('Integer literal out of range');
     static RANGE_REAL : PascalErrorCode = new PascalErrorCode('Real literal out of range');
