@@ -1,5 +1,3 @@
-// TODO : check this
-
 export class ICodeNodeTypeImpl {
     private text : string;
 

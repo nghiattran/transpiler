@@ -196,10 +196,7 @@ export class ParseTreePrinter {
 
             // Unnamed type: Print an artificial type identifier name.
             else {
-                // let code : number = typeSpec.hashCode() + typeSpec.getForm().getHash();
                 typeName = "$anon_" + typeSpec.getForm().getHash();
-                // TODO
-                // Integer.toHexString(code);
             }
 
             this.printAttribute("TYPE_ID", typeName);

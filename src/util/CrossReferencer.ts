@@ -22,13 +22,7 @@ export class CrossReferencer {
     private static LABEL_WIDTH : number = CrossReferencer.NUMBERS_LABEL.length;
     private static INDENT_WIDTH : number = CrossReferencer.NAME_WIDTH + CrossReferencer.LABEL_WIDTH;
 
-    // TODO check it
     private static INDENT : string = '            '
-
-    // TODO
-    // static {
-    //     for (int i = 0; i < INDENT_WIDTH; ++i) INDENT.append(" ");
-    // }
 
     /**
      * Print the cross-reference table.
@@ -79,7 +73,6 @@ export class CrossReferencer {
      * Print column headings.
      */
     private printColumnHeadings() : void {
-        // TODO check it
         console.info(util.format(CrossReferencer.NAME_FORMAT, "Identifier")
                            + CrossReferencer.NUMBERS_LABEL +     "Type specification");
         console.info(util.format(CrossReferencer.NAME_FORMAT, "----------")
@@ -213,9 +206,8 @@ export class CrossReferencer {
                     let name : string = constantId.getName();
                     let value : Object = constantId.getAttribute(SymTabKeyImpl.CONSTANT_VALUE);
 
-                    // TODO format
-                    // console.info(CrossReferencer.INDENT + String.format(ENUM_CONST_FORMAT,
-                    //                                           name, value));
+                    console.info(CrossReferencer.INDENT + CrossReferencer.ENUM_CONST_FORMAT,
+                                                              name, value);
                 }
 
                 break;

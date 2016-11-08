@@ -179,8 +179,7 @@ class BackendMessageListener implements MessageListener {
                 if (this.parent.lines) {
                     let lineNumber : number = message.getBody() as number;
 
-                    // TODO: format
-                    // util.format(LINE_FORMAT, lineNumber);
+                    console.info(Pascal.LINE_FORMAT, lineNumber);
                 }
                 break;
             }
@@ -192,9 +191,8 @@ class BackendMessageListener implements MessageListener {
                     let letiableName : string = body[1] as string;
                     let value : Object = body[2] as Object;
 
-                    // TODO: format
-                    // util.format(ASSIGN_FORMAT,
-                    //                   lineNumber, letiableName, value);
+                    console.info(Pascal.ASSIGN_FORMAT,
+                                      lineNumber, letiableName, value);
                 }
                 break;
             }
@@ -206,9 +204,8 @@ class BackendMessageListener implements MessageListener {
                     let letiableName : string = body[1] as string;
                     let value : Object = body[2] as Object;
 
-                    // TODO: format
-                    // util.format(FETCH_FORMAT,
-                    //                   lineNumber, letiableName, value);
+                    console.info(Pascal.FETCH_FORMAT,
+                                      lineNumber, letiableName, value);
                 }
                 break;
             }
@@ -219,9 +216,8 @@ class BackendMessageListener implements MessageListener {
                     let lineNumber : number = body[0] as number;
                     let routineName : string = body[1] as string;
 
-                    // TODO: format
-                    // util.format(CALL_FORMAT,
-                    //                   lineNumber, routineName);
+                    console.info(Pascal.CALL_FORMAT,
+                                      lineNumber, routineName);
                 }
                 break;
             }
@@ -232,9 +228,8 @@ class BackendMessageListener implements MessageListener {
                     let lineNumber : number = body[0] as number;
                     let routineName : string = body[1] as string;
 
-                    // TODO: format
-                    // util.format(RETURN_FORMAT,
-                    //                   lineNumber, routineName);
+                    console.info(Pascal.RETURN_FORMAT,
+                                      lineNumber, routineName);
                 }
                 break;
             }
@@ -246,7 +241,6 @@ class BackendMessageListener implements MessageListener {
 
                 console.info('*** RUNTIME ERROR');
                 if (lineNumber !== undefined) {
-                    // TODO: format
                     console.info(' AT LINE %03d', lineNumber);
                 }
                 console.info(': ' + errorMessage);
@@ -259,10 +253,9 @@ class BackendMessageListener implements MessageListener {
                 let runtimeErrors : number = body[1] as number;
                 let elapsedTime : number = body[2] as number;
 
-                // TODO: format
-                // util.format(INTERPRETER_SUMMARY_FORMAT,
-                //                   executionCount, runtimeErrors,
-                //                   elapsedTime);
+                console.info(Pascal.INTERPRETER_SUMMARY_FORMAT,
+                                  executionCount, runtimeErrors,
+                                  elapsedTime);
                 break;
             }
 
@@ -271,9 +264,8 @@ class BackendMessageListener implements MessageListener {
                 let instructionCount : number = body[0] as number;
                 let elapsedTime : number = body[1] as number;
 
-                // TODO: format
-                // util.format(COMPILER_SUMMARY_FORMAT,
-                //                   instructionCount, elapsedTime);
+                console.info(Pascal.COMPILER_SUMMARY_FORMAT,
+                                  instructionCount, elapsedTime);
                 break;
             }
         }
@@ -297,9 +289,8 @@ class SourceMessageListener implements MessageListener {
                 let lineNumber : number = body[0] as number;
                 let lineText : string  = body[1] as string;
                 
-                // TODO format output
-                console.info(util.format(Pascal.SOURCE_LINE_FORMAT,
-                                        lineNumber, lineText));
+                console.info(Pascal.SOURCE_LINE_FORMAT,
+                                        lineNumber, lineText);
                 break;
             }
         }
@@ -323,9 +314,9 @@ class ParserMessageListener implements MessageListener {
                 let statementCount : number = body[0] as number;
                 let syntaxErrors : number = body[1] as number;
                 let elapsedTime : number = body[2] as number;
-                
+
                 // TODO format output
-                let line = util.format(Pascal.PARSER_SUMMARY_FORMAT,
+                let line = console.info(Pascal.PARSER_SUMMARY_FORMAT,
                                   statementCount, syntaxErrors,
                                   elapsedTime);
                 console.info(line);
