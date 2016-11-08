@@ -81,7 +81,7 @@ export class StatementParser extends PascalParser {
                 let id : SymTabEntry= StatementParser.symTabStack.lookup(name);
                 let idDefn : Definition = id !== undefined ? id.getDefinition()
                                                : DefinitionImpl.UNDEFINED;
-
+                              
                 // Assignment statement or procedure call.
                 switch (<DefinitionImpl> idDefn) {
                     case DefinitionImpl.VARIABLE:

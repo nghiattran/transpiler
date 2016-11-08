@@ -6,7 +6,9 @@ export class List <T>{
 	}
 
 	add(value : T) : void {
-		this.collection.push(value)
+		if (!this.contains(value)) {
+			this.collection.push(value)
+		}
 	}
 
 	removeIndex(index : number) : void {
@@ -17,7 +19,7 @@ export class List <T>{
 		if (value) {
 			let index : number = this.indexOf(value);
 			if (index !== -1)
-				this.collection.splice(2, 1);
+				this.collection.splice(index, 1);
 		} else {
 			this.collection.pop()
 		}
@@ -36,18 +38,20 @@ export class List <T>{
 	}
 
 	contains(value : T) : boolean {
-		return this.collection.indexOf(value) !== -1;
+		return this.indexOf(value) !== -1;
 	}
 
 	addAll(value : List<T>) : void {
-		for (var i = 0; i < value.size(); i++) {
-			this.add(value.index(i));
+		for (let i = 0; i < value.size(); i++) {
+			if (!this.contains(value[i])) {
+				this.add(value.index(i));
+			}
 		}
 	}
 
 	clone() : List<T> {
-		// TODO: change it to deep clone
-		return new List(this.collection);
+		return new List(this.collection.slice(0));
+		// return new List(this.collection);
 	}
 
 	size() {

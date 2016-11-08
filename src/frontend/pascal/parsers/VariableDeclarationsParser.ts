@@ -54,11 +54,11 @@ export class VariableDeclarationsParser extends DeclarationsParser {
     static NEXT_START_SET : List<PascalTokenType>=
         DeclarationsParser.ROUTINE_START_SET.clone();
 
-    static initialze() : void {
+    static initialize() : void {
         VariableDeclarationsParser.IDENTIFIER_SET.add(PascalTokenType.IDENTIFIER);
         VariableDeclarationsParser.IDENTIFIER_SET.add(PascalTokenType.END);
         VariableDeclarationsParser.IDENTIFIER_SET.add(PascalTokenType.SEMICOLON);
-        
+
         VariableDeclarationsParser.IDENTIFIER_FOLLOW_SET.addAll(DeclarationsParser.VAR_START_SET);
 
         VariableDeclarationsParser.NEXT_START_SET.add(PascalTokenType.IDENTIFIER);
@@ -90,11 +90,10 @@ export class VariableDeclarationsParser extends DeclarationsParser {
      */
     public parse(token : Token, parentId : SymTabEntry) : SymTabEntry {
         token = this.synchronize(VariableDeclarationsParser.IDENTIFIER_SET);
-
+        
         // Loop to parse a sequence of variable declarations
         // separated by semicolons.
         while (token.getType() === PascalTokenType.IDENTIFIER) {
-
             // Parse the identifier sublist and its type specification.
             this.parseIdentifierSublist(
                 token, 
@@ -131,9 +130,10 @@ export class VariableDeclarationsParser extends DeclarationsParser {
      * @return the sublist of identifiers in a declaration.
      * @throws Exception if an error occurred.
      */
-    public parseIdentifierSublist(token : Token,
-                                     followSet : List<PascalTokenType>,
-                                     commaSet : List<PascalTokenType>) : List<SymTabEntry>
+    public parseIdentifierSublist(
+        token : Token,
+        followSet : List<PascalTokenType>,
+        commaSet : List<PascalTokenType>) : List<SymTabEntry>
     {
         let sublist : List<SymTabEntry> = new List<SymTabEntry>();
 
@@ -153,6 +153,7 @@ export class VariableDeclarationsParser extends DeclarationsParser {
                 token = this.nextToken();  // consume the comma
 
                 if (followSet.contains(token.getType() as PascalTokenType)) {
+                   
                     VariableDeclarationsParser.errorHandler.flag(token, PascalErrorCode.MISSING_IDENTIFIER, this);
                 }
             }
@@ -243,3 +244,5 @@ export class VariableDeclarationsParser extends DeclarationsParser {
         return type;
     }
 }
+
+VariableDeclarationsParser.initialize();

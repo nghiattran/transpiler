@@ -115,7 +115,6 @@ export class TypeChecker {
             compatible =
                 targetType.isPascalString() && valueType.isPascalString();
         }
-
         return compatible;
     }
 

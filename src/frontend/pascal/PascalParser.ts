@@ -43,7 +43,7 @@ export class PascalParser extends Parser {
      * @return the error count.
      */
     public getErrorCount() : number {
-        return 0;
+        return PascalParser.errorHandler.getErrorCount();
     }
 
     /**
@@ -54,10 +54,10 @@ export class PascalParser extends Parser {
      */
     public synchronize(syncSet : List<PascalTokenType>) : Token{
         let token : Token = this.currentToken();
-        
+
         // If the current token is not in the synchronization set,
         // then it is unexpected and the parser must recover.
-        if (!syncSet.contains(token.getType() as PascalTokenType)) {
+        if (!syncSet.contains(<PascalTokenType>token.getType())) {
 
             // Flag the unexpected token.
             PascalParser.errorHandler.flag(token, PascalErrorCode.UNEXPECTED_TOKEN, this);

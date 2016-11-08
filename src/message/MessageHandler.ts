@@ -47,9 +47,8 @@ export class MessageHandler {
      * messageReceived() method.
      */
     private notifyListeners() : void {
-        for (let listener in this.listeners) {
-            //TODO fix the line below
-            // listener.messageReceived(this.message);
+        for (let i = 0; i < this.listeners.length; i++) {
+            this.listeners[i].messageReceived(this.message);
         }
     }
 }

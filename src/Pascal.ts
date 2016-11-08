@@ -63,16 +63,16 @@ export class Pascal {
             if (this.parser.getErrorCount() === 0) {
                 this.symTabStack = this.parser.getSymTabStack();
                 
-                var programId : SymTabEntry = this.symTabStack.getProgramId();
+                let programId : SymTabEntry = this.symTabStack.getProgramId();
                 this.iCode = programId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE) as ICode;
                 
                 if (this.xref) {
-                    var crossReferencer : CrossReferencer = new CrossReferencer();
+                    let crossReferencer : CrossReferencer = new CrossReferencer();
                     crossReferencer.print(this.symTabStack);
                 }
 
                 if (this.intermediate) {
-                    var treePrinter : ParseTreePrinter =
+                    let treePrinter : ParseTreePrinter =
                                          new ParseTreePrinter();
                     treePrinter.print(this.symTabStack);
                 }
@@ -97,7 +97,7 @@ export class Pascal {
      */
     public static main(args : string []) : void {
         try {
-            var operation : string = args[0];
+            let operation : string = args[0];
 
             // Operation.
             if (!(operation.toLowerCase() === 'compile'
@@ -105,15 +105,15 @@ export class Pascal {
                 throw new Error();
             }
 
-            var i : number = 0;
-            var flags : string = '';
+            let i : number = 0;
+            let flags : string = '';
 
             // Flags.
             flags = args[1];
 
             // Source path.
             if (i < args.length) {
-                var path : string = args[2];
+                let path : string = args[2];
                 new Pascal(operation, path, flags);
             }
             else {
@@ -172,7 +172,7 @@ class BackendMessageListener implements MessageListener {
      * @param message the message.
      */
     public messageReceived(message : Message) : void {
-        var type : MessageType = message.getType();
+        let type : MessageType = message.getType();
 
         switch (type) {
             case MessageType.SOURCE_LINE: {
@@ -189,12 +189,12 @@ class BackendMessageListener implements MessageListener {
                 if (this.parent.assign) {
                     let body : Object[] = message.getBody() as Object[];
                     let lineNumber : number = body[0] as number;
-                    let variableName : string = body[1] as string;
+                    let letiableName : string = body[1] as string;
                     let value : Object = body[2] as Object;
 
                     // TODO: format
                     // util.format(ASSIGN_FORMAT,
-                    //                   lineNumber, variableName, value);
+                    //                   lineNumber, letiableName, value);
                 }
                 break;
             }
@@ -203,12 +203,12 @@ class BackendMessageListener implements MessageListener {
                 if (this.parent.fetch) {
                     let body : Object[] = message.getBody() as Object[];
                     let lineNumber : number = body[0] as number;
-                    let variableName : string = body[1] as string;
+                    let letiableName : string = body[1] as string;
                     let value : Object = body[2] as Object;
 
                     // TODO: format
                     // util.format(FETCH_FORMAT,
-                    //                   lineNumber, variableName, value);
+                    //                   lineNumber, letiableName, value);
                 }
                 break;
             }
@@ -247,8 +247,7 @@ class BackendMessageListener implements MessageListener {
                 console.info('*** RUNTIME ERROR');
                 if (lineNumber !== undefined) {
                     // TODO: format
-                    // console.info(' AT LINE ' +
-                    //                  String.format('%03d', lineNumber));
+                    console.info(' AT LINE %03d', lineNumber);
                 }
                 console.info(': ' + errorMessage);
                 break;
@@ -290,13 +289,13 @@ class SourceMessageListener implements MessageListener {
      * @param message the message.
      */
     public messageReceived(message : Message) : void{
-        var type : MessageType = message.getType();
+        let type : MessageType = message.getType();
         let body : Object[] = message.getBody() as Object[];
         switch (type) {
 
             case MessageType.SOURCE_LINE: {
-                var lineNumber : number = body[0] as number;
-                var lineText : string  = body[1] as string;
+                let lineNumber : number = body[0] as number;
+                let lineText : string  = body[1] as string;
                 
                 // TODO format output
                 console.info(util.format(Pascal.SOURCE_LINE_FORMAT,
@@ -316,18 +315,17 @@ class ParserMessageListener implements MessageListener {
      * @param message the message.
      */
     public messageReceived(message : Message) : void{
-        var type : MessageType = message.getType();
+        let type : MessageType = message.getType();
 
         switch (type) {
-
             case MessageType.PARSER_SUMMARY: {
                 let body : number[] = message.getBody() as number[];
                 let statementCount : number = body[0] as number;
                 let syntaxErrors : number = body[1] as number;
-                let elapsedTime : number= body[2] as number;
-
+                let elapsedTime : number = body[2] as number;
+                
                 // TODO format output
-                var line = util.format(Pascal.PARSER_SUMMARY_FORMAT,
+                let line = util.format(Pascal.PARSER_SUMMARY_FORMAT,
                                   statementCount, syntaxErrors,
                                   elapsedTime);
                 console.info(line);
@@ -345,7 +343,7 @@ class ParserMessageListener implements MessageListener {
                 let flagBuffer : string = '';
 
                 // Spaces up to the error position.
-                for (var i = 0; i < spaceCount; i++) {
+                for (let i = 0; i < spaceCount; i++) {
                     flagBuffer += ' ';
                 }
 
@@ -368,4 +366,4 @@ class ParserMessageListener implements MessageListener {
 
 let text = fs.readFileSync('./test.pas', 'utf8');
 
-Pascal.main(['compile', 'i', text])
+Pascal.main(['compile', 'xi', text])

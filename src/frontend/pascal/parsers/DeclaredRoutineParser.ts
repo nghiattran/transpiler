@@ -34,7 +34,6 @@ export class DeclaredRoutineParser extends DeclarationsParser {
     private static PARAMETER_SET : List<PascalTokenType> =
         DeclarationsParser.DECLARATION_START_SET.clone();
     
-
     // Synchronization set for the opening left parenthesis.
     private static LEFT_PAREN_SET : List<PascalTokenType> =
         DeclarationsParser.DECLARATION_START_SET.clone();
@@ -59,7 +58,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
             PascalTokenType.RIGHT_PAREN, 
             PascalTokenType.SEMICOLON]);
 
-    static initialize() : void{
+    static initialize() : void {
         DeclaredRoutineParser.PARAMETER_SET.add(PascalTokenType.VAR);
         DeclaredRoutineParser.PARAMETER_SET.add(PascalTokenType.IDENTIFIER);
         DeclaredRoutineParser.PARAMETER_SET.add(PascalTokenType.RIGHT_PAREN);
@@ -70,9 +69,8 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         
         DeclaredRoutineParser.RIGHT_PAREN_SET.remove(PascalTokenType.LEFT_PAREN);
         DeclaredRoutineParser.RIGHT_PAREN_SET.add(PascalTokenType.RIGHT_PAREN);
-        
+
         DeclaredRoutineParser.PARAMETER_FOLLOW_SET.addAll(DeclarationsParser.DECLARATION_START_SET);
-    
         DeclaredRoutineParser.COMMA_SET.addAll(DeclarationsParser.DECLARATION_START_SET);
     }
 
@@ -363,6 +361,7 @@ export class DeclaredRoutineParser extends DeclarationsParser {
         let variableDeclarationsParser : VariableDeclarationsParser =
             new VariableDeclarationsParser(this);
         variableDeclarationsParser.setDefinition(parmDefn);
+        
         let sublist : List<SymTabEntry> =
             variableDeclarationsParser.parseIdentifierSublist(
                                            token, DeclaredRoutineParser.PARAMETER_FOLLOW_SET,

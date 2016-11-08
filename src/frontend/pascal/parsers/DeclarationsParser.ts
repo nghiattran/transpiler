@@ -36,6 +36,7 @@ export class DeclarationsParser extends PascalParser {
             PascalTokenType.PROCEDURE, 
             PascalTokenType.FUNCTION, 
             PascalTokenType.BEGIN]);
+        
     static TYPE_START_SET : List<PascalTokenType> =
         DeclarationsParser.DECLARATION_START_SET.clone();
     static VAR_START_SET : List<PascalTokenType> =
@@ -57,10 +58,12 @@ export class DeclarationsParser extends PascalParser {
      * @return undefined
      * @throws Exception if an error occurred.
      */
-    public parse(token : Token, parentId : SymTabEntry) : SymTabEntry
+    public parse(
+        token : Token, 
+        parentId : SymTabEntry) : SymTabEntry
     {
         token = this.synchronize(DeclarationsParser.DECLARATION_START_SET);
-
+        
         if (token.getType() === PascalTokenType.CONST) {
             token = this.nextToken();  // consume CONST
 
@@ -83,7 +86,7 @@ export class DeclarationsParser extends PascalParser {
 
         if (token.getType() === PascalTokenType.VAR) {
             token = this.nextToken();  // consume VAR
-
+            
             let variableDeclarationsParser : VariableDeclarationsParser =
                 new VariableDeclarationsParser(this);
             variableDeclarationsParser.setDefinition(DefinitionImpl.VARIABLE);
