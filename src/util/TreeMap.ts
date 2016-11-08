@@ -44,7 +44,7 @@ export class TreeMap<E> {
     public toList() : E[] {
         let list : any[] = [];
 
-        for (var entry in this.collection) {
+        for (let entry in this.collection) {
             list.push(this.collection[entry]);
         }
 

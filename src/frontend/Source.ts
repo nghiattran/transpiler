@@ -156,7 +156,7 @@ export class Source implements MessageProducer {
     }
 
     public readALine() : string {
-        var line = '';
+        let line = '';
 
         if (this.globalPos >= this.text.length) {
             return undefined;

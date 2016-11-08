@@ -60,7 +60,7 @@ export class CrossReferencer {
         let routineIds : SymTabEntry[] =
             routineId.getAttribute(SymTabKeyImpl.ROUTINE_ROUTINES) as SymTabEntry[];
         if (routineIds !== undefined) {
-            for (var i = 0; i < routineIds.length; ++i) {
+            for (let i = 0; i < routineIds.length; ++i) {
                 let rtnId : SymTabEntry = routineIds[i] as SymTabEntry;
                 this.printRoutine(rtnId);
             }
@@ -94,7 +94,7 @@ export class CrossReferencer {
             // For each entry, print the identifier name
             // followed by the line numbers.
             let line = entry.getName();
-            for (var index = line.length; index < 10; index++) {
+            for (let index = line.length; index < 10; index++) {
                 line += ' ';
             }
 

@@ -1,38 +1,37 @@
 const fs = require('fs');
-const path = require('path');
 const exec = require('child_process').exec;
 
-let files = `./src/frontend/pascal/parsers/StatementParser.ts
-./src/frontend/pascal/parsers/BlockParser.ts
-./src/frontend/pascal/parsers/CompoundStatementParser.ts
-./src/frontend/pascal/parsers/DeclarationsParser.ts
-./src/frontend/pascal/parsers/ConstantDefinitionsParser.ts
-./src/frontend/pascal/parsers/SimpleTypeParser.ts
-./src/frontend/pascal/parsers/TypeSpecificationParser.ts
-./src/frontend/pascal/parsers/TypeDefinitionsParser.ts
-./src/frontend/pascal/parsers/ArrayTypeParser.ts
-./src/frontend/pascal/parsers/DeclaredRoutineParser.ts
-./src/frontend/pascal/parsers/EnumerationTypeParser.ts
-./src/frontend/pascal/parsers/ProgramParser.ts
-./src/frontend/pascal/parsers/RecordTypeParser.ts
-./src/frontend/pascal/parsers/SubrangeTypeParser.ts
-./src/frontend/pascal/parsers/VariableDeclarationsParser.ts
-./src/frontend/pascal/parsers/ExpressionParser.ts
-./src/frontend/pascal/parsers/AssignmentStatementParser.ts
-./src/frontend/pascal/parsers/ForStatementParser.ts
-./src/frontend/pascal/parsers/WhileStatementParser.ts
-./src/frontend/pascal/parsers/IfStatementParser.ts
-./src/frontend/pascal/parsers/CaseStatementParser.ts
-./src/frontend/pascal/parsers/RepeatStatementParser.ts
-./src/frontend/pascal/parsers/CallParser.ts
-./src/frontend/pascal/parsers/CallDeclaredParser.ts
-./src/frontend/pascal/parsers/CallStandardParser.ts
-./src/frontend/pascal/parsers/VariableParser.ts`
+let files = `./src/language/pascal/parsers/StatementParser.ts
+./src/language/pascal/parsers/BlockParser.ts
+./src/language/pascal/parsers/CompoundStatementParser.ts
+./src/language/pascal/parsers/DeclarationsParser.ts
+./src/language/pascal/parsers/ConstantDefinitionsParser.ts
+./src/language/pascal/parsers/SimpleTypeParser.ts
+./src/language/pascal/parsers/TypeSpecificationParser.ts
+./src/language/pascal/parsers/TypeDefinitionsParser.ts
+./src/language/pascal/parsers/ArrayTypeParser.ts
+./src/language/pascal/parsers/DeclaredRoutineParser.ts
+./src/language/pascal/parsers/EnumerationTypeParser.ts
+./src/language/pascal/parsers/ProgramParser.ts
+./src/language/pascal/parsers/RecordTypeParser.ts
+./src/language/pascal/parsers/SubrangeTypeParser.ts
+./src/language/pascal/parsers/VariableDeclarationsParser.ts
+./src/language/pascal/parsers/ExpressionParser.ts
+./src/language/pascal/parsers/AssignmentStatementParser.ts
+./src/language/pascal/parsers/ForStatementParser.ts
+./src/language/pascal/parsers/WhileStatementParser.ts
+./src/language/pascal/parsers/IfStatementParser.ts
+./src/language/pascal/parsers/CaseStatementParser.ts
+./src/language/pascal/parsers/RepeatStatementParser.ts
+./src/language/pascal/parsers/CallParser.ts
+./src/language/pascal/parsers/CallDeclaredParser.ts
+./src/language/pascal/parsers/CallStandardParser.ts
+./src/language/pascal/parsers/VariableParser.ts`
 
 files = files.split('\n')
 
 let result = '';
-for (var i = 0; i < files.length; i++) {
+for (let i = 0; i < files.length; i++) {
 	result += fs.readFileSync(files[i], 'utf8') + '\n';
 }
 
@@ -43,9 +42,9 @@ let importStatements = `import {PascalParser} from './PascalParser';
 import {PascalTokenType} from './PascalTokenType';
 import {PascalErrorCode} from './PascalErrorCode';
 
-import {Token} from '../Token';
-import {TokenType} from '../TokenType';
-import {EofToken} from '../EofToken';
+import {Token} from '../../frontend/Token';
+import {TokenType} from '../../frontend/TokenType';
+import {EofToken} from '../../frontend/EofToken';
 
 import {ICodeNode} from '../../intermediate/ICodeNode';
 import {Definition} from '../../intermediate/Definition';
@@ -76,7 +75,8 @@ import {HashMap} from '../../util/HashMap';
 import {List} from '../../util/List';
 import {Util} from '../../util/Util';`
 
-fs.writeFileSync('./src/frontend/pascal/parsersBundle.ts', importStatements + result);
+let bundleFile = './src/language/pascal/parsersBundle.ts';
+fs.writeFileSync(bundleFile, importStatements + result);
 
 console.info('Finish writing files.');
 
@@ -91,7 +91,7 @@ exec('tsc', (error, stdout, stderr) => {
 
 	console.info('Run program.');
 
-	exec('node .tmp/Pascal.js', (error, stdout, stderr) => {
+	exec('node .tmp/test.js', (error, stdout, stderr) => {
 		if (error) {
 			console.error(`exec error: ${error}`);
 			return;

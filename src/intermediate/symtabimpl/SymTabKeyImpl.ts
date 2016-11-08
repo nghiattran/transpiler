@@ -18,7 +18,7 @@ export class SymTabKeyImpl extends PolyfillObject implements SymTabKey {
     // Variable or record field value.
     public static DATA_VALUE : SymTabKeyImpl = new SymTabKeyImpl('DATA_VALUE');
 
-    // Local variables array slot numbers.
+    // Local letiables array slot numbers.
     public static SLOT : SymTabKeyImpl = new SymTabKeyImpl('SLOT');
     public static WRAP_SLOT : SymTabKeyImpl = new SymTabKeyImpl('WRAP_SLOT');
 

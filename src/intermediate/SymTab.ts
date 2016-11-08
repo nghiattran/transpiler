@@ -28,12 +28,12 @@ export interface SymTab extends TreeMap<SymTabEntry> {
     sortedEntries() : SymTabEntry[];
 
     /**
-     * @return the next local variables array slot number.
+     * @return the next local letiables array slot number.
      */
     nextSlotNumber() : number;
 
     /**
-     * @return the maximum local variables array slot number.
+     * @return the maximum local letiables array slot number.
      */
     getMaxSlotNumber() : number;
 }

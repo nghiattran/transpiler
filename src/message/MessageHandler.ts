@@ -27,7 +27,7 @@ export class MessageHandler {
      * @param listener the listener to remove.
      */
     public removeListener(listener : MessageListener) : void {
-        var index = this.listeners.indexOf(listener, 0);
+        let index = this.listeners.indexOf(listener, 0);
         if (index > -1) {
            this.listeners.splice(index, 1);
         }

@@ -43,7 +43,7 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
     public stringConstructor(value : string) {
         this.form = TypeFormImpl.ARRAY;
 
-        var indexType : TypeSpec = new TypeSpecImpl(TypeFormImpl.SUBRANGE) as TypeSpec;
+        let indexType : TypeSpec = new TypeSpecImpl(TypeFormImpl.SUBRANGE) as TypeSpec;
         
         indexType.setAttribute(TypeKeyImpl.SUBRANGE_BASE_TYPE, Predefined.integerType);
         indexType.setAttribute(TypeKeyImpl.SUBRANGE_MIN_VALUE, 1);
@@ -83,8 +83,8 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
      */
     public isPascalString(): boolean {
         if (this.form === TypeFormImpl.ARRAY) {
-            var elmtType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE) as TypeSpec;
-            var indexType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE) as TypeSpec;
+            let elmtType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_ELEMENT_TYPE) as TypeSpec;
+            let indexType : TypeSpec = this.getAttribute(TypeKeyImpl.ARRAY_INDEX_TYPE) as TypeSpec;
 
             return (elmtType.baseType()  === Predefined.charType) &&
                    (indexType.baseType() === Predefined.integerType);

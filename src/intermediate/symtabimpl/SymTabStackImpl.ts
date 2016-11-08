@@ -72,7 +72,7 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
      * @return the popped symbol table.
      */
     public pop() : SymTab {
-        var symTab : SymTab = this.get(this.currentNestingLevel);
+        let symTab : SymTab = this.get(this.currentNestingLevel);
         this.removeIndex(this.currentNestingLevel--);
 
         return symTab;
@@ -102,10 +102,10 @@ export class SymTabStackImpl extends List<SymTab> implements SymTabStack {
      * @return the entry, or undefined if it does not exist.
      */
     public lookup(name : string) : SymTabEntry{
-        var foundEntry : SymTabEntry = undefined;
+        let foundEntry : SymTabEntry = undefined;
 
         // Search the current and enclosing scopes.
-        for (var i = this.currentNestingLevel; (i >= 0) && (foundEntry === undefined); --i) {
+        for (let i = this.currentNestingLevel; (i >= 0) && (foundEntry === undefined); --i) {
             foundEntry = this.get(i).lookup(name);
         }
 

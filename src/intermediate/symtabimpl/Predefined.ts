@@ -114,7 +114,7 @@ export  class Predefined {
         this.trueId.setAttribute(SymTabKeyImpl.CONSTANT_VALUE, 1);
 
         // Add false and true to the boolean enumeration type.
-        var constants: SymTabEntry[] = [];
+        let constants: SymTabEntry[] = [];
         constants.push(this.falseId);
         constants.push(this.trueId);
         this.booleanType.setAttribute(TypeKeyImpl.ENUMERATION_CONSTANTS, constants);
@@ -159,7 +159,7 @@ export  class Predefined {
                                 defn : Definition, name : string,
                                 routineCode : RoutineCode) : SymTabEntry
     {
-        var procId : SymTabEntry = symTabStack.enterLocal(name);
+        let procId : SymTabEntry = symTabStack.enterLocal(name);
         procId.setDefinition(defn);
         procId.setAttribute(SymTabKeyImpl.ROUTINE_CODE, routineCode);
 

@@ -65,7 +65,7 @@ export class HashMap <T, E> {
     }
 
     public copy(copy: HashMap<PolyfillObject, E>) {
-        for (var key in this.getKeys()) {
+        for (let key in this.getKeys()) {
             copy.putKeyString(key, this.get[key])
         }
     }
@@ -73,7 +73,7 @@ export class HashMap <T, E> {
     public toList() : E[] {
         let list : any[] = [];
 
-        for (var entry in this.collection) {
+        for (let entry in this.collection) {
             list.push(this.collection[entry]);
         }
 

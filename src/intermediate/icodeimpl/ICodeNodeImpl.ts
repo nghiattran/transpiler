@@ -102,13 +102,13 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
      */
     public copy() : ICodeNode {
         // Create a copy with the same type and type specification.
-        var copy : ICodeNodeImpl;
+        let copy : ICodeNodeImpl;
         copy = ICodeFactory.createICodeNode(this.type) as ICodeNodeImpl;
         copy.setTypeSpec(this.typeSpec);
 
 
         // Copy attributes
-        for (var key in this.getKeys()) {
+        for (let key in this.getKeys()) {
             copy.putKeyString(key, this.get[key])
         }
 

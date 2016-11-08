@@ -98,7 +98,7 @@ export class TypeChecker {
         targetType = targetType.baseType();
         valueType  = valueType.baseType();
 
-        var compatible : boolean = false;
+        let compatible : boolean = false;
 
         // Identical types.
         if (targetType === valueType) {
@@ -133,9 +133,9 @@ export class TypeChecker {
 
         type1 = type1.baseType();
         type2 = type2.baseType();
-        var form : TypeForm = type1.getForm();
+        let form : TypeForm = type1.getForm();
 
-        var compatible : boolean = false;
+        let compatible : boolean = false;
 
         // Two identical scalar or enumeration types.
         if ((type1 === type2) && ((form === TypeFormImpl.SCALAR) || (form === TypeFormImpl.ENUMERATION))) {

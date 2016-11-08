@@ -77,7 +77,7 @@ export class ParseTreePrinter {
             <List<SymTabEntry>> routineId.getAttribute(SymTabKeyImpl.ROUTINE_ROUTINES);
 
         if (routineIds !== undefined) {
-            for (var i = 0; i < routineIds.size(); i++) {
+            for (let i = 0; i < routineIds.size(); i++) {
                 this.printRoutine(routineIds[i]);
             }
         }
@@ -126,7 +126,7 @@ export class ParseTreePrinter {
         this.indentation += this.indent;
 
         let keys = node.getKeys();
-        for (var i = 0; i < keys.length; ++i) {
+        for (let i = 0; i < keys.length; ++i) {
             this.printAttribute(
                 PolyfillObject.getObject(keys[i]).toString(),
                 node.getKeyString(keys[i])
@@ -168,7 +168,7 @@ export class ParseTreePrinter {
         let saveIndentation : string = this.indentation;
         this.indentation += this.indent;
 
-        for (var i = 0; i < childNodes.size(); i++) {
+        for (let i = 0; i < childNodes.size(); i++) {
             this.printNode(<ICodeNodeImpl>childNodes.get(i));
         }
 
