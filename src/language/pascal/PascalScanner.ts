@@ -19,7 +19,7 @@ export class PascalScanner extends Scanner {
      * Constructor
      * @param this.source the this.source to be used with this scanner.
      */
-    public constructor(source : Source) {
+    public constructor(source? : Source) {
         super(source);
     }
 

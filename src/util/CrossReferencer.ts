@@ -10,7 +10,9 @@ import {SymTabKeyImpl} from '../intermediate/symtabimpl/SymTabKeyImpl';
 import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
 import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 
-export class CrossReferencer {
+import {IntermediateHandler} from './IntermediateHandler';
+
+export class CrossReferencer implements IntermediateHandler {
     private static NAME_WIDTH : number = 16;
     private static NAME_FORMAT : string       = '%s';
     private static NUMBERS_LABEL : string     = ' Line numbers    ';

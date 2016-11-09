@@ -1,59 +1,69 @@
-import {SymTabStack} from '../intermediate/SymTabStack';
-import {SymTabEntry} from '../intermediate/SymTabEntry';
-import {SymTab} from '../intermediate/SymTab';
-import {Definition} from '../intermediate/Definition';
-import {TypeSpec} from '../intermediate/TypeSpec';
-import {TypeForm} from '../intermediate/TypeForm';
-import {ICode} from '../intermediate/ICode';
-import {ICodeNode} from '../intermediate/ICodeNode';
-import {ICodeKey} from '../intermediate/ICodeKey';
+import {SymTabStack} from '../../intermediate/SymTabStack';
+import {SymTabEntry} from '../../intermediate/SymTabEntry';
+import {SymTab} from '../../intermediate/SymTab';
+import {Definition} from '../../intermediate/Definition';
+import {TypeSpec} from '../../intermediate/TypeSpec';
+import {TypeForm} from '../../intermediate/TypeForm';
+import {ICode} from '../../intermediate/ICode';
+import {ICodeNode} from '../../intermediate/ICodeNode';
+import {ICodeKey} from '../../intermediate/ICodeKey';
 
-import {DefinitionImpl} from '../intermediate/symtabimpl/DefinitionImpl';
-import {SymTabKeyImpl} from '../intermediate/symtabimpl/SymTabKeyImpl';
-import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
-import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
+import {DefinitionImpl} from '../../intermediate/symtabimpl/DefinitionImpl';
+import {SymTabKeyImpl} from '../../intermediate/symtabimpl/SymTabKeyImpl';
+import {TypeKeyImpl} from '../../intermediate/typeimpl/TypeKeyImpl';
+import {TypeFormImpl} from '../../intermediate/typeimpl/TypeFormImpl';
 
-import {ICodeNodeImpl} from '../intermediate/icodeimpl/ICodeNodeImpl';
+import {ICodeNodeImpl} from '../../intermediate/icodeimpl/ICodeNodeImpl';
 
-import {List} from './List';
-import {PolyfillObject} from './PolyfillObject';
+import {List} from '../List';
+import {PolyfillObject} from '../PolyfillObject';
+import {IntermediateHandler} from '../IntermediateHandler';
 
-export class ParseTreePrinter {
+import {Exporter} from './Exporter';
+
+export class XMLExporter implements Exporter {
     private static INDENT_WIDTH : number = 4;
     private static LINE_WIDTH : number = 80;
 
-    private ps : string;      // output print stream
-    private length : number;          // output line length
-    private indent : string;       // indent spaces
-    private indentation : string;  // indentation of a line
-    private line : string;  // output line
+    private length : number;                     // output line length
+    private indent : string;                     // indent spaces
+    private indentation : string;                // indentation of a line
+    private line : string;                       // output line
+    private reportContent : string;              // report in string format
+    private callback : (result : string) => any; // callback from requester.
+
 
     /**
-     * Constructor
-     * @param ps the output print stream.
+     * init
      */
-    public constructor() {
-        this.ps = '';
+    public init() {
         this.length = 0;
         this.indentation = '';
         this.line = '';
+        this.reportContent = '';
 
         // The indent is INDENT_WIDTH spaces.
         this.indent = '';
-        for (let i = 0; i < ParseTreePrinter.INDENT_WIDTH; ++i) {
+        for (let i = 0; i < XMLExporter.INDENT_WIDTH; ++i) {
             this.indent += ' ';
         }
     }
 
     /**
-     * Print the intermediate code as a parse tree.
+     * Export the intermediate code as a parse tree.
      * @param symTabStack the symbol table stack.
      */
-    public print(symTabStack : SymTabStack) : void{
-        console.info("\n===== INTERMEDIATE CODE =====");
+    export(symTabStack : SymTabStack) {
+        this.init();
 
         let programId : SymTabEntry = symTabStack.getProgramId();
         this.printRoutine(programId);
+
+        return this.reportContent;
+    }
+
+    appendReport(content : string) : string {
+        return this.reportContent += content + '\n';
     }
 
     /**
@@ -62,8 +72,9 @@ export class ParseTreePrinter {
      */
     private printRoutine(routineId : SymTabEntry) : void {
         let definition : Definition = routineId.getDefinition();
-        console.info("\n*** " + definition.toString() +
-                           " " + routineId.getName() + " ***\n");
+        // TODO: solve  it
+        // this.appendReport('\n*** ' + definition.toString() +
+        //                    ' ' + routineId.getName() + ' ***\n');
 
         // Print the intermediate code in the routine's symbol table entry.
         let iCode : ICode = <ICode> routineId.getAttribute(SymTabKeyImpl.ROUTINE_ICODE);
@@ -90,7 +101,7 @@ export class ParseTreePrinter {
     private printNode(node : ICodeNodeImpl) : void {
         // Opening tag.
         this.append(this.indentation);
-        this.append("<" + node.toString());
+        this.append('<' + node.toString());
 
         this.printAttributes(node);
         this.printTypeSpec(node);
@@ -99,19 +110,19 @@ export class ParseTreePrinter {
 
         // Print the node's children followed by the closing tag.
         if ((childNodes !== undefined) && (childNodes.size() > 0)) {
-            this.append(">");
+            this.append('>');
             this.printLine();
 
             this.printChildNodes(childNodes);
             this.append(this.indentation); 
 
-            this.append("</" + node.toString() + ">");
+            this.append('</' + node.toString() + '>');
         }
 
         // No children: Close off the tag.
         else {
-            this.append(" "); 
-            this.append("/>");
+            this.append(' '); 
+            this.append('/>');
         }
 
         this.printLine();
@@ -137,7 +148,7 @@ export class ParseTreePrinter {
     }
 
     /**
-     * Print a node attribute as key="value".
+     * Print a node attribute as key='value'.
      * @param keyString the key string.
      * @param value the value.
      */
@@ -149,14 +160,14 @@ export class ParseTreePrinter {
         let valueString : string = isSymTabEntry ? (<SymTabEntry> value).getName()
                                            : value.toString();
 
-        let text : string = keyString.toLowerCase() + "=\"" + valueString + "\"";
-        this.append(" "); 
+        let text : string = keyString.toLowerCase() + '=\'' + valueString + '\'';
+        this.append(' '); 
         this.append(text);
 
         // Include an identifier's nesting level.
         if (isSymTabEntry) {
             let level : number = (<SymTabEntry> value).getSymTab().getNestingLevel();
-            this.printAttribute("LEVEL", level);
+            this.printAttribute('LEVEL', level);
         }
     }
 
@@ -196,10 +207,10 @@ export class ParseTreePrinter {
 
             // Unnamed type: Print an artificial type identifier name.
             else {
-                typeName = "$anon_" + typeSpec.getForm().getHash();
+                typeName = '$anon_' + typeSpec.getForm().getHash();
             }
 
-            this.printAttribute("TYPE_ID", typeName);
+            this.printAttribute('TYPE_ID', typeName);
             this.indentation = saveMargin;
         }
     }
@@ -214,7 +225,7 @@ export class ParseTreePrinter {
         let lineBreak : boolean = false;
 
         // Wrap lines that are too long.
-        if (this.length + textLength > ParseTreePrinter.LINE_WIDTH) {
+        if (this.length + textLength > XMLExporter.LINE_WIDTH) {
             this.printLine();
             this.line += this.indentation;
             this.length = this.indentation.length;
@@ -233,7 +244,7 @@ export class ParseTreePrinter {
      */
     private printLine() : void {
         if (this.length > 0) {
-            console.info(this.line);
+            this.appendReport(this.line);
             this.line = '';
             this.length = 0;
         }
