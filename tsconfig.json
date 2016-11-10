@@ -2,7 +2,8 @@
     "compilerOptions": {
         "removeComments": true,
         "preserveConstEnums": true,
-        "outDir": ".tmp",
+        "module": "system",
+        "outFile": ".tmp/bundle.js",
         "sourceMap": true
     },
     "include": [

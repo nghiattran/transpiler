@@ -3,11 +3,11 @@ import {ICodeNodeType} from '../ICodeNodeType';
 import {TypeSpec} from '../TypeSpec';
 import {ICodeKey} from '../ICodeKey';
 import {ICodeFactory} from '../ICodeFactory';
-
-import {ICodeNodeTypeImpl} from './ICodeNodeTypeImpl';
+import {SymTabEntry} from '../SymTabEntry';
 
 import {List} from '../../util/List';
 import {HashMap} from '../../util/HashMap';
+import {PolyfillObject} from '../../util/PolyfillObject';
 
 export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNode {
     private type : ICodeNodeType;             // node type
@@ -125,8 +125,21 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
         let node = {
             name: this.type.toString(),
             typeSpec: this.typeSpec ? this.typeSpec.toJson() : undefined,
-            children: []
+            children: [],
+            attributes : {}
         };
+
+        let keys = this.getKeys();
+        for (let i = 0; i < keys.length; ++i) {
+            let value = this.getKeyString(keys[i]);
+            let isSymTabEntry : boolean = value instanceof SymTabEntry;
+            let valueString : string = isSymTabEntry ? (<SymTabEntry> value).getName()
+                                               : value.toString();
+
+            let attribute = {};
+            node.attributes[PolyfillObject.getObject(keys[i]).toString().toLowerCase()]
+                = valueString;
+        }
 
         for (let i = 0; i < this.children.size(); i++) {
             node.children.push((<ICodeNodeImpl>this.children.get(i)).toJson());

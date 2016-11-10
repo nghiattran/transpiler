@@ -30,7 +30,6 @@ export class XMLExporter implements Exporter {
     private indentation : string;                // indentation of a line
     private line : string;                       // output line
     private reportContent : string;              // report in string format
-    private callback : (result : string) => any; // callback from requester.
 
 
     /**
@@ -53,7 +52,7 @@ export class XMLExporter implements Exporter {
      * Export the intermediate code as a parse tree.
      * @param symTabStack the symbol table stack.
      */
-    export(symTabStack : SymTabStack) {
+    export(symTabStack : SymTabStack) : string {
         this.init();
 
         let programId : SymTabEntry = symTabStack.getProgramId();

@@ -9,8 +9,7 @@ let text = fs.readFileSync('./test.pas', 'utf8');
 
 let exporter = new JsonExporter();
 let compiler = new Transpiler(new Pascal());
-
 compiler.parse(text);
+compiler.export(exporter)
 
-
-fs.writeFileSync('export.json', JSON.stringify(compiler.export(exporter), null, 4));
+// fs.writeFileSync('export.json', JSON.stringify(compiler.export(exporter), null, 4));

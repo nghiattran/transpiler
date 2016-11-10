@@ -26,7 +26,7 @@ export class JsonExporter implements Exporter {
      * Export the intermediate code as a parse tree.
      * @param symTabStack the symbol table stack.
      */
-    export(symTabStack : SymTabStack) {
+    export(symTabStack : SymTabStack) : Object {
         let programId : SymTabEntry = symTabStack.getProgramId();
         let definition : Definition = programId.getDefinition();
 

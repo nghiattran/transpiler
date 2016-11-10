@@ -19,7 +19,7 @@ import {List} from './util/List';
 
 import {Compiler} from './Compiler';
 
-let util = require('util');
+// let util = require('util');
 
 export class Transpiler {
     private parser : Parser;            // language-independent parser
@@ -135,8 +135,9 @@ class SourceMessageListener implements MessageListener {
                 let lineNumber : number = body[0] as number;
                 let lineText : string  = body[1] as string;
                 
-                this.sourcelineReport += util.format(Transpiler.SOURCE_LINE_FORMAT,
-                                        lineNumber, lineText)
+                // TODO
+                // this.sourcelineReport += util.format(Transpiler.SOURCE_LINE_FORMAT,
+                //                         lineNumber, lineText)
                 break;
             }
         }
@@ -246,8 +247,10 @@ class ParserSummary {
     }
 
     toString() : string {
-        return util.format(Transpiler.PARSER_SUMMARY_FORMAT,
-                          this.statementCount, this.syntaxErrors,
-                          this.elapsedTime);
+        return '';
+        // TODO
+        // return util.format(Transpiler.PARSER_SUMMARY_FORMAT,
+        //                   this.statementCount, this.syntaxErrors,
+        //                   this.elapsedTime);
     }
 }
