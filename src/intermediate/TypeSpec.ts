@@ -45,4 +45,6 @@ export interface TypeSpec {
      * @return the base type of this type.
      */
     baseType() : TypeSpec;
+
+    toJson() : Object;
 }

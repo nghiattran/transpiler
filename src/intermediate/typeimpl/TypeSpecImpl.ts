@@ -101,4 +101,11 @@ export class TypeSpecImpl extends HashMap<TypeKey, Object> implements TypeSpec {
         return this.form === TypeFormImpl.SUBRANGE ? this.getAttribute(TypeKeyImpl.SUBRANGE_BASE_TYPE) as TypeSpec
                                 : this;
     }
+
+    toJson() : Object {
+        return {
+            form : this.form.toString(),
+            indentifier: this.identifier ? this.identifier.getName() : undefined
+        }
+    }
 }

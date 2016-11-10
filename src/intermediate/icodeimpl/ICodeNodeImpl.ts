@@ -4,13 +4,15 @@ import {TypeSpec} from '../TypeSpec';
 import {ICodeKey} from '../ICodeKey';
 import {ICodeFactory} from '../ICodeFactory';
 
+import {ICodeNodeTypeImpl} from './ICodeNodeTypeImpl';
+
 import {List} from '../../util/List';
 import {HashMap} from '../../util/HashMap';
 
 export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNode {
     private type : ICodeNodeType;             // node type
     private parent : ICodeNode;               // parent node
-    private children : List<ICodeNode>;           // children array list
+    private children : List<ICodeNode>;       // children array list
     private typeSpec : TypeSpec;              // data type specification
 
     /**
@@ -117,5 +119,19 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
 
     public toString() : string {
         return this.type.toString();
+    }
+
+    public toJson() {
+        let node = {
+            name: this.type.toString(),
+            typeSpec: this.typeSpec ? this.typeSpec.toJson() : undefined,
+            children: []
+        };
+
+        for (let i = 0; i < this.children.size(); i++) {
+            node.children.push((<ICodeNodeImpl>this.children.get(i)).toJson());
+        }
+
+        return node;
     }
 }
