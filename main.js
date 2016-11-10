@@ -40,7 +40,6 @@ function createCodeMirror(id, options) {
 
 function compile() {
   if (ready) {
-    console.log();
     let exporter = new JsonExporter();
     let compiler = new Transpiler(new Pascal());
     compiler.parse(editor.getValue());
