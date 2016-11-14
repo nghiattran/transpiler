@@ -16,7 +16,7 @@ import {TypeFormImpl} from '../../intermediate/typeimpl/TypeFormImpl';
 import {ICodeNodeImpl} from '../../intermediate/icodeimpl/ICodeNodeImpl';
 
 import {List} from '../List';
-import {PolyfillObject} from '../PolyfillObject';
+import {BaseObject} from '../BaseObject';
 import {IntermediateHandler} from '../IntermediateHandler';
 
 import {Exporter} from './Exporter';

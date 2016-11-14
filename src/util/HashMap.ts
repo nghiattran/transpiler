@@ -1,13 +1,13 @@
-import {PolyfillObject} from './PolyfillObject';
+import {BaseObject} from './BaseObject';
 
 export class HashMap <T, E> {
 	protected collection : Object = {};
 
     public getKey(key : T) : string {
-        if(key instanceof PolyfillObject) {
-            return (<PolyfillObject> key).getHash();
+        if(key instanceof BaseObject) {
+            return (<BaseObject> key).getHash();
         }
-        throw 'Key must be a instance of PolyfillObject or a String.';
+        throw 'Key must be a instance of BaseObject or a String.';
     }
 
 	/**
@@ -64,7 +64,7 @@ export class HashMap <T, E> {
         return this.collection[key];
     }
 
-    public copy(copy: HashMap<PolyfillObject, E>) {
+    public copy(copy: HashMap<BaseObject, E>) {
         for (let key in this.getKeys()) {
             copy.putKeyString(key, this.get[key])
         }

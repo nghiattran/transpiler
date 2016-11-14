@@ -7,7 +7,7 @@ import {SymTabEntry} from '../SymTabEntry';
 
 import {List} from '../../util/List';
 import {HashMap} from '../../util/HashMap';
-import {PolyfillObject} from '../../util/PolyfillObject';
+import {BaseObject} from '../../util/BaseObject';
 
 export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNode {
     private type : ICodeNodeType;             // node type
@@ -137,7 +137,7 @@ export class ICodeNodeImpl extends HashMap<ICodeKey, Object> implements ICodeNod
                                                : value.toString();
 
             let attribute = {};
-            node.attributes[PolyfillObject.getObject(keys[i]).toString().toLowerCase()]
+            node.attributes[BaseObject.getObject(keys[i]).toString().toLowerCase()]
                 = valueString;
         }
 

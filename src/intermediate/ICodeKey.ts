@@ -1,4 +1,4 @@
-import {PolyfillObject} from '../util/PolyfillObject'; 
+import {BaseObject} from '../util/BaseObject'; 
 
-export interface ICodeKey extends PolyfillObject {
+export interface ICodeKey extends BaseObject {
 }

@@ -1,4 +1,4 @@
-import {PolyfillObject} from '../util/PolyfillObject';
+import {BaseObject} from '../util/BaseObject';
 
-export interface TypeForm extends PolyfillObject {
+export interface TypeForm extends BaseObject {
 }

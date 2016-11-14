@@ -1,4 +1,4 @@
-import {PolyfillObject} from '../util/PolyfillObject';
+import {BaseObject} from '../util/BaseObject';
 
-export interface TypeKey extends PolyfillObject {
+export interface TypeKey extends BaseObject {
 }

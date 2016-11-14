@@ -1,7 +1,7 @@
 import {TypeKey} from '../TypeKey';
-import {PolyfillObject} from '../../util/PolyfillObject';
+import {BaseObject} from '../../util/BaseObject';
 
-export class TypeKeyImpl extends PolyfillObject implements TypeKey {
+export class TypeKeyImpl extends BaseObject implements TypeKey {
     private text : string;
 
     // Enumeration
