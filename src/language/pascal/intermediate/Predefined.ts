@@ -1,16 +1,16 @@
-import {TypeSpec} from '../TypeSpec';
-import {SymTabEntry} from '../SymTabEntry';
-import {SymTabStack} from '../SymTabStack';
-import {Definition} from '../Definition';
-import {RoutineCode} from '../RoutineCode';
-import {TypeFactory} from '../TypeFactory';
+import {TypeSpec} from '../../../intermediate/TypeSpec';
+import {SymTabEntry} from '../../../intermediate/SymTabEntry';
+import {SymTabStack} from '../../../intermediate/SymTabStack';
+import {Definition} from '../../../intermediate/Definition';
+import {RoutineCode} from '../../../intermediate/RoutineCode';
+import {TypeFactory} from './TypeFactory';
 
 import {DefinitionImpl} from './DefinitionImpl';
 import {RoutineCodeImpl} from './RoutineCodeImpl';
-import {SymTabKeyImpl} from './SymTabKeyImpl'
+import {SymTabKeyImpl} from '../../../intermediate/symtabimpl/SymTabKeyImpl'
 
-import {TypeFormImpl} from '../typeimpl/TypeFormImpl';
-import {TypeKeyImpl} from '../typeimpl/TypeKeyImpl';
+import {TypeFormImpl} from './typeimpl/TypeFormImpl';
+import {TypeKeyImpl} from './typeimpl/TypeKeyImpl';
 
 export  class Predefined {
     // Predefined types.

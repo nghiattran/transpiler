@@ -1,17 +1,10 @@
 import {SymTabStack} from '../../intermediate/SymTabStack';
 import {SymTabEntry} from '../../intermediate/SymTabEntry';
-import {SymTab} from '../../intermediate/SymTab';
 import {Definition} from '../../intermediate/Definition';
-import {TypeSpec} from '../../intermediate/TypeSpec';
-import {TypeForm} from '../../intermediate/TypeForm';
 import {ICode} from '../../intermediate/ICode';
 import {ICodeNode} from '../../intermediate/ICodeNode';
-import {ICodeKey} from '../../intermediate/ICodeKey';
 
-import {DefinitionImpl} from '../../intermediate/symtabimpl/DefinitionImpl';
 import {SymTabKeyImpl} from '../../intermediate/symtabimpl/SymTabKeyImpl';
-import {TypeKeyImpl} from '../../intermediate/typeimpl/TypeKeyImpl';
-import {TypeFormImpl} from '../../intermediate/typeimpl/TypeFormImpl';
 
 import {ICodeNodeImpl} from '../../intermediate/icodeimpl/ICodeNodeImpl';
 

@@ -8,14 +8,14 @@ import {TokenType} from '../../../frontend/TokenType';
 import {Definition} from '../../../intermediate/Definition';
 import {TypeSpec} from '../../../intermediate/TypeSpec';
 import {SymTabEntry} from '../../../intermediate/SymTabEntry';
-import {TypeFactory} from '../../../intermediate/TypeFactory';
+import {TypeFactory} from '../intermediate/TypeFactory';
 
 import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 import {Predefined} from '../../../intermediate/symtabimpl/Predefined';
 import {SymTabKeyImpl} from '../../../intermediate/symtabimpl/SymTabKeyImpl';
 
-import {TypeKeyImpl} from '../../../intermediate/typeimpl/TypeKeyImpl';
-import {TypeFormImpl} from '../../../intermediate/typeimpl/TypeFormImpl';
+import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
+import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 
 import {List} from '../../../util/List';
 

@@ -1,4 +1,4 @@
-import {Definition} from '../Definition';
+import {Definition} from '../../../intermediate/Definition';
 
 export class DefinitionImpl implements Definition {
     private text : string;

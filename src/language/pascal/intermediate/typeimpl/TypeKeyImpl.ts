@@ -1,5 +1,5 @@
-import {TypeKey} from '../TypeKey';
-import {BaseObject} from '../../util/BaseObject';
+import {TypeKey} from '../../../../intermediate/TypeKey';
+import {BaseObject} from '../../../../util/BaseObject';
 
 export class TypeKeyImpl extends BaseObject implements TypeKey {
     private text : string;

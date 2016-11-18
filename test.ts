@@ -12,5 +12,3 @@ let exporter = new XMLExporter();
 let compiler = new Transpiler(new Pascal());
 compiler.parse(text);
 console.log(compiler.export(exporter));
-
-// fs.writeFileSync('export.json', JSON.stringify(compiler.export(exporter), null, 4));

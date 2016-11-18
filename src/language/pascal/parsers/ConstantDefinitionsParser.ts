@@ -11,7 +11,7 @@ import {Definition} from '../../../intermediate/Definition';
 import {SymTabEntry} from '../../../intermediate/SymTabEntry';
 
 import {TypeSpec} from '../../../intermediate/TypeSpec';
-import {TypeFactory} from '../../../intermediate/TypeFactory';
+import {TypeFactory} from '../intermediate/TypeFactory';
 
 import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 import {Predefined} from '../../../intermediate/symtabimpl/Predefined';

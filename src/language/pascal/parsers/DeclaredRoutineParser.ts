@@ -21,9 +21,9 @@ import {ICodeFactory} from '../../../intermediate/ICodeFactory';
 import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';
 import {Predefined} from '../../../intermediate/symtabimpl/Predefined';
 import {SymTabKeyImpl} from '../../../intermediate/symtabimpl/SymTabKeyImpl';
-import {RoutineCodeImpl} from '../../../intermediate/symtabimpl/RoutineCodeImpl';
+import {RoutineCodeImpl} from '../intermediate/RoutineCodeImpl';
 
-import {TypeFormImpl} from '../../../intermediate/typeimpl/TypeFormImpl';
+import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
 
 import {List} from '../../../util/List';
 

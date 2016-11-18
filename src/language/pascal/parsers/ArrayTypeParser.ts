@@ -14,9 +14,9 @@ import {TypeForm} from '../../../intermediate/TypeForm';
 
 import {TypeSpec} from '../../../intermediate/TypeSpec';
 import {SymTabEntry} from '../../../intermediate/SymTabEntry';
-import {TypeFactory} from '../../../intermediate/TypeFactory';
-import {TypeFormImpl} from '../../../intermediate/typeimpl/TypeFormImpl';
-import {TypeKeyImpl} from '../../../intermediate/typeimpl/TypeKeyImpl';
+import {TypeFactory} from '../intermediate/TypeFactory';
+import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
+import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
 
 import {List} from '../../../util/List';
 

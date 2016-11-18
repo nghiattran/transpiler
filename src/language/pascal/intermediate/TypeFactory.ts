@@ -1,6 +1,6 @@
-import {TypeForm} from './TypeForm';
+import {TypeForm} from '../../../intermediate/TypeForm';
 import {TypeSpecImpl} from './typeimpl/TypeSpecImpl';
-import {TypeSpec} from './TypeSpec';
+import {TypeSpec} from '../../../intermediate/TypeSpec';
 
 
 export class TypeFactory {

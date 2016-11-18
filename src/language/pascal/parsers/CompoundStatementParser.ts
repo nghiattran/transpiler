@@ -14,9 +14,9 @@ import {TypeForm} from '../../../intermediate/TypeForm';
 import {ICodeNode} from '../../../intermediate/ICodeNode';
 import {ICodeFactory} from '../../../intermediate/ICodeFactory';
 import {SymTabEntry} from '../../../intermediate/SymTabEntry';
-import {TypeFactory} from '../../../intermediate/TypeFactory';
+import {TypeFactory} from '../intermediate/TypeFactory';
 
-import {ICodeNodeTypeImpl} from '../../../intermediate/icodeimpl/ICodeNodeTypeImpl';
+import {ICodeNodeTypeImpl} from '../intermediate/ICodeNodeTypeImpl';
 
 import {List} from '../../../util/List';
 

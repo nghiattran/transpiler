@@ -1,8 +1,8 @@
-import {TypeSpec} from '../TypeSpec';
-import {TypeForm} from '../TypeForm';
+import {TypeSpec} from '../../../../intermediate/TypeSpec';
+import {TypeForm} from '../../../../intermediate/TypeForm';
 import {TypeFormImpl} from './TypeFormImpl';
 
-import {Predefined} from '../symtabimpl/Predefined';
+import {Predefined} from '../Predefined';
 
 export class TypeChecker {
     /**

@@ -16,13 +16,13 @@ import {ICodeNode} from '../../../intermediate/ICodeNode';
 import {ICodeFactory} from '../../../intermediate/ICodeFactory';
 import {TypeSpec} from '../../../intermediate/TypeSpec';
 import {SymTabEntry} from '../../../intermediate/SymTabEntry';
-import {TypeFactory} from '../../../intermediate/TypeFactory';
+import {TypeFactory} from '../intermediate/TypeFactory';
 
-import {TypeFormImpl} from '../../../intermediate/typeimpl/TypeFormImpl';
-import {TypeKeyImpl} from '../../../intermediate/typeimpl/TypeKeyImpl';
-import {TypeChecker} from '../../../intermediate/typeimpl/TypeChecker';
+import {TypeFormImpl} from '../intermediate/typeimpl/TypeFormImpl';
+import {TypeKeyImpl} from '../intermediate/typeimpl/TypeKeyImpl';
+import {TypeChecker} from '../intermediate/typeimpl/TypeChecker';
 
-import {ICodeNodeTypeImpl} from '../../../intermediate/icodeimpl/ICodeNodeTypeImpl';
+import {ICodeNodeTypeImpl} from '../intermediate/ICodeNodeTypeImpl';
 
 import {Predefined} from '../../../intermediate/symtabimpl/Predefined';
 

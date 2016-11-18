@@ -14,7 +14,7 @@ import {SymTabEntry} from '../../../intermediate/SymTabEntry';
 import {ICodeNode} from '../../../intermediate/ICodeNode';
 import {ICodeFactory} from '../../../intermediate/ICodeFactory';
 
-import {ICodeNodeTypeImpl} from '../../../intermediate/icodeimpl/ICodeNodeTypeImpl';
+import {ICodeNodeTypeImpl} from '../intermediate/ICodeNodeTypeImpl';
 
 export class BlockParser extends PascalParser {
     /**

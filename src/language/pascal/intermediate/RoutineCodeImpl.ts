@@ -1,4 +1,4 @@
-import {RoutineCode} from '../RoutineCode';
+import {RoutineCode} from '../../../intermediate/RoutineCode';
 
 export class RoutineCodeImpl implements RoutineCode {
     private text : string;

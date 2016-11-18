@@ -1,5 +1,5 @@
-import {TypeForm} from '../TypeForm';
-import {BaseObject} from '../../util/BaseObject';
+import {TypeForm} from '../../../../intermediate/TypeForm';
+import {BaseObject} from '../../../../util/BaseObject';
 
 export class TypeFormImpl extends BaseObject implements TypeForm {
     private text : string;

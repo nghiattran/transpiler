@@ -14,7 +14,7 @@ import {ICodeFactory} from '../../../intermediate/ICodeFactory';
 import {Definition} from '../../../intermediate/Definition';
 import {SymTabEntry} from '../../../intermediate/SymTabEntry';
 
-import {ICodeNodeTypeImpl} from '../../../intermediate/icodeimpl/ICodeNodeTypeImpl';
+import {ICodeNodeTypeImpl} from '../intermediate/ICodeNodeTypeImpl';
 import {ICodeKeyImpl} from '../../../intermediate/icodeimpl/ICodeKeyImpl';
 
 import {DefinitionImpl} from '../../../intermediate/symtabimpl/DefinitionImpl';

@@ -50,14 +50,11 @@ import {ICodeNode} from '../../intermediate/ICodeNode';
 import {Definition} from '../../intermediate/Definition';
 import {TypeSpec} from '../../intermediate/TypeSpec';
 import {SymTabEntry} from '../../intermediate/SymTabEntry';
-import {TypeFactory} from '../../intermediate/TypeFactory';
+import {TypeFactory} from './intermediate/TypeFactory';
 import {ICodeNodeType} from '../../intermediate/ICodeNodeType';
 import {RoutineCode} from '../../intermediate/RoutineCode';
 
-import {DefinitionImpl} from '../../intermediate/symtabimpl/DefinitionImpl';
-import {Predefined} from '../../intermediate/symtabimpl/Predefined';
 import {SymTabKeyImpl} from '../../intermediate/symtabimpl/SymTabKeyImpl';
-import {RoutineCodeImpl} from '../../intermediate/symtabimpl/RoutineCodeImpl';
 
 import {ICodeFactory} from '../../intermediate/ICodeFactory';
 import {SymTab} from '../../intermediate/SymTab';
@@ -65,11 +62,16 @@ import {ICode} from '../../intermediate/ICode';
 import {TypeForm} from '../../intermediate/TypeForm';
 
 import {ICodeKeyImpl} from '../../intermediate/icodeimpl/ICodeKeyImpl';
-import {ICodeNodeTypeImpl} from '../../intermediate/icodeimpl/ICodeNodeTypeImpl';
 
-import {TypeKeyImpl} from '../../intermediate/typeimpl/TypeKeyImpl';
-import {TypeFormImpl} from '../../intermediate/typeimpl/TypeFormImpl';
-import {TypeChecker} from '../../intermediate/typeimpl/TypeChecker';
+import {TypeKeyImpl} from './intermediate/typeimpl/TypeKeyImpl';
+import {TypeFormImpl} from './intermediate/typeimpl/TypeFormImpl';
+import {TypeChecker} from './intermediate/typeimpl/TypeChecker';
+
+import {Predefined} from './intermediate/Predefined';
+import {ICodeNodeTypeImpl} from './intermediate/ICodeNodeTypeImpl';
+import {RoutineCodeImpl} from './intermediate/RoutineCodeImpl';
+import {DefinitionImpl} from './intermediate/DefinitionImpl';
+
 
 import {HashMap} from '../../util/HashMap';
 import {List} from '../../util/List';

@@ -1,11 +1,11 @@
-import {HashMap} from '../../util/HashMap';
+import {HashMap} from '../../../../util/HashMap';
 
-import {TypeSpec} from '../TypeSpec';
-import {TypeKey} from '../TypeKey';
-import {SymTabEntry} from '../SymTabEntry';
-import {TypeForm} from '../TypeForm';
+import {TypeSpec} from '../../../../intermediate/TypeSpec';
+import {TypeKey} from '../../../../intermediate/TypeKey';
+import {SymTabEntry} from '../../../../intermediate/SymTabEntry';
+import {TypeForm} from '../../../../intermediate/TypeForm';
 
-import {Predefined} from '../symtabimpl/Predefined';
+import {Predefined} from '../Predefined';
 
 import {TypeKeyImpl} from './TypeKeyImpl';
 import {TypeFormImpl} from './TypeFormImpl';

@@ -12,7 +12,7 @@ import {MessageType} from '../../message/MessageType';
 import {Message} from '../../message/Message';
 
 import {SymTabEntry} from '../../intermediate/SymTabEntry';
-import {Predefined} from '../../intermediate/symtabimpl/Predefined';
+import {Predefined} from './intermediate/Predefined';
 
 import {List} from '../../util/List';
 
